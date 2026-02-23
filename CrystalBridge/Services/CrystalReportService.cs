@@ -129,14 +129,14 @@ namespace CrystalBridge.Services
 
                 debug.MainParameters = reportDocument.DataDefinition.ParameterFields
                     .Cast<ParameterFieldDefinition>()
-                    .Select(x => x.Name + " [" + x.ParameterValueType + "]")
+                    .Select(x => x.Name)
                     .ToList();
 
                 foreach (ReportDocument subreport in reportDocument.Subreports)
                 {
                     var subParams = subreport.DataDefinition.ParameterFields
                         .Cast<ParameterFieldDefinition>()
-                        .Select(x => subreport.Name + ":" + x.Name + " [" + x.ParameterValueType + "]");
+                        .Select(x => subreport.Name + ":" + x.Name);
                     debug.SubreportParameters.AddRange(subParams);
                 }
 
@@ -245,7 +245,10 @@ ORDER BY IsDefault DESC, Id ASC";
                 using (var layoutByIdCmd = new SqlCommand(layoutByIdSql, connection))
                 {
                     layoutByIdCmd.Parameters.AddWithValue("@Id", idLayout);
-                    layoutByIdCmd.Parameters.AddWithValue("@SubmissionDocumentTypeId", (object?)submissionContext.DocumentTypeId ?? DBNull.Value);
+                    object submissionDocumentTypeValue = submissionContext.DocumentTypeId.HasValue
+                        ? (object)submissionContext.DocumentTypeId.Value
+                        : DBNull.Value;
+                    layoutByIdCmd.Parameters.AddWithValue("@SubmissionDocumentTypeId", submissionDocumentTypeValue);
                     using (var reader = layoutByIdCmd.ExecuteReader())
                     {
                         if (reader.Read())
@@ -443,45 +446,19 @@ ORDER BY IsDefault DESC, Id ASC";
                 if (!parameters.TryGetValue(name, out var parameter))
                     continue;
 
-                reportDocument.SetParameterValue(name, ConvertParameterValue(parameter, value));
+                reportDocument.SetParameterValue(name, ConvertParameterValue(value));
                 return true;
             }
 
             return false;
         }
 
-        private static object ConvertParameterValue(ParameterFieldDefinition parameter, object value)
+        private static object ConvertParameterValue(object value)
         {
             if (value == null)
                 return string.Empty;
 
-            var text = Convert.ToString(value);
-            switch (parameter.ParameterValueType)
-            {
-                case ParameterValueKind.StringParameter:
-                    return text ?? string.Empty;
-                case ParameterValueKind.BooleanParameter:
-                    if (value is bool b)
-                        return b;
-                    return string.Equals(text, "true", StringComparison.OrdinalIgnoreCase) || text == "1";
-                case ParameterValueKind.NumberParameter:
-                case ParameterValueKind.CurrencyParameter:
-                    if (value is decimal || value is double || value is float || value is int || value is long || value is short)
-                        return value;
-                    if (decimal.TryParse(text, out var dec))
-                        return dec;
-                    return 0;
-                case ParameterValueKind.DateParameter:
-                case ParameterValueKind.DateTimeParameter:
-                case ParameterValueKind.TimeParameter:
-                    if (value is DateTime dt)
-                        return dt;
-                    if (DateTime.TryParse(text, out var parsed))
-                        return parsed;
-                    return DateTime.MinValue;
-                default:
-                    return value;
-            }
+            return value;
         }
 
         private static string FindParameterMatch(ReportDocument reportDocument, params string[] candidates)
