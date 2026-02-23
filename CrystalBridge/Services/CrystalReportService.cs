@@ -3,6 +3,7 @@ using CrystalDecisions.CrystalReports.Engine;
 using CrystalDecisions.Shared;
 using System;
 using System.Configuration;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -44,12 +45,12 @@ namespace CrystalBridge.Services
             {
                 reportDocument.Load(reportPath);
 
-                SetParameterIfExists(reportDocument, "DocKey@", idObject);
-                SetParameterIfExists(reportDocument, "ObjectId@", idObject);
-                SetParameterIfExists(reportDocument, "DocumentTypeId@", layout.DocumentTypeId);
-                SetParameterIfExists(reportDocument, "ObjectTypeId@", layout.DocumentTypeId);
-                SetParameterIfExists(reportDocument, "PrintedByUserID@", NormalizePrintedByUserId(printedByUserId));
-                SetParameterIfExists(reportDocument, "ApplicationPath@", _reportsRootPath);
+                SetParameterIfExists(reportDocument, idObject, "DocKey@", "DocKey", "@DocKey");
+                SetParameterIfExists(reportDocument, idObject, "ObjectId@", "ObjectId", "@ObjectId", "DocEntry@", "DocEntry");
+                SetParameterIfExists(reportDocument, layout.DocumentTypeId, "DocumentTypeId@", "DocumentTypeId", "@DocumentTypeId");
+                SetParameterIfExists(reportDocument, layout.DocumentTypeId, "ObjectTypeId@", "ObjectTypeId", "@ObjectTypeId");
+                SetParameterIfExists(reportDocument, NormalizePrintedByUserId(printedByUserId), "PrintedByUserID@", "PrintedByUserID");
+                SetParameterIfExists(reportDocument, _reportsRootPath, "ApplicationPath@", "ApplicationPath");
 
                 ApplyDatabaseLogon(reportDocument);
 
@@ -262,16 +263,48 @@ ORDER BY IsDefault DESC, Id DESC";
 
             for (int i = 0; i < reportDocument.DataSourceConnections.Count; i++)
                 reportDocument.DataSourceConnections[i].SetConnection(source, catalog, user, pass);
+
+            ApplyTableLogon(reportDocument, source, catalog, user, pass);
+
+            foreach (ReportDocument subreport in reportDocument.Subreports)
+            {
+                subreport.SetDatabaseLogon(user, pass, source, catalog);
+                ApplyTableLogon(subreport, source, catalog, user, pass);
+            }
         }
 
-        private static void SetParameterIfExists(ReportDocument reportDocument, string name, object value)
+        private static void ApplyTableLogon(ReportDocument reportDocument, string source, string catalog, string user, string pass)
         {
-            var exists = reportDocument.DataDefinition.ParameterFields
-                .Cast<ParameterFieldDefinition>()
-                .Any(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            foreach (Table table in reportDocument.Database.Tables)
+            {
+                var logon = table.LogOnInfo;
+                logon.ConnectionInfo.ServerName = source;
+                logon.ConnectionInfo.DatabaseName = catalog;
+                logon.ConnectionInfo.UserID = user;
+                logon.ConnectionInfo.Password = pass;
+                logon.ConnectionInfo.IntegratedSecurity = string.IsNullOrWhiteSpace(user);
+                table.ApplyLogOnInfo(logon);
+            }
+        }
 
-            if (exists)
+        private static void SetParameterIfExists(ReportDocument reportDocument, object value, params string[] candidateNames)
+        {
+            if (candidateNames == null || candidateNames.Length == 0)
+                return;
+
+            var parameters = reportDocument.DataDefinition.ParameterFields
+                .Cast<ParameterFieldDefinition>()
+                .Select(x => x.Name)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var name in candidateNames)
+            {
+                if (!parameters.Contains(name))
+                    continue;
+
                 reportDocument.SetParameterValue(name, value);
+                break;
+            }
         }
     }
 }
