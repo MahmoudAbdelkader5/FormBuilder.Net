@@ -69,6 +69,7 @@ namespace CrystalBridgeService.Services
                 SetParameterIfExists(reportDocument, _reportsRootPath, "ApplicationPath@", "ApplicationPath");
 
                 ApplyDatabaseLogon(reportDocument);
+                reportDocument.Refresh();
 
                 using (var stream = reportDocument.ExportToStream(ExportFormatType.PortableDocFormat))
                 using (var memoryStream = new MemoryStream())
@@ -82,6 +83,100 @@ namespace CrystalBridgeService.Services
                     };
                 }
             }
+        }
+
+        public ReportDebugResult GenerateLayoutDebug(int idLayout, int idObject, string fileName, string printedByUserId)
+        {
+            if (idLayout <= 0)
+                throw new ArgumentOutOfRangeException(nameof(idLayout));
+            if (idObject <= 0)
+                throw new ArgumentOutOfRangeException(nameof(idObject));
+
+            var debug = new ReportDebugResult
+            {
+                RequestedLayoutId = idLayout,
+                ObjectId = idObject
+            };
+
+            var submissionContext = LoadSubmissionContext(idObject);
+            debug.SubmissionDocumentTypeId = submissionContext.DocumentTypeId;
+            debug.SubmissionDocumentNumber = submissionContext.DocumentNumber ?? string.Empty;
+
+            var layout = LoadLayout(idLayout, submissionContext);
+            if (layout == null)
+            {
+                debug.Warnings.Add("Layout not found or inactive.");
+                return debug;
+            }
+
+            debug.SelectedLayoutId = layout.Id;
+            debug.SelectedLayoutDocumentTypeId = layout.DocumentTypeId;
+            debug.SelectedLayoutName = layout.LayoutName ?? string.Empty;
+            debug.SelectedLayoutPath = layout.LayoutPath ?? string.Empty;
+
+            string reportPath = ResolveReportPath(layout.LayoutPath);
+            debug.ResolvedReportPath = reportPath;
+            debug.ReportFileExists = File.Exists(reportPath);
+            if (!debug.ReportFileExists)
+            {
+                debug.Warnings.Add("Report file not found on disk.");
+                return debug;
+            }
+
+            using (var reportDocument = new ReportDocument())
+            {
+                reportDocument.Load(reportPath);
+
+                debug.MainParameters = reportDocument.DataDefinition.ParameterFields
+                    .Cast<ParameterFieldDefinition>()
+                    .Select(x => x.Name + " [" + x.ParameterValueType + "]")
+                    .ToList();
+
+                foreach (ReportDocument subreport in reportDocument.Subreports)
+                {
+                    var subParams = subreport.DataDefinition.ParameterFields
+                        .Cast<ParameterFieldDefinition>()
+                        .Select(x => subreport.Name + ":" + x.Name + " [" + x.ParameterValueType + "]");
+                    debug.SubreportParameters.AddRange(subParams);
+                }
+
+                debug.MatchedParameters["DocKey"] = FindParameterMatch(reportDocument, "DocKey@", "DocKey", "@DocKey");
+                debug.MatchedParameters["ObjectId"] = FindParameterMatch(reportDocument, "ObjectId@", "ObjectId", "@ObjectId", "DocEntry@", "DocEntry", "SubmissionId@", "SubmissionId");
+                debug.MatchedParameters["DocumentTypeId"] = FindParameterMatch(reportDocument, "DocumentTypeId@", "DocumentTypeId", "@DocumentTypeId");
+                debug.MatchedParameters["ObjectTypeId"] = FindParameterMatch(reportDocument, "ObjectTypeId@", "ObjectTypeId", "@ObjectTypeId");
+                debug.MatchedParameters["DocumentNumber"] = FindParameterMatch(reportDocument, "DocumentNumber@", "DocumentNumber", "DocNumber@", "DocNumber", "DocNum@", "DocNum");
+                debug.MatchedParameters["PrintedByUserID"] = FindParameterMatch(reportDocument, "PrintedByUserID@", "PrintedByUserID");
+                debug.MatchedParameters["ApplicationPath"] = FindParameterMatch(reportDocument, "ApplicationPath@", "ApplicationPath");
+
+                SetParameterIfExists(reportDocument, idObject, "DocKey@", "DocKey", "@DocKey");
+                SetParameterIfExists(reportDocument, idObject, "ObjectId@", "ObjectId", "@ObjectId", "DocEntry@", "DocEntry", "SubmissionId@", "SubmissionId");
+                SetParameterIfExists(reportDocument, layout.DocumentTypeId, "DocumentTypeId@", "DocumentTypeId", "@DocumentTypeId");
+                SetParameterIfExists(reportDocument, layout.DocumentTypeId, "ObjectTypeId@", "ObjectTypeId", "@ObjectTypeId");
+
+                if (!string.IsNullOrWhiteSpace(submissionContext.DocumentNumber))
+                {
+                    SetParameterIfExists(reportDocument, submissionContext.DocumentNumber,
+                        "DocumentNumber@", "DocumentNumber", "DocNumber@", "DocNumber", "DocNum@", "DocNum");
+                }
+
+                SetParameterIfExists(reportDocument, NormalizePrintedByUserId(printedByUserId), "PrintedByUserID@", "PrintedByUserID");
+                SetParameterIfExists(reportDocument, _reportsRootPath, "ApplicationPath@", "ApplicationPath");
+
+                ApplyDatabaseLogon(reportDocument);
+                reportDocument.Refresh();
+
+                using (var stream = reportDocument.ExportToStream(ExportFormatType.PortableDocFormat))
+                using (var memoryStream = new MemoryStream())
+                {
+                    stream.CopyTo(memoryStream);
+                    debug.ExportedPdfBytes = memoryStream.ToArray().Length;
+                }
+            }
+
+            if (debug.ExportedPdfBytes <= 0)
+                debug.Warnings.Add("Export generated zero bytes.");
+
+            return debug;
         }
 
         private SubmissionContext LoadSubmissionContext(int idObject)
@@ -341,19 +436,82 @@ ORDER BY IsDefault DESC, Id ASC";
         {
             var parameters = reportDocument.DataDefinition.ParameterFields
                 .Cast<ParameterFieldDefinition>()
-                .Select(x => x.Name)
-                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                .ToDictionary(x => x.Name, x => x, StringComparer.OrdinalIgnoreCase);
 
             foreach (var name in candidateNames)
             {
-                if (!parameters.Contains(name))
+                if (!parameters.TryGetValue(name, out var parameter))
                     continue;
 
-                reportDocument.SetParameterValue(name, value);
+                reportDocument.SetParameterValue(name, ConvertParameterValue(parameter, value));
                 return true;
             }
 
             return false;
+        }
+
+        private static object ConvertParameterValue(ParameterFieldDefinition parameter, object value)
+        {
+            if (value == null)
+                return string.Empty;
+
+            var text = Convert.ToString(value);
+            switch (parameter.ParameterValueType)
+            {
+                case ParameterValueKind.StringParameter:
+                    return text ?? string.Empty;
+                case ParameterValueKind.BooleanParameter:
+                    if (value is bool b)
+                        return b;
+                    return string.Equals(text, "true", StringComparison.OrdinalIgnoreCase) || text == "1";
+                case ParameterValueKind.NumberParameter:
+                case ParameterValueKind.CurrencyParameter:
+                    if (value is decimal || value is double || value is float || value is int || value is long || value is short)
+                        return value;
+                    if (decimal.TryParse(text, out var dec))
+                        return dec;
+                    return 0;
+                case ParameterValueKind.DateParameter:
+                case ParameterValueKind.DateTimeParameter:
+                case ParameterValueKind.TimeParameter:
+                    if (value is DateTime dt)
+                        return dt;
+                    if (DateTime.TryParse(text, out var parsed))
+                        return parsed;
+                    return DateTime.MinValue;
+                default:
+                    return value;
+            }
+        }
+
+        private static string FindParameterMatch(ReportDocument reportDocument, params string[] candidates)
+        {
+            var main = reportDocument.DataDefinition.ParameterFields
+                .Cast<ParameterFieldDefinition>()
+                .Select(x => x.Name)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var candidate in candidates)
+            {
+                if (main.Contains(candidate))
+                    return "main:" + candidate;
+            }
+
+            foreach (ReportDocument subreport in reportDocument.Subreports)
+            {
+                var sub = subreport.DataDefinition.ParameterFields
+                    .Cast<ParameterFieldDefinition>()
+                    .Select(x => x.Name)
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                foreach (var candidate in candidates)
+                {
+                    if (sub.Contains(candidate))
+                        return "subreport:" + subreport.Name + ":" + candidate;
+                }
+            }
+
+            return "<not found>";
         }
     }
 }

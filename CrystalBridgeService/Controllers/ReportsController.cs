@@ -53,5 +53,28 @@ namespace CrystalBridgeService.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("GenerateLayoutDebug")]
+        public IHttpActionResult GenerateLayoutDebug(
+            int idLayout,
+            int idObject,
+            string fileName = "Report",
+            string printedByUserId = "")
+        {
+            try
+            {
+                var result = _reportService.GenerateLayoutDebug(idLayout, idObject, fileName, printedByUserId);
+                return Ok(result);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
     }
 }
