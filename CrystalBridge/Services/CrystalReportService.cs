@@ -451,16 +451,18 @@ ORDER BY IsDefault DESC, Id ASC";
             if (candidateNames == null || candidateNames.Length == 0)
                 return false;
 
+            var anyMatched = false;
+
             if (SetParameterOnDocument(reportDocument, value, candidateNames))
-                return true;
+                anyMatched = true;
 
             foreach (ReportDocument subreport in reportDocument.Subreports)
             {
                 if (SetParameterOnDocument(subreport, value, candidateNames))
-                    return true;
+                    anyMatched = true;
             }
 
-            return false;
+            return anyMatched;
         }
 
         private static bool SetParameterOnDocument(ReportDocument reportDocument, object value, IEnumerable<string> candidateNames)
