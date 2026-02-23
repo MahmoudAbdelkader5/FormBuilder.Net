@@ -142,9 +142,6 @@ public class CrystalReportsController : ControllerBase
         var candidates = new List<int>();
         var seen = new HashSet<int>();
 
-        if (requestedLayoutId > 0 && seen.Add(requestedLayoutId))
-            candidates.Add(requestedLayoutId);
-
         var documentTypeId = await _formBuilderDbContext.FORM_SUBMISSIONS
             .AsNoTracking()
             .Where(x => x.Id == objectId && !x.IsDeleted)
@@ -153,6 +150,22 @@ public class CrystalReportsController : ControllerBase
 
         if (!documentTypeId.HasValue || documentTypeId.Value <= 0)
             return candidates;
+
+        if (requestedLayoutId > 0)
+        {
+            var requestedLayout = await _formBuilderDbContext.CRYSTAL_LAYOUTS
+                .AsNoTracking()
+                .Where(x => x.Id == requestedLayoutId && x.IsActive && !x.IsDeleted)
+                .Select(x => new { x.Id, x.DocumentTypeId })
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (requestedLayout != null
+                && requestedLayout.DocumentTypeId == documentTypeId.Value
+                && seen.Add(requestedLayout.Id))
+            {
+                candidates.Add(requestedLayout.Id);
+            }
+        }
 
         var activeLayoutIds = await _formBuilderDbContext.CRYSTAL_LAYOUTS
             .AsNoTracking()

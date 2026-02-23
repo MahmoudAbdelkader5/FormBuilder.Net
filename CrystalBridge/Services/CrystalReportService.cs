@@ -78,6 +78,7 @@ SELECT TOP 1
     LayoutPath
 FROM dbo.CRYSTAL_LAYOUTS
 WHERE Id = @Id
+  AND (@SubmissionDocumentTypeId IS NULL OR DocumentTypeId = @SubmissionDocumentTypeId)
   AND IsActive = 1
   AND IsDeleted = 0";
 
@@ -104,16 +105,6 @@ ORDER BY IsDefault DESC, Id DESC";
             {
                 connection.Open();
 
-                using (var layoutByIdCmd = new SqlCommand(layoutByIdSql, connection))
-                {
-                    layoutByIdCmd.Parameters.AddWithValue("@Id", idLayout);
-                    using (var reader = layoutByIdCmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                            return MapLayout(reader);
-                    }
-                }
-
                 int? documentTypeId = null;
                 using (var docTypeCmd = new SqlCommand(submissionDocTypeSql, connection))
                 {
@@ -121,6 +112,17 @@ ORDER BY IsDefault DESC, Id DESC";
                     var scalar = docTypeCmd.ExecuteScalar();
                     if (scalar != null && scalar != DBNull.Value)
                         documentTypeId = Convert.ToInt32(scalar);
+                }
+
+                using (var layoutByIdCmd = new SqlCommand(layoutByIdSql, connection))
+                {
+                    layoutByIdCmd.Parameters.AddWithValue("@Id", idLayout);
+                    layoutByIdCmd.Parameters.AddWithValue("@SubmissionDocumentTypeId", (object?)documentTypeId ?? DBNull.Value);
+                    using (var reader = layoutByIdCmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            return MapLayout(reader);
+                    }
                 }
 
                 if (!documentTypeId.HasValue || documentTypeId.Value <= 0)
