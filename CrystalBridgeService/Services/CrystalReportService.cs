@@ -30,7 +30,7 @@ namespace CrystalBridgeService.Services
             if (idObject <= 0)
                 throw new ArgumentOutOfRangeException(nameof(idObject));
 
-            var layout = LoadLayout(idLayout);
+            var layout = LoadLayout(idLayout, idObject);
             if (layout == null)
                 throw new InvalidOperationException("Layout not found or inactive.");
 
@@ -65,9 +65,9 @@ namespace CrystalBridgeService.Services
             }
         }
 
-        private DynamicLayoutConfig LoadLayout(int idLayout)
+        private DynamicLayoutConfig LoadLayout(int idLayout, int idObject)
         {
-            const string sql = @"
+            const string layoutByIdSql = @"
 SELECT TOP 1
     Id,
     DocumentTypeId,
@@ -78,26 +78,74 @@ WHERE Id = @Id
   AND IsActive = 1
   AND IsDeleted = 0";
 
+            const string submissionDocTypeSql = @"
+SELECT TOP 1
+    DocumentTypeId
+FROM dbo.FORM_SUBMISSIONS
+WHERE Id = @Id
+  AND IsDeleted = 0";
+
+            const string defaultLayoutByDocTypeSql = @"
+SELECT TOP 1
+    Id,
+    DocumentTypeId,
+    LayoutName,
+    LayoutPath
+FROM dbo.CRYSTAL_LAYOUTS
+WHERE DocumentTypeId = @DocumentTypeId
+  AND IsActive = 1
+  AND IsDeleted = 0
+ORDER BY IsDefault DESC, Id DESC";
+
             using (var connection = new SqlConnection(_connectionString))
-            using (var command = new SqlCommand(sql, connection))
             {
-                command.Parameters.AddWithValue("@Id", idLayout);
                 connection.Open();
 
-                using (var reader = command.ExecuteReader())
+                using (var layoutByIdCmd = new SqlCommand(layoutByIdSql, connection))
                 {
-                    if (!reader.Read())
-                        return null;
-
-                    return new DynamicLayoutConfig
+                    layoutByIdCmd.Parameters.AddWithValue("@Id", idLayout);
+                    using (var reader = layoutByIdCmd.ExecuteReader())
                     {
-                        Id = reader.GetInt32(0),
-                        DocumentTypeId = reader.GetInt32(1),
-                        LayoutName = reader.GetString(2),
-                        LayoutPath = reader.GetString(3)
-                    };
+                        if (reader.Read())
+                            return MapLayout(reader);
+                    }
+                }
+
+                int? documentTypeId = null;
+                using (var docTypeCmd = new SqlCommand(submissionDocTypeSql, connection))
+                {
+                    docTypeCmd.Parameters.AddWithValue("@Id", idObject);
+                    var scalar = docTypeCmd.ExecuteScalar();
+                    if (scalar != null && scalar != DBNull.Value)
+                        documentTypeId = Convert.ToInt32(scalar);
+                }
+
+                if (!documentTypeId.HasValue || documentTypeId.Value <= 0)
+                    return null;
+
+                using (var defaultLayoutCmd = new SqlCommand(defaultLayoutByDocTypeSql, connection))
+                {
+                    defaultLayoutCmd.Parameters.AddWithValue("@DocumentTypeId", documentTypeId.Value);
+                    using (var reader = defaultLayoutCmd.ExecuteReader())
+                    {
+                        if (!reader.Read())
+                            return null;
+
+                        return MapLayout(reader);
+                    }
                 }
             }
+        }
+
+        private static DynamicLayoutConfig MapLayout(SqlDataReader reader)
+        {
+            return new DynamicLayoutConfig
+            {
+                Id = reader.GetInt32(0),
+                DocumentTypeId = reader.GetInt32(1),
+                LayoutName = reader.GetString(2),
+                LayoutPath = reader.GetString(3)
+            };
         }
 
         private string ResolveReportPath(string layoutPath)
