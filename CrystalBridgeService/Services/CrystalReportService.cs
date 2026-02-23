@@ -45,7 +45,9 @@ namespace CrystalBridgeService.Services
                 reportDocument.Load(reportPath);
 
                 SetParameterIfExists(reportDocument, "DocKey@", idObject);
-                SetParameterIfExists(reportDocument, "ObjectId@", layout.DocumentTypeId);
+                SetParameterIfExists(reportDocument, "ObjectId@", idObject);
+                SetParameterIfExists(reportDocument, "DocumentTypeId@", layout.DocumentTypeId);
+                SetParameterIfExists(reportDocument, "ObjectTypeId@", layout.DocumentTypeId);
                 SetParameterIfExists(reportDocument, "PrintedByUserID@", NormalizePrintedByUserId(printedByUserId));
                 SetParameterIfExists(reportDocument, "ApplicationPath@", _reportsRootPath);
 
