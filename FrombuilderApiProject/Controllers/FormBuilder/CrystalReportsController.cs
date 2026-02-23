@@ -171,7 +171,7 @@ public class CrystalReportsController : ControllerBase
             .AsNoTracking()
             .Where(x => x.DocumentTypeId == documentTypeId.Value && x.IsActive && !x.IsDeleted)
             .OrderByDescending(x => x.IsDefault)
-            .ThenByDescending(x => x.Id)
+            .ThenBy(x => x.Id)
             .Select(x => x.Id)
             .ToListAsync(cancellationToken);
 

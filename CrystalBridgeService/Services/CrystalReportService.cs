@@ -13,6 +13,12 @@ namespace CrystalBridgeService.Services
 {
     public sealed class CrystalReportService : ICrystalReportService
     {
+        private sealed class SubmissionContext
+        {
+            public int? DocumentTypeId { get; set; }
+            public string DocumentNumber { get; set; }
+        }
+
         private readonly string _connectionString;
         private readonly string _reportsRootPath;
 
@@ -31,7 +37,8 @@ namespace CrystalBridgeService.Services
             if (idObject <= 0)
                 throw new ArgumentOutOfRangeException(nameof(idObject));
 
-            var layout = LoadLayout(idLayout, idObject);
+            var submissionContext = LoadSubmissionContext(idObject);
+            var layout = LoadLayout(idLayout, submissionContext);
             if (layout == null)
                 throw new InvalidOperationException("Layout not found or inactive.");
 
@@ -46,9 +53,18 @@ namespace CrystalBridgeService.Services
                 reportDocument.Load(reportPath);
 
                 SetParameterIfExists(reportDocument, idObject, "DocKey@", "DocKey", "@DocKey");
-                SetParameterIfExists(reportDocument, idObject, "ObjectId@", "ObjectId", "@ObjectId", "DocEntry@", "DocEntry");
+                SetParameterIfExists(reportDocument, idObject, "ObjectId@", "ObjectId", "@ObjectId", "DocEntry@", "DocEntry", "SubmissionId@", "SubmissionId");
                 SetParameterIfExists(reportDocument, layout.DocumentTypeId, "DocumentTypeId@", "DocumentTypeId", "@DocumentTypeId");
                 SetParameterIfExists(reportDocument, layout.DocumentTypeId, "ObjectTypeId@", "ObjectTypeId", "@ObjectTypeId");
+
+                if (!string.IsNullOrWhiteSpace(submissionContext.DocumentNumber))
+                {
+                    SetParameterIfExists(reportDocument, submissionContext.DocumentNumber,
+                        "DocumentNumber@", "DocumentNumber",
+                        "DocNumber@", "DocNumber",
+                        "DocNum@", "DocNum");
+                }
+
                 SetParameterIfExists(reportDocument, NormalizePrintedByUserId(printedByUserId), "PrintedByUserID@", "PrintedByUserID");
                 SetParameterIfExists(reportDocument, _reportsRootPath, "ApplicationPath@", "ApplicationPath");
 
@@ -68,7 +84,40 @@ namespace CrystalBridgeService.Services
             }
         }
 
-        private DynamicLayoutConfig LoadLayout(int idLayout, int idObject)
+        private SubmissionContext LoadSubmissionContext(int idObject)
+        {
+            const string submissionSql = @"
+SELECT TOP 1
+    DocumentTypeId,
+    DocumentNumber
+FROM dbo.FORM_SUBMISSIONS
+WHERE Id = @Id
+  AND IsDeleted = 0";
+
+            using (var connection = new SqlConnection(_connectionString))
+            using (var command = new SqlCommand(submissionSql, connection))
+            {
+                command.Parameters.AddWithValue("@Id", idObject);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    if (!reader.Read())
+                    {
+                        return new SubmissionContext();
+                    }
+
+                    var context = new SubmissionContext();
+                    if (!reader.IsDBNull(0))
+                        context.DocumentTypeId = reader.GetInt32(0);
+                    if (!reader.IsDBNull(1))
+                        context.DocumentNumber = reader.GetString(1);
+
+                    return context;
+                }
+            }
+        }
+
+        private DynamicLayoutConfig LoadLayout(int idLayout, SubmissionContext submissionContext)
         {
             const string layoutByIdSql = @"
 SELECT TOP 1
@@ -82,13 +131,6 @@ WHERE Id = @Id
   AND IsActive = 1
   AND IsDeleted = 0";
 
-            const string submissionDocTypeSql = @"
-SELECT TOP 1
-    DocumentTypeId
-FROM dbo.FORM_SUBMISSIONS
-WHERE Id = @Id
-  AND IsDeleted = 0";
-
             const string defaultLayoutByDocTypeSql = @"
 SELECT TOP 1
     Id,
@@ -99,25 +141,16 @@ FROM dbo.CRYSTAL_LAYOUTS
 WHERE DocumentTypeId = @DocumentTypeId
   AND IsActive = 1
   AND IsDeleted = 0
-ORDER BY IsDefault DESC, Id DESC";
+ORDER BY IsDefault DESC, Id ASC";
 
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
-                int? documentTypeId = null;
-                using (var docTypeCmd = new SqlCommand(submissionDocTypeSql, connection))
-                {
-                    docTypeCmd.Parameters.AddWithValue("@Id", idObject);
-                    var scalar = docTypeCmd.ExecuteScalar();
-                    if (scalar != null && scalar != DBNull.Value)
-                        documentTypeId = Convert.ToInt32(scalar);
-                }
-
                 using (var layoutByIdCmd = new SqlCommand(layoutByIdSql, connection))
                 {
                     layoutByIdCmd.Parameters.AddWithValue("@Id", idLayout);
-                    layoutByIdCmd.Parameters.AddWithValue("@SubmissionDocumentTypeId", (object?)documentTypeId ?? DBNull.Value);
+                    layoutByIdCmd.Parameters.AddWithValue("@SubmissionDocumentTypeId", (object?)submissionContext.DocumentTypeId ?? DBNull.Value);
                     using (var reader = layoutByIdCmd.ExecuteReader())
                     {
                         if (reader.Read())
@@ -125,12 +158,12 @@ ORDER BY IsDefault DESC, Id DESC";
                     }
                 }
 
-                if (!documentTypeId.HasValue || documentTypeId.Value <= 0)
+                if (!submissionContext.DocumentTypeId.HasValue || submissionContext.DocumentTypeId.Value <= 0)
                     return null;
 
                 using (var defaultLayoutCmd = new SqlCommand(defaultLayoutByDocTypeSql, connection))
                 {
-                    defaultLayoutCmd.Parameters.AddWithValue("@DocumentTypeId", documentTypeId.Value);
+                    defaultLayoutCmd.Parameters.AddWithValue("@DocumentTypeId", submissionContext.DocumentTypeId.Value);
                     using (var reader = defaultLayoutCmd.ExecuteReader())
                     {
                         if (!reader.Read())
@@ -294,6 +327,18 @@ ORDER BY IsDefault DESC, Id DESC";
             if (candidateNames == null || candidateNames.Length == 0)
                 return;
 
+            if (SetParameterOnDocument(reportDocument, value, candidateNames))
+                return;
+
+            foreach (ReportDocument subreport in reportDocument.Subreports)
+            {
+                if (SetParameterOnDocument(subreport, value, candidateNames))
+                    return;
+            }
+        }
+
+        private static bool SetParameterOnDocument(ReportDocument reportDocument, object value, IEnumerable<string> candidateNames)
+        {
             var parameters = reportDocument.DataDefinition.ParameterFields
                 .Cast<ParameterFieldDefinition>()
                 .Select(x => x.Name)
@@ -305,8 +350,10 @@ ORDER BY IsDefault DESC, Id DESC";
                     continue;
 
                 reportDocument.SetParameterValue(name, value);
-                break;
+                return true;
             }
+
+            return false;
         }
     }
 }
