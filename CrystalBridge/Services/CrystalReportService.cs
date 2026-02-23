@@ -52,7 +52,20 @@ namespace CrystalBridge.Services
             {
                 reportDocument.Load(reportPath);
 
-                SetParameterIfExists(reportDocument, idObject, "DocKey@", "DocKey", "@DocKey");
+                var docKeyAssigned = false;
+                if (!string.IsNullOrWhiteSpace(submissionContext.DocumentNumber))
+                {
+                    docKeyAssigned = SetParameterIfExists(
+                        reportDocument,
+                        submissionContext.DocumentNumber,
+                        "DocKey@", "DocKey", "@DocKey");
+                }
+
+                if (!docKeyAssigned)
+                {
+                    SetParameterIfExists(reportDocument, idObject, "DocKey@", "DocKey", "@DocKey");
+                }
+
                 SetParameterIfExists(reportDocument, idObject, "ObjectId@", "ObjectId", "@ObjectId", "DocEntry@", "DocEntry", "SubmissionId@", "SubmissionId");
                 SetParameterIfExists(reportDocument, layout.DocumentTypeId, "DocumentTypeId@", "DocumentTypeId", "@DocumentTypeId");
                 SetParameterIfExists(reportDocument, layout.DocumentTypeId, "ObjectTypeId@", "ObjectTypeId", "@ObjectTypeId");
@@ -148,7 +161,20 @@ namespace CrystalBridge.Services
                 debug.MatchedParameters["PrintedByUserID"] = FindParameterMatch(reportDocument, "PrintedByUserID@", "PrintedByUserID");
                 debug.MatchedParameters["ApplicationPath"] = FindParameterMatch(reportDocument, "ApplicationPath@", "ApplicationPath");
 
-                SetParameterIfExists(reportDocument, idObject, "DocKey@", "DocKey", "@DocKey");
+                var docKeyAssigned = false;
+                if (!string.IsNullOrWhiteSpace(submissionContext.DocumentNumber))
+                {
+                    docKeyAssigned = SetParameterIfExists(
+                        reportDocument,
+                        submissionContext.DocumentNumber,
+                        "DocKey@", "DocKey", "@DocKey");
+                }
+
+                if (!docKeyAssigned)
+                {
+                    SetParameterIfExists(reportDocument, idObject, "DocKey@", "DocKey", "@DocKey");
+                }
+
                 SetParameterIfExists(reportDocument, idObject, "ObjectId@", "ObjectId", "@ObjectId", "DocEntry@", "DocEntry", "SubmissionId@", "SubmissionId");
                 SetParameterIfExists(reportDocument, layout.DocumentTypeId, "DocumentTypeId@", "DocumentTypeId", "@DocumentTypeId");
                 SetParameterIfExists(reportDocument, layout.DocumentTypeId, "ObjectTypeId@", "ObjectTypeId", "@ObjectTypeId");
@@ -420,19 +446,21 @@ ORDER BY IsDefault DESC, Id ASC";
             }
         }
 
-        private static void SetParameterIfExists(ReportDocument reportDocument, object value, params string[] candidateNames)
+        private static bool SetParameterIfExists(ReportDocument reportDocument, object value, params string[] candidateNames)
         {
             if (candidateNames == null || candidateNames.Length == 0)
-                return;
+                return false;
 
             if (SetParameterOnDocument(reportDocument, value, candidateNames))
-                return;
+                return true;
 
             foreach (ReportDocument subreport in reportDocument.Subreports)
             {
                 if (SetParameterOnDocument(subreport, value, candidateNames))
-                    return;
+                    return true;
             }
+
+            return false;
         }
 
         private static bool SetParameterOnDocument(ReportDocument reportDocument, object value, IEnumerable<string> candidateNames)
