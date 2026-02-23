@@ -452,10 +452,11 @@ D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\staticw
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\staticwebassets.build.json.cache
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\staticwebassets.development.json
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\FormBuil.6FE58BCE.Up2Date
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\FormBuilder.ApiProject.dll
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\refint\FormBuilder.ApiProject.dll
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\FormBuilder.ApiProject.pdb
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\FormBuilder.ApiProject.genruntimeconfig.cache
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\ref\FormBuilder.ApiProject.dll
+d:\trioapps\FormBuilderApiProject\FrombuilderApiProject\obj\Debug\net9.0\ar\FormBuilder.ApiProject.resources.cs
+d:\trioapps\FormBuilderApiProject\FrombuilderApiProject\obj\Debug\net9.0\en\FormBuilder.ApiProject.resources.cs

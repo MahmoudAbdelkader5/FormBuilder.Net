@@ -94,25 +94,80 @@ public class CrystalReportsController : ControllerBase
         var outputName = string.IsNullOrWhiteSpace(fileName) ? "Report" : fileName;
         var printedByUserId = User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
 
-        (byte[] Content, string ContentType, string? FileName) result;
-        try
+        var layoutCandidates = await GetLayoutCandidatesAsync(idLayout, idObject, cancellationToken);
+        if (layoutCandidates.Count == 0)
+            return NotFound("No active crystal layout found for this submission.");
+
+        (byte[] Content, string ContentType, string? FileName) result = default;
+        InvalidOperationException? lastLayoutNotFoundError = null;
+
+        foreach (var candidateLayoutId in layoutCandidates)
         {
-            result = await _crystalReportProxyService.GenerateLayoutPdfAsync(
-                idLayout,
-                idObject,
-                outputName,
-                printedByUserId,
-                cancellationToken);
-        }
-        catch (InvalidOperationException ex)
-        {
-            return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+            try
+            {
+                result = await _crystalReportProxyService.GenerateLayoutPdfAsync(
+                    candidateLayoutId,
+                    idObject,
+                    outputName,
+                    printedByUserId,
+                    cancellationToken);
+
+                var downloadedFileName = string.IsNullOrWhiteSpace(result.FileName)
+                    ? $"{outputName}.pdf"
+                    : result.FileName;
+
+                return File(result.Content, result.ContentType, downloadedFileName);
+            }
+            catch (InvalidOperationException ex) when (IsLayoutMissingOrInactiveError(ex))
+            {
+                lastLayoutNotFoundError = ex;
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
+            }
         }
 
-        var downloadedFileName = string.IsNullOrWhiteSpace(result.FileName)
-            ? $"{outputName}.pdf"
-            : result.FileName;
+        if (lastLayoutNotFoundError != null)
+            return Problem(detail: lastLayoutNotFoundError.Message, statusCode: StatusCodes.Status500InternalServerError);
 
-        return File(result.Content, result.ContentType, downloadedFileName);
+        return Problem(detail: "Failed to resolve an active crystal layout.", statusCode: StatusCodes.Status500InternalServerError);
+    }
+
+    private static bool IsLayoutMissingOrInactiveError(InvalidOperationException ex) =>
+        ex.Message.Contains("Layout not found or inactive", StringComparison.OrdinalIgnoreCase);
+
+    private async Task<List<int>> GetLayoutCandidatesAsync(int requestedLayoutId, int objectId, CancellationToken cancellationToken)
+    {
+        var candidates = new List<int>();
+        var seen = new HashSet<int>();
+
+        if (requestedLayoutId > 0 && seen.Add(requestedLayoutId))
+            candidates.Add(requestedLayoutId);
+
+        var documentTypeId = await _formBuilderDbContext.FORM_SUBMISSIONS
+            .AsNoTracking()
+            .Where(x => x.Id == objectId && !x.IsDeleted)
+            .Select(x => (int?)x.DocumentTypeId)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (!documentTypeId.HasValue || documentTypeId.Value <= 0)
+            return candidates;
+
+        var activeLayoutIds = await _formBuilderDbContext.CRYSTAL_LAYOUTS
+            .AsNoTracking()
+            .Where(x => x.DocumentTypeId == documentTypeId.Value && x.IsActive && !x.IsDeleted)
+            .OrderByDescending(x => x.IsDefault)
+            .ThenByDescending(x => x.Id)
+            .Select(x => x.Id)
+            .ToListAsync(cancellationToken);
+
+        foreach (var layoutId in activeLayoutIds)
+        {
+            if (seen.Add(layoutId))
+                candidates.Add(layoutId);
+        }
+
+        return candidates;
     }
 }
