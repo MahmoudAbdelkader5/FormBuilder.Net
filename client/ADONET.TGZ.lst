@@ -1,0 +1,20 @@
+LSS-HASHES
+Hash: SHA256
+
+b14817c3d59370b04c18480c434dbdef121c418752423f58832d157fd18f4618   PACKAGEDATA
+3b19e9b73c9305bf396589969ca05ee7695eefbc08245a33aafc0586a47bbc21   files.lst
+5286275d4427a0a1a65cd96efa580b39e031c6f99edc3075bd39cd663446e3aa   script.pm
+a373588af5254c2fdf460d9434424ca6ff92e926404de8416fe4399e43097730   ado.net/libadonetHDB.dll
+1e4edc08a0067327059861ad6aed8b7c4d0e32a16dfb40b4d1a9b8d397f9e950   ado.net/libadonetHDB32.dll
+1272581ded168b26de4ae32c9ec817ee859157347ff2cc317f4be4e9395309ca   ado.net/v3.5/Sap.Data.Hana.v3.5.dll
+cdf477072a2ef0fcbb38a130192bc57f6608a22bec842ee619442116669dce73   ado.net/v3.5/Sap.Data.Hana.v3.5.dll.config
+d8278b0da0a88f87ec78c0045f25723d1d474e0da88a2acbaab0d1572d80d215   ado.net/v3.5/Sap.Data.Hana.v3.5.xml
+863778cfa84c80797f78bd60123f62a522cb42bfbba1a9f45689b48321e5f233   ado.net/v3.5/Sap.VSPackage.Hana.dll
+3f0ac580b0d0fd9909f6d8577cd558a5ae1973642fe832738a61f191bf600676   ado.net/v3.5/SetupNet.v3.5.exe
+d2118232bba12f312b065907709f22d2ef486403e3a38ed3cab443d16a65d723   ado.net/v3.5/policy.2.27.Sap.Data.Hana.v3.5.dll
+22299a1ac4aa5b1cfbbc919d8cc174271e143b1f2ff3937f1bb7612fc08ed8eb   ado.net/v4.5/SSDLToHana.tt
+4eaece98ec629218345bd2ecd363a35c1b18da530d6a0e7dca0d078456a21b35   ado.net/v4.5/Sap.Data.Hana.v4.5.dll
+71ef510b85415b4e85320907a5d59fdde167a0c6db16f2fb42a7f0efed12ac05   ado.net/v4.5/Sap.Data.Hana.v4.5.dll.config
+f302d860b382c8412995a1641b824dae832e1b1af56e6560aceb23190042ac2c   ado.net/v4.5/Sap.Data.Hana.v4.5.xml
+6da1c4929a362339783ba500ffbee04ac0b5488e7b085bd2a721f04b0503b2b6   ado.net/v4.5/SetupNet.v4.5.exe
+45948058f2c0dd894f3d0dfd0117050546e96ee86ea95b6acc07d2faced8d027   ado.net/v4.5/policy.2.27.Sap.Data.Hana.v4.5.dll

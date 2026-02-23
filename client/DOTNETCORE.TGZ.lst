@@ -1,0 +1,26 @@
+LSS-HASHES
+Hash: SHA256
+
+d61322ec2d7760895b6a5d4e2eb32e1dad5ca10a2f595d702105bdbaaef180aa   PACKAGEDATA
+28d7540be43c6c0c1511af5a6bf7ff03d8381311038edefcac79580586988771   files.lst
+5dbf0a34f495c034e496ff6471fd555a0c724c4d5fe042617abd57cad99d5dd7   script.pm
+a373588af5254c2fdf460d9434424ca6ff92e926404de8416fe4399e43097730   dotnetcore/libadonetHDB.dll
+1e4edc08a0067327059861ad6aed8b7c4d0e32a16dfb40b4d1a9b8d397f9e950   dotnetcore/libadonetHDB32.dll
+c9ea28b766cb6923d7e9d78f8cb19d3026968aff35c485c58f2a39cda1cd53c3   dotnetcore/v6.0/Sap.Data.Hana.Net.v6.0.deps.json
+dff64af1e34905f8ef978005506c3ce98a173752c4e06b02b09e119a78caffd0   dotnetcore/v6.0/Sap.Data.Hana.Net.v6.0.dll
+d3ff9bc36413d22a0acd5e3f50a0b6e13c0e4a68fcbc0f50ed6249418fbb93df   dotnetcore/v6.0/Sap.EntityFrameworkCore.Hana.NetTopologySuite.v7.0.deps.json
+2eb2708d7545eb1afc4bd03f5206aa4045217dc4b1102c2d60be08d12c44b7bb   dotnetcore/v6.0/Sap.EntityFrameworkCore.Hana.NetTopologySuite.v7.0.dll
+6405ce0217096e39d0e46d7d73ef90d4809fff60e9ea52a72e995ebab3c71c46   dotnetcore/v6.0/Sap.EntityFrameworkCore.Hana.v6.0.deps.json
+9b2cc158ff0ce9f9ed6e3750d0add2847c7baeec597ac8991338f4ae205e9520   dotnetcore/v6.0/Sap.EntityFrameworkCore.Hana.v6.0.dll
+80606596455f64142298067dfed91801d5927a0b941f2a5f3b60a2b1af1119da   dotnetcore/v6.0/Sap.EntityFrameworkCore.Hana.v7.0.deps.json
+6821b60923f5315c0c756a1403d1d3c082efffb359a09069104d5d526e369c77   dotnetcore/v6.0/Sap.EntityFrameworkCore.Hana.v7.0.dll
+7c9e234ba1ad97c42125701fef26fdd3ea640af8b32cb63c2cc3d8557d35f259   dotnetcore/v8.0/Sap.Data.Hana.Net.v8.0.deps.json
+a346377e191db2e46d4be80b2d0e3421a5e1a171be221e803fd8654e89f12863   dotnetcore/v8.0/Sap.Data.Hana.Net.v8.0.dll
+0cb0f05c5892fe5084d1b4204732b934a95a9e87ac6614e3cb28f4dba71622db   dotnetcore/v8.0/Sap.EntityFrameworkCore.Hana.NetTopologySuite.v8.0.deps.json
+a2328b5a0cae5f87d4d71c70d014d4100f13ca95af229480f089dd11dda4c77b   dotnetcore/v8.0/Sap.EntityFrameworkCore.Hana.NetTopologySuite.v8.0.dll
+891ce0b834122bf77267cdfde4b378e75649caa79fe55a4430446802e71fd11d   dotnetcore/v8.0/Sap.EntityFrameworkCore.Hana.NetTopologySuite.v9.0.deps.json
+bbcc03ac5e98d36a92d4abb1f83bf084151dbf4823472ffacd4ec16fb6759a5d   dotnetcore/v8.0/Sap.EntityFrameworkCore.Hana.NetTopologySuite.v9.0.dll
+b163aa4aae1e4025e3154c74f3df8ce56943e578e1a25e78c3f8853588c94689   dotnetcore/v8.0/Sap.EntityFrameworkCore.Hana.v8.0.deps.json
+6ea0191578897c58d29bcd1570bc1a1c431be02bb4c756d5b5e02ba85d9f305e   dotnetcore/v8.0/Sap.EntityFrameworkCore.Hana.v8.0.dll
+b5d28a57ff6b3e2f572a9668db3e93bf704ff8d235a5991de0567e542f5e1616   dotnetcore/v8.0/Sap.EntityFrameworkCore.Hana.v9.0.deps.json
+c4278e6ccb60b782cb914055c3997cd0c43c1f3a57ecdce94c5a89d392fc3967   dotnetcore/v8.0/Sap.EntityFrameworkCore.Hana.v9.0.dll

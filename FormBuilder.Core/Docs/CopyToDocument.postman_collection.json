@@ -1,0 +1,400 @@
+{
+  "info": {
+    "name": "CopyToDocument API",
+    "description": "Complete API collection for CopyToDocument endpoints with new required fields",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "copy-to-document-api"
+  },
+  "item": [
+    {
+      "name": "Execute CopyToDocument",
+      "item": [
+        {
+          "name": "Create New Document (Draft)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"sourceDocumentTypeId\": 1,\n    \"sourceFormId\": 10,\n    \"targetDocumentTypeId\": 2,\n    \"targetFormId\": 20,\n    \"createNewDocument\": true,\n    \"initialStatus\": \"Draft\",\n    \"fieldMapping\": {\n      \"TOTAL_AMOUNT\": \"CONTRACT_VALUE\",\n      \"REQUEST_DATE\": \"ORDER_DATE\",\n      \"CUSTOMER_NAME\": \"PARTY_NAME\"\n    },\n    \"gridMapping\": {\n      \"ITEMS\": \"CONTRACT_ITEMS\"\n    },\n    \"copyCalculatedFields\": true,\n    \"copyGridRows\": true,\n    \"startWorkflow\": false,\n    \"linkDocuments\": true,\n    \"copyAttachments\": false,\n    \"copyMetadata\": false,\n    \"overrideTargetDefaults\": false,\n    \"metadataFields\": []\n  },\n  \"sourceSubmissionId\": 115,\n  \"actionId\": null,\n  \"ruleId\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/execute",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "execute"]
+            },
+            "description": "Create a new target document with Draft status"
+          }
+        },
+        {
+          "name": "Create New Document (Submitted)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"sourceDocumentTypeId\": 1,\n    \"sourceFormId\": 10,\n    \"targetDocumentTypeId\": 2,\n    \"targetFormId\": 20,\n    \"createNewDocument\": true,\n    \"initialStatus\": \"Submitted\",\n    \"fieldMapping\": {\n      \"TOTAL_AMOUNT\": \"CONTRACT_VALUE\",\n      \"REQUEST_DATE\": \"ORDER_DATE\"\n    },\n    \"gridMapping\": {},\n    \"copyCalculatedFields\": true,\n    \"copyGridRows\": true,\n    \"startWorkflow\": false,\n    \"linkDocuments\": true,\n    \"copyAttachments\": false,\n    \"copyMetadata\": false,\n    \"overrideTargetDefaults\": false,\n    \"metadataFields\": []\n  },\n  \"sourceSubmissionId\": 115\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/execute",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "execute"]
+            },
+            "description": "Create a new target document with Submitted status"
+          }
+        },
+        {
+          "name": "Update Existing Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"sourceDocumentTypeId\": 1,\n    \"sourceFormId\": 10,\n    \"targetDocumentTypeId\": 2,\n    \"targetFormId\": 20,\n    \"createNewDocument\": false,\n    \"targetDocumentId\": 116,\n    \"initialStatus\": \"Draft\",\n    \"fieldMapping\": {\n      \"TOTAL_AMOUNT\": \"CONTRACT_VALUE\",\n      \"REQUEST_DATE\": \"ORDER_DATE\"\n    },\n    \"gridMapping\": {\n      \"ITEMS\": \"CONTRACT_ITEMS\"\n    },\n    \"copyCalculatedFields\": true,\n    \"copyGridRows\": true,\n    \"startWorkflow\": false,\n    \"linkDocuments\": false,\n    \"copyAttachments\": false,\n    \"copyMetadata\": false,\n    \"overrideTargetDefaults\": true,\n    \"metadataFields\": []\n  },\n  \"sourceSubmissionId\": 115\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/execute",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "execute"]
+            },
+            "description": "Update an existing target document"
+          }
+        },
+        {
+          "name": "Copy with Attachments and Metadata",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"sourceDocumentTypeId\": 1,\n    \"sourceFormId\": 10,\n    \"targetDocumentTypeId\": 2,\n    \"targetFormId\": 20,\n    \"createNewDocument\": true,\n    \"initialStatus\": \"Draft\",\n    \"fieldMapping\": {\n      \"TOTAL_AMOUNT\": \"CONTRACT_VALUE\"\n    },\n    \"gridMapping\": {},\n    \"copyCalculatedFields\": true,\n    \"copyGridRows\": false,\n    \"startWorkflow\": false,\n    \"linkDocuments\": true,\n    \"copyAttachments\": true,\n    \"copyMetadata\": true,\n    \"overrideTargetDefaults\": false,\n    \"metadataFields\": [\n      \"SubmittedDate\",\n      \"SubmittedByUserId\",\n      \"Status\"\n    ]\n  },\n  \"sourceSubmissionId\": 115\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/execute",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "execute"]
+            },
+            "description": "Copy document with attachments and metadata"
+          }
+        },
+        {
+          "name": "Start Workflow",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"sourceDocumentTypeId\": 1,\n    \"sourceFormId\": 10,\n    \"targetDocumentTypeId\": 2,\n    \"targetFormId\": 20,\n    \"createNewDocument\": true,\n    \"initialStatus\": \"Draft\",\n    \"fieldMapping\": {\n      \"TOTAL_AMOUNT\": \"CONTRACT_VALUE\"\n    },\n    \"gridMapping\": {},\n    \"copyCalculatedFields\": true,\n    \"copyGridRows\": false,\n    \"startWorkflow\": true,\n    \"linkDocuments\": true,\n    \"copyAttachments\": false,\n    \"copyMetadata\": false,\n    \"overrideTargetDefaults\": false,\n    \"metadataFields\": []\n  },\n  \"sourceSubmissionId\": 115\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/execute",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "execute"]
+            },
+            "description": "Create document and start workflow"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Execute by Codes",
+      "item": [
+        {
+          "name": "Execute with Codes",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"sourceDocumentTypeCode\": \"PURCHASE_REQUEST\",\n    \"sourceFormCode\": \"PR_FORM\",\n    \"targetDocumentTypeCode\": \"PURCHASE_ORDER\",\n    \"targetFormCode\": \"PO_FORM\",\n    \"createNewDocument\": true,\n    \"initialStatus\": \"Draft\",\n    \"fieldMapping\": {\n      \"TOTAL_AMOUNT\": \"CONTRACT_VALUE\",\n      \"REQUEST_DATE\": \"ORDER_DATE\"\n    },\n    \"gridMapping\": {\n      \"ITEMS\": \"CONTRACT_ITEMS\"\n    },\n    \"copyCalculatedFields\": true,\n    \"copyGridRows\": true,\n    \"startWorkflow\": false,\n    \"linkDocuments\": true,\n    \"copyAttachments\": false,\n    \"copyMetadata\": false,\n    \"overrideTargetDefaults\": false,\n    \"metadataFields\": []\n  },\n  \"sourceSubmissionId\": 115,\n  \"actionId\": null,\n  \"ruleId\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/execute-by-codes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "execute-by-codes"]
+            },
+            "description": "Execute CopyToDocument using codes instead of IDs"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Audit",
+      "item": [
+        {
+          "name": "Get All Audit Records",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/audit?page=1&pageSize=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "audit"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "10",
+                  "description": "Page size"
+                },
+                {
+                  "key": "sourceSubmissionId",
+                  "value": "",
+                  "description": "Filter by source submission ID",
+                  "disabled": true
+                },
+                {
+                  "key": "targetDocumentId",
+                  "value": "",
+                  "description": "Filter by target document ID",
+                  "disabled": true
+                },
+                {
+                  "key": "ruleId",
+                  "value": "",
+                  "description": "Filter by rule ID",
+                  "disabled": true
+                },
+                {
+                  "key": "success",
+                  "value": "",
+                  "description": "Filter by success status (true/false)",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get all audit records with pagination and filters"
+          }
+        },
+        {
+          "name": "Get Audit Record By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/audit/{{auditId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "audit", "{{auditId}}"]
+            },
+            "description": "Get a specific audit record by ID"
+          }
+        },
+        {
+          "name": "Get Audit By Submission ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/audit/submission/{{submissionId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "audit", "submission", "{{submissionId}}"]
+            },
+            "description": "Get all audit records for a specific source submission"
+          }
+        },
+        {
+          "name": "Get Audit By Target Document ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/audit/target/{{targetDocumentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "audit", "target", "{{targetDocumentId}}"]
+            },
+            "description": "Get all audit records for a specific target document"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Validation Tests",
+      "item": [
+        {
+          "name": "Missing sourceDocumentTypeId",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"sourceFormId\": 10,\n    \"targetDocumentTypeId\": 2,\n    \"targetFormId\": 20,\n    \"createNewDocument\": true,\n    \"fieldMapping\": {}\n  },\n  \"sourceSubmissionId\": 115\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/execute",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "execute"]
+            },
+            "description": "Test validation error when sourceDocumentTypeId is missing"
+          }
+        },
+        {
+          "name": "Missing sourceFormId",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"sourceDocumentTypeId\": 1,\n    \"targetDocumentTypeId\": 2,\n    \"targetFormId\": 20,\n    \"createNewDocument\": true,\n    \"fieldMapping\": {}\n  },\n  \"sourceSubmissionId\": 115\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/execute",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "execute"]
+            },
+            "description": "Test validation error when sourceFormId is missing"
+          }
+        },
+        {
+          "name": "Invalid initialStatus",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"config\": {\n    \"sourceDocumentTypeId\": 1,\n    \"sourceFormId\": 10,\n    \"targetDocumentTypeId\": 2,\n    \"targetFormId\": 20,\n    \"createNewDocument\": true,\n    \"initialStatus\": \"InvalidStatus\",\n    \"fieldMapping\": {}\n  },\n  \"sourceSubmissionId\": 115\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/CopyToDocument/execute",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "CopyToDocument", "execute"]
+            },
+            "description": "Test validation error when initialStatus is invalid"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "YOUR_TOKEN_HERE",
+      "type": "string"
+    },
+    {
+      "key": "submissionId",
+      "value": "115",
+      "type": "string"
+    },
+    {
+      "key": "targetDocumentId",
+      "value": "116",
+      "type": "string"
+    },
+    {
+      "key": "auditId",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}
+

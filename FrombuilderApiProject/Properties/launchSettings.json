@@ -1,0 +1,39 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5203",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DS_AUTH_SERVER": "account-d.docusign.com",
+        "DS_INTEGRATION_KEY": "5f5e24fa-8ad3-4bdb-8e5c-3e68e96da5a1",
+        "DS_USER_ID": "314a7865-d00a-498d-ab30-6868133ae9ea",
+        "DS_PRIVATE_KEY_PATH": "C:\\secrets\\docusign_private.pem",
+        "APP_BASE_URL": "http://localhost:4200",
+        "DS_REDIRECT_URI": "https://localhost:5001/api/docusign/callback",
+        "DS_RECIPIENT_RETURN_URL": "http://localhost:4200/signature/return"
+      }
+    },
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7276;http://localhost:5203",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DS_AUTH_SERVER": "account-d.docusign.com",
+        "DS_INTEGRATION_KEY": "5f5e24fa-8ad3-4bdb-8e5c-3e68e96da5a1",
+        "DS_USER_ID": "314a7865-d00a-498d-ab30-6868133ae9ea",
+        "DS_PRIVATE_KEY_PATH": "C:\\secrets\\docusign_private.pem",
+        "APP_BASE_URL": "http://localhost:4200",
+        "DS_REDIRECT_URI": "https://localhost:5001/api/docusign/callback",
+        "DS_RECIPIENT_RETURN_URL": "http://localhost:4200/signature/return"
+      }
+    }
+  }
+}

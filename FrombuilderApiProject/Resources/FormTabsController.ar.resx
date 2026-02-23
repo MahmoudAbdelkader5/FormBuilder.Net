@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="FormTabs_UserIdNotFound" xml:space="preserve">
+    <value>معرّف المستخدم غير موجود في الـ claims.</value>
+  </data>
+  <data name="FormTabs_TabCodeExists" xml:space="preserve">
+    <value>كود التبويب مستخدم بالفعل.</value>
+  </data>
+  <data name="FormTabs_TabCodeAvailable" xml:space="preserve">
+    <value>كود التبويب متاح.</value>
+  </data>
+  <data name="FormTabs_TabExists" xml:space="preserve">
+    <value>التبويب موجود.</value>
+  </data>
+  <data name="FormTabs_TabNotExists" xml:space="preserve">
+    <value>التبويب غير موجود.</value>
+  </data>
+</root>

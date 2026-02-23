@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace FormBuilder.Core.Models;
+
+public partial class TblCustomerSponsor
+{
+    public int Id { get; set; }
+
+    public int IdCustomer { get; set; }
+
+    public int IdSponsor { get; set; }
+
+    public int? IdLegalEntity { get; set; }
+
+    public bool IsActive { get; set; }
+
+    public int IdCreatedBy { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public int? IdUpdatedBy { get; set; }
+
+    public DateTime? UpdatedDate { get; set; }
+
+    public virtual TblCustomer IdCustomerNavigation { get; set; } = null!;
+
+    public virtual TblLegalEntity? IdLegalEntityNavigation { get; set; }
+
+    public virtual TblSponsor IdSponsorNavigation { get; set; } = null!;
+}

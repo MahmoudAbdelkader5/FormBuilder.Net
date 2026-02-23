@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Common_PayloadRequired" xml:space="preserve">
+    <value>البيانات المطلوبة غير موجودة.</value>
+  </data>
+  <data name="Common_ValidationFailed" xml:space="preserve">
+    <value>فشل التحقق من البيانات.</value>
+  </data>
+  <data name="Common_ResourceNotFound" xml:space="preserve">
+    <value>المورد غير موجود.</value>
+  </data>
+  <data name="Term_Tabs" xml:space="preserve">
+    <value>التبويبات</value>
+  </data>
+  <data name="Term_Field" xml:space="preserve">
+    <value>حقل</value>
+  </data>
+  <data name="Term_Fields" xml:space="preserve">
+    <value>الحقول</value>
+  </data>
+  <data name="Term_FormBuilder" xml:space="preserve">
+    <value>منشئ النماذج</value>
+  </data>
+  <data name="Term_FormBuilders" xml:space="preserve">
+    <value>منشئو النماذج</value>
+  </data>
+  <data name="Term_FieldType" xml:space="preserve">
+    <value>نوع الحقل</value>
+  </data>
+  <data name="Term_FieldTypes" xml:space="preserve">
+    <value>أنواع الحقول</value>
+  </data>
+  <data name="Term_Option" xml:space="preserve">
+    <value>خيار</value>
+  </data>
+  <data name="Term_Options" xml:space="preserve">
+    <value>الخيارات</value>
+  </data>
+  <data name="Term_SqlQuery" xml:space="preserve">
+    <value>استعلام SQL</value>
+  </data>
+</root>

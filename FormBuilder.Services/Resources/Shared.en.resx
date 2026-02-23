@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Common_PayloadRequired" xml:space="preserve">
+    <value>Payload is required.</value>
+  </data>
+  <data name="Common_ValidationFailed" xml:space="preserve">
+    <value>Validation failed.</value>
+  </data>
+  <data name="Common_ResourceNotFound" xml:space="preserve">
+    <value>Resource not found.</value>
+  </data>
+  <data name="Term_Tabs" xml:space="preserve">
+    <value>Tabs</value>
+  </data>
+  <data name="Term_Field" xml:space="preserve">
+    <value>Field</value>
+  </data>
+  <data name="Term_Fields" xml:space="preserve">
+    <value>Fields</value>
+  </data>
+  <data name="Term_FormBuilder" xml:space="preserve">
+    <value>Form Builder</value>
+  </data>
+  <data name="Term_FormBuilders" xml:space="preserve">
+    <value>Form Builders</value>
+  </data>
+  <data name="Term_FieldType" xml:space="preserve">
+    <value>Field Type</value>
+  </data>
+  <data name="Term_FieldTypes" xml:space="preserve">
+    <value>Field Types</value>
+  </data>
+  <data name="Term_Option" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="Term_Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="Term_SqlQuery" xml:space="preserve">
+    <value>SQL Query</value>
+  </data>
+</root>

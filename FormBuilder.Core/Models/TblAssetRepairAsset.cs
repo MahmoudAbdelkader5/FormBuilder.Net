@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace FormBuilder.Core.Models;
+
+public partial class TblAssetRepairAsset
+{
+    public int Id { get; set; }
+
+    public int? IdAsset { get; set; }
+
+    public int? IdWorkOrder { get; set; }
+
+    public int? Quantity { get; set; }
+
+    public int? IdFromWarehouse { get; set; }
+
+    public int? IdToWarehouse { get; set; }
+
+    public int IdCreatedBy { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public int? IdUpdatedBy { get; set; }
+
+    public DateTime? UpdatedDate { get; set; }
+
+    public int? IdLegalEntity { get; set; }
+
+    public int? IdAssetRepair { get; set; }
+
+    public string? PurchaseRequestCode { get; set; }
+
+    public virtual TblAsset? IdAssetNavigation { get; set; }
+
+    public virtual TblAssetRepair? IdAssetRepairNavigation { get; set; }
+
+    public virtual TblWarehouse? IdFromWarehouseNavigation { get; set; }
+
+    public virtual TblLegalEntity? IdLegalEntityNavigation { get; set; }
+
+    public virtual TblWarehouse? IdToWarehouseNavigation { get; set; }
+
+    public virtual TblWorkOrder? IdWorkOrderNavigation { get; set; }
+}

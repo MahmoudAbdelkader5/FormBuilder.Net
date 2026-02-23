@@ -1,0 +1,429 @@
+{
+  "testScenarios": {
+    "scenario1_full_copy": {
+      "name": "Purchase Request → Purchase Order (Full Copy)",
+      "description": "نسخ كامل مع جميع الخيارات: Fields + Grid + Attachments + Link + Workflow",
+      "apiUrl": "POST http://localhost:5000/api/CopyToDocument/execute",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "requestBody": {
+        "config": {
+          "sourceDocumentTypeId": 1,
+          "sourceFormId": 10,
+          "targetDocumentTypeId": 2,
+          "targetFormId": 20,
+          "createNewDocument": true,
+          "initialStatus": "Draft",
+          "fieldMapping": {
+            "REQUEST_AMOUNT": "ORDER_AMOUNT",
+            "REQUEST_DATE": "ORDER_DATE",
+            "SUPPLIER_NAME": "VENDOR_NAME",
+            "REQUEST_DESCRIPTION": "ORDER_DESCRIPTION"
+          },
+          "gridMapping": {
+            "REQUEST_ITEMS": "ORDER_ITEMS"
+          },
+          "copyCalculatedFields": true,
+          "copyGridRows": true,
+          "startWorkflow": true,
+          "linkDocuments": true,
+          "copyAttachments": true,
+          "copyMetadata": false,
+          "overrideTargetDefaults": false,
+          "metadataFields": []
+        },
+        "sourceSubmissionId": 115,
+        "actionId": null,
+        "ruleId": null
+      },
+      "expectedResponse": {
+        "statusCode": 200,
+        "message": "CopyToDocument executed successfully",
+        "data": {
+          "success": true,
+          "targetDocumentId": 116,
+          "targetDocumentNumber": "PO-000116",
+          "errorMessage": null,
+          "fieldsCopied": 4,
+          "gridRowsCopied": 5,
+          "actionId": null,
+          "sourceSubmissionId": 115
+        }
+      }
+    },
+    "scenario2_with_codes": {
+      "name": "Purchase Request → Purchase Order (Using Codes)",
+      "description": "نسخ باستخدام Codes بدلاً من IDs",
+      "apiUrl": "POST http://localhost:5000/api/CopyToDocument/execute-by-codes",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "requestBody": {
+        "config": {
+          "sourceDocumentTypeCode": "PURCHASE_REQUEST",
+          "sourceFormCode": "PR_FORM",
+          "targetDocumentTypeCode": "PURCHASE_ORDER",
+          "targetFormCode": "PO_FORM",
+          "createNewDocument": true,
+          "initialStatus": "Draft",
+          "fieldMapping": {
+            "REQUEST_AMOUNT": "ORDER_AMOUNT",
+            "REQUEST_DATE": "ORDER_DATE",
+            "SUPPLIER_NAME": "VENDOR_NAME"
+          },
+          "gridMapping": {
+            "REQUEST_ITEMS": "ORDER_ITEMS"
+          },
+          "copyCalculatedFields": true,
+          "copyGridRows": true,
+          "startWorkflow": true,
+          "linkDocuments": true,
+          "copyAttachments": true,
+          "copyMetadata": false,
+          "overrideTargetDefaults": false,
+          "metadataFields": []
+        },
+        "sourceSubmissionId": 115,
+        "actionId": null,
+        "ruleId": null
+      }
+    },
+    "scenario3_without_attachments": {
+      "name": "Purchase Request → Purchase Order (Without Attachments)",
+      "description": "نسخ بدون Attachments",
+      "apiUrl": "POST http://localhost:5000/api/CopyToDocument/execute",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "requestBody": {
+        "config": {
+          "sourceDocumentTypeId": 1,
+          "sourceFormId": 10,
+          "targetDocumentTypeId": 2,
+          "targetFormId": 20,
+          "createNewDocument": true,
+          "initialStatus": "Draft",
+          "fieldMapping": {
+            "REQUEST_AMOUNT": "ORDER_AMOUNT",
+            "REQUEST_DATE": "ORDER_DATE",
+            "SUPPLIER_NAME": "VENDOR_NAME"
+          },
+          "gridMapping": {
+            "REQUEST_ITEMS": "ORDER_ITEMS"
+          },
+          "copyCalculatedFields": true,
+          "copyGridRows": true,
+          "startWorkflow": true,
+          "linkDocuments": true,
+          "copyAttachments": false,
+          "copyMetadata": false,
+          "overrideTargetDefaults": false,
+          "metadataFields": []
+        },
+        "sourceSubmissionId": 115
+      }
+    },
+    "scenario4_without_workflow": {
+      "name": "Purchase Request → Purchase Order (Without Workflow)",
+      "description": "نسخ بدون بدء Workflow",
+      "apiUrl": "POST http://localhost:5000/api/CopyToDocument/execute",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "requestBody": {
+        "config": {
+          "sourceDocumentTypeId": 1,
+          "sourceFormId": 10,
+          "targetDocumentTypeId": 2,
+          "targetFormId": 20,
+          "createNewDocument": true,
+          "initialStatus": "Draft",
+          "fieldMapping": {
+            "REQUEST_AMOUNT": "ORDER_AMOUNT",
+            "REQUEST_DATE": "ORDER_DATE",
+            "SUPPLIER_NAME": "VENDOR_NAME"
+          },
+          "gridMapping": {
+            "REQUEST_ITEMS": "ORDER_ITEMS"
+          },
+          "copyCalculatedFields": true,
+          "copyGridRows": true,
+          "startWorkflow": false,
+          "linkDocuments": true,
+          "copyAttachments": true,
+          "copyMetadata": false,
+          "overrideTargetDefaults": false,
+          "metadataFields": []
+        },
+        "sourceSubmissionId": 115
+      }
+    },
+    "scenario5_with_metadata": {
+      "name": "Purchase Request → Purchase Order (With Metadata)",
+      "description": "نسخ مع Metadata",
+      "apiUrl": "POST http://localhost:5000/api/CopyToDocument/execute",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "requestBody": {
+        "config": {
+          "sourceDocumentTypeId": 1,
+          "sourceFormId": 10,
+          "targetDocumentTypeId": 2,
+          "targetFormId": 20,
+          "createNewDocument": true,
+          "initialStatus": "Draft",
+          "fieldMapping": {
+            "REQUEST_AMOUNT": "ORDER_AMOUNT",
+            "REQUEST_DATE": "ORDER_DATE"
+          },
+          "gridMapping": {
+            "REQUEST_ITEMS": "ORDER_ITEMS"
+          },
+          "copyCalculatedFields": true,
+          "copyGridRows": true,
+          "startWorkflow": true,
+          "linkDocuments": true,
+          "copyAttachments": true,
+          "copyMetadata": true,
+          "overrideTargetDefaults": false,
+          "metadataFields": [
+            "SubmittedDate",
+            "SubmittedByUserId",
+            "Status"
+          ]
+        },
+        "sourceSubmissionId": 115
+      }
+    },
+    "scenario6_minimal_fields": {
+      "name": "Purchase Request → Purchase Order (Minimal Fields Only)",
+      "description": "نسخ مع حقول قليلة فقط",
+      "apiUrl": "POST http://localhost:5000/api/CopyToDocument/execute",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "requestBody": {
+        "config": {
+          "sourceDocumentTypeId": 1,
+          "sourceFormId": 10,
+          "targetDocumentTypeId": 2,
+          "targetFormId": 20,
+          "createNewDocument": true,
+          "initialStatus": "Draft",
+          "fieldMapping": {
+            "REQUEST_AMOUNT": "ORDER_AMOUNT"
+          },
+          "gridMapping": {},
+          "copyCalculatedFields": false,
+          "copyGridRows": false,
+          "startWorkflow": false,
+          "linkDocuments": true,
+          "copyAttachments": false,
+          "copyMetadata": false,
+          "overrideTargetDefaults": false,
+          "metadataFields": []
+        },
+        "sourceSubmissionId": 115
+      }
+    },
+    "scenario7_update_existing": {
+      "name": "Purchase Request → Purchase Order (Update Existing)",
+      "description": "تحديث مستند موجود بدلاً من إنشاء جديد",
+      "apiUrl": "POST http://localhost:5000/api/CopyToDocument/execute",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "requestBody": {
+        "config": {
+          "sourceDocumentTypeId": 1,
+          "sourceFormId": 10,
+          "targetDocumentTypeId": 2,
+          "targetFormId": 20,
+          "createNewDocument": false,
+          "targetDocumentId": 116,
+          "initialStatus": "Draft",
+          "fieldMapping": {
+            "REQUEST_AMOUNT": "ORDER_AMOUNT",
+            "REQUEST_DATE": "ORDER_DATE"
+          },
+          "gridMapping": {
+            "REQUEST_ITEMS": "ORDER_ITEMS"
+          },
+          "copyCalculatedFields": true,
+          "copyGridRows": true,
+          "startWorkflow": false,
+          "linkDocuments": false,
+          "copyAttachments": false,
+          "copyMetadata": false,
+          "overrideTargetDefaults": true,
+          "metadataFields": []
+        },
+        "sourceSubmissionId": 115
+      }
+    }
+  },
+  "auditTests": {
+    "getAllAudit": {
+      "name": "Get All Audit Records",
+      "apiUrl": "GET http://localhost:5000/api/CopyToDocument/audit?page=1&pageSize=50",
+      "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      }
+    },
+    "getAuditBySubmission": {
+      "name": "Get Audit by Source Submission ID",
+      "apiUrl": "GET http://localhost:5000/api/CopyToDocument/audit/submission/115",
+      "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      }
+    },
+    "getAuditByTarget": {
+      "name": "Get Audit by Target Document ID",
+      "apiUrl": "GET http://localhost:5000/api/CopyToDocument/audit/target/116",
+      "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      }
+    },
+    "getAuditById": {
+      "name": "Get Audit Record by ID",
+      "apiUrl": "GET http://localhost:5000/api/CopyToDocument/audit/1",
+      "headers": {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      }
+    }
+  },
+  "validationTests": {
+    "missingSourceDocumentTypeId": {
+      "name": "Validation: Missing sourceDocumentTypeId",
+      "description": "يجب أن يفشل - sourceDocumentTypeId مطلوب",
+      "apiUrl": "POST http://localhost:5000/api/CopyToDocument/execute",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "requestBody": {
+        "config": {
+          "sourceFormId": 10,
+          "targetDocumentTypeId": 2,
+          "targetFormId": 20,
+          "createNewDocument": true,
+          "fieldMapping": {}
+        },
+        "sourceSubmissionId": 115
+      },
+      "expectedError": {
+        "statusCode": 400,
+        "message": "Validation failed",
+        "data": {
+          "errors": {
+            "config.sourceDocumentTypeId": ["SourceDocumentTypeId must be greater than 0"]
+          }
+        }
+      }
+    },
+    "missingSourceFormId": {
+      "name": "Validation: Missing sourceFormId",
+      "description": "يجب أن يفشل - sourceFormId مطلوب",
+      "apiUrl": "POST http://localhost:5000/api/CopyToDocument/execute",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "requestBody": {
+        "config": {
+          "sourceDocumentTypeId": 1,
+          "targetDocumentTypeId": 2,
+          "targetFormId": 20,
+          "createNewDocument": true,
+          "fieldMapping": {}
+        },
+        "sourceSubmissionId": 115
+      },
+      "expectedError": {
+        "statusCode": 400,
+        "message": "Validation failed",
+        "data": {
+          "errors": {
+            "config.sourceFormId": ["SourceFormId must be greater than 0"]
+          }
+        }
+      }
+    },
+    "invalidInitialStatus": {
+      "name": "Validation: Invalid initialStatus",
+      "description": "يجب أن يفشل - initialStatus يجب أن يكون Draft أو Submitted",
+      "apiUrl": "POST http://localhost:5000/api/CopyToDocument/execute",
+      "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+      },
+      "requestBody": {
+        "config": {
+          "sourceDocumentTypeId": 1,
+          "sourceFormId": 10,
+          "targetDocumentTypeId": 2,
+          "targetFormId": 20,
+          "createNewDocument": true,
+          "initialStatus": "InvalidStatus",
+          "fieldMapping": {}
+        },
+        "sourceSubmissionId": 115
+      },
+      "expectedError": {
+        "statusCode": 400,
+        "message": "Validation failed",
+        "data": {
+          "errors": {
+            "config.initialStatus": ["InitialStatus must be either 'Draft' or 'Submitted'"]
+          }
+        }
+      }
+    }
+  },
+  "curlExamples": {
+    "scenario1_full_copy": {
+      "command": "curl -X POST \"http://localhost:5000/api/CopyToDocument/execute\" -H \"Content-Type: application/json\" -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\" -d '{\"config\":{\"sourceDocumentTypeId\":1,\"sourceFormId\":10,\"targetDocumentTypeId\":2,\"targetFormId\":20,\"createNewDocument\":true,\"initialStatus\":\"Draft\",\"fieldMapping\":{\"REQUEST_AMOUNT\":\"ORDER_AMOUNT\",\"REQUEST_DATE\":\"ORDER_DATE\",\"SUPPLIER_NAME\":\"VENDOR_NAME\"},\"gridMapping\":{\"REQUEST_ITEMS\":\"ORDER_ITEMS\"},\"copyCalculatedFields\":true,\"copyGridRows\":true,\"startWorkflow\":true,\"linkDocuments\":true,\"copyAttachments\":true,\"copyMetadata\":false,\"overrideTargetDefaults\":false,\"metadataFields\":[]},\"sourceSubmissionId\":115,\"actionId\":null,\"ruleId\":null}'"
+    },
+    "getAuditBySubmission": {
+      "command": "curl -X GET \"http://localhost:5000/api/CopyToDocument/audit/submission/115\" -H \"Authorization: Bearer YOUR_ACCESS_TOKEN\""
+    }
+  },
+  "notes": {
+    "important": [
+      "استبدل YOUR_ACCESS_TOKEN بـ Access Token الفعلي",
+      "استبدل IDs (1, 10, 2, 20, 115) بـ IDs الفعلية في النظام",
+      "استبدل FieldCodes (REQUEST_AMOUNT, ORDER_AMOUNT, etc.) بـ FieldCodes الفعلية في Forms",
+      "استبدل GridCodes (REQUEST_ITEMS, ORDER_ITEMS) بـ GridCodes الفعلية في Forms",
+      "استبدل DocumentTypeCodes و FormCodes بـ Codes الفعلية في النظام",
+      "Base URL: http://localhost:5000 (أو URL الفعلي للـ API)"
+    ],
+    "fieldMapping": {
+      "sourceFields": [
+        "REQUEST_AMOUNT",
+        "REQUEST_DATE",
+        "SUPPLIER_NAME",
+        "REQUEST_DESCRIPTION"
+      ],
+      "targetFields": [
+        "ORDER_AMOUNT",
+        "ORDER_DATE",
+        "VENDOR_NAME",
+        "ORDER_DESCRIPTION"
+      ]
+    },
+    "gridMapping": {
+      "sourceGrid": "REQUEST_ITEMS",
+      "targetGrid": "ORDER_ITEMS"
+    }
+  }
+}
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Login_InvalidCredentials" xml:space="preserve">
+    <value>اسم المستخدم أو كلمة المرور غير صحيحة.</value>
+  </data>
+  <data name="Auth_InvalidRefreshToken" xml:space="preserve">
+    <value>رمز التحديث غير صالح.</value>
+  </data>
+  <data name="Auth_LoggedOut" xml:space="preserve">
+    <value>تم تسجيل الخروج بنجاح.</value>
+  </data>
+  <data name="Auth_InvalidUserId" xml:space="preserve">
+    <value>معرّف المستخدم غير صالح.</value>
+  </data>
+  <data name="Auth_RevokeFailed" xml:space="preserve">
+    <value>فشل إلغاء جميع الرموز.</value>
+  </data>
+  <data name="Auth_RevokeSuccess" xml:space="preserve">
+    <value>تم إلغاء جميع رموز المستخدم بنجاح.</value>
+  </data>
+  <data name="Auth_InvalidUserToken" xml:space="preserve">
+    <value>رمز المستخدم غير صالح.</value>
+  </data>
+  <data name="Auth_UserNotFound" xml:space="preserve">
+    <value>المستخدم غير موجود.</value>
+  </data>
+  <data name="Auth_ChangePasswordFailed" xml:space="preserve">
+    <value>كلمة المرور الحالية غير صحيحة أو أن المستخدم غير موجود.</value>
+  </data>
+  <data name="Auth_ChangePasswordSuccess" xml:space="preserve">
+    <value>تم تغيير كلمة المرور بنجاح، وتم إنهاء جميع الجلسات الحالية.</value>
+  </data>
+</root>

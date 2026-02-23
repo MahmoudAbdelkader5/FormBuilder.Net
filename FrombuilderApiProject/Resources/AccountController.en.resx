@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Login_InvalidCredentials" xml:space="preserve">
+    <value>Invalid username or password.</value>
+  </data>
+  <data name="Auth_InvalidRefreshToken" xml:space="preserve">
+    <value>Invalid refresh token.</value>
+  </data>
+  <data name="Auth_LoggedOut" xml:space="preserve">
+    <value>Logged out successfully.</value>
+  </data>
+  <data name="Auth_InvalidUserId" xml:space="preserve">
+    <value>Invalid user ID.</value>
+  </data>
+  <data name="Auth_RevokeFailed" xml:space="preserve">
+    <value>Failed to revoke tokens.</value>
+  </data>
+  <data name="Auth_RevokeSuccess" xml:space="preserve">
+    <value>All user tokens revoked successfully.</value>
+  </data>
+  <data name="Auth_InvalidUserToken" xml:space="preserve">
+    <value>Invalid user token.</value>
+  </data>
+  <data name="Auth_UserNotFound" xml:space="preserve">
+    <value>User not found.</value>
+  </data>
+  <data name="Auth_ChangePasswordFailed" xml:space="preserve">
+    <value>Current password is incorrect or user not found.</value>
+  </data>
+  <data name="Auth_ChangePasswordSuccess" xml:space="preserve">
+    <value>Password changed successfully. All existing sessions have been revoked.</value>
+  </data>
+</root>

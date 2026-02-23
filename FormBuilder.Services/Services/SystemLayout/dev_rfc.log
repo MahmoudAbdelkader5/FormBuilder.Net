@@ -1,0 +1,10 @@
+
+**** Log file opened at 2025-06-19 13:07:52.177148 UTC+03:00 (Middle East Standard Time), Encoding UTF-8
+NW RFC Library: SDK variant, Release 750 Patch Level 7, Compiled on Sep 19 2020 01:34:20
+ CPIC library: 753.2020.09.14 version 3, NI library: 40, Kernel Release: 753 Patch Level 711
+ Current working directory: C:\Users\BAlHariri\source\Workspaces\TFM - FIXIT -MANAGEIT\PortalUI\Attachments\SystemLayout, Program: crw64
+ Hardware: PC with Windows NT 8x AMD64 Level 6 (Mod 85 Step 7), Operating_system: Windows NT 10.0
+ Hostname: SQLDEV-01, IP address: 10.10.150.57, IPv6 address: fe80::d427:8dcf:f0fb:fab7
+
+2025-06-19 13:07:52.178379 [62184] >> Info entry
+	Did not find config file C:\Users\BAlHariri\source\Workspaces\TFM - FIXIT -MANAGEIT\PortalUI\Attachments\SystemLayout\sapnwrfc.ini.

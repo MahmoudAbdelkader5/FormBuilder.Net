@@ -1,0 +1,7 @@
+LSS-HASHES
+Hash: SHA256
+
+f5ea10bcf037adcbd6ffb7787d6bdf580dfbe357132b354c88e3331a1d4f16cb   PACKAGEDATA
+1be70ffbcdd89ffbaecbb17bc53f1babf3c61591d5d224a29f8623b94ca20c5a   files.lst
+267345d5149920b1887768b934efe73b5dc1d4ec258c6fbc053626cea32ea5be   script.pm
+95846c1d46587cff0ce36861e00081b2ca7bdeeead47fe00b83bd2f7448d78c9   hana.ml.r_2.17.24011100.tar.gz

@@ -1,0 +1,6 @@
+D:\FormBuilderApiProject\.buildobj\Debug\net9.0\FormBuilder.Domian.csproj.AssemblyReference.cache
+D:\FormBuilderApiProject\.buildobj\Debug\net9.0\FormBuilder.Domian.GeneratedMSBuildEditorConfig.editorconfig
+D:\FormBuilderApiProject\.buildobj\Debug\net9.0\FormBuilder.Domian.AssemblyInfoInputs.cache
+D:\FormBuilderApiProject\.buildobj\Debug\net9.0\FormBuilder.Domian.AssemblyInfo.cs
+D:\FormBuilderApiProject\.buildobj\Debug\net9.0\FormBuilder.Domian.csproj.CoreCompileInputs.cache
+D:\FormBuilderApiProject\.buildobj\Debug\net9.0\FormBuilder.Domian.sourcelink.json

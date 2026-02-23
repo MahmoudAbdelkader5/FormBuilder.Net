@@ -1,0 +1,16 @@
+LSS-HASHES
+Hash: SHA256
+
+f921a8a3c49cda393491d72c9698536b56abfe6589afe74a8ab4737c69db9c45   PACKAGEDATA
+4218f5979c2769719e8b22cc1e057b512f5a4090cd4d66ca667bddc6df7ab2c8   files.lst
+7079ab2015dc36bdb7b1431304771553c056558ac9b4a583d26ec45437211249   dotnetcore/libadonetHDB.pdb
+2d8919ad6cb4b24ebd9155ca9b727e10d63818c46615a934aaea7855096be33b   dotnetcore/libadonetHDB32.pdb
+56c05cf787d572aebf2f57e005438b10f2f5cc823ac549114d01443c00011a23   dotnetcore/v6.0/Sap.Data.Hana.Net.v6.0.pdb
+bc740f858ed658ed24c0321e08b50870d93c5ac9be3a40f06ef3286912892635   dotnetcore/v6.0/Sap.EntityFrameworkCore.Hana.NetTopologySuite.v7.0.pdb
+7736c1013d2f007e8d586e6af221414057f6ecafdd83d2a8bf4d61d4da7b01d2   dotnetcore/v6.0/Sap.EntityFrameworkCore.Hana.v6.0.pdb
+c341562d33757884a6580f30f632809d4f770e8caf46857ea1c0154e27be1b04   dotnetcore/v6.0/Sap.EntityFrameworkCore.Hana.v7.0.pdb
+df9dc5882c345ded9547e9283f105d65b210203dac1ddc380e9c20eb75476524   dotnetcore/v8.0/Sap.Data.Hana.Net.v8.0.pdb
+67c6024e0bc842265aa0c19f17e2fe04f3ad6f9dfbf6a90b48dd4ca0fcca31e2   dotnetcore/v8.0/Sap.EntityFrameworkCore.Hana.NetTopologySuite.v8.0.pdb
+eddbe9a072bbdadfac6a02d3b16100c6356d4f523220a75bc13defc63b8adb8f   dotnetcore/v8.0/Sap.EntityFrameworkCore.Hana.NetTopologySuite.v9.0.pdb
+b5f93388588893698de7c6de85ef7e2a7f6214c38198e8e8c5a1edc8beedf794   dotnetcore/v8.0/Sap.EntityFrameworkCore.Hana.v8.0.pdb
+e563b62cbb4b6337bb041318bf76ee8432b923abfefb90eb077e7e0864c63145   dotnetcore/v8.0/Sap.EntityFrameworkCore.Hana.v9.0.pdb

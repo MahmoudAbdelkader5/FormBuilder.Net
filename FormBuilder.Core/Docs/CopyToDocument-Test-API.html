@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CopyToDocument API Test - Purchase Request → Purchase Order</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        .test-case {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .test-case h3 {
+            color: #27ae60;
+            margin-top: 0;
+        }
+        .api-url {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+        .json-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            margin: 10px 0;
+        }
+        .copy-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .copy-btn:hover {
+            background: #2980b9;
+        }
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .info {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 CopyToDocument API Test - Purchase Request → Purchase Order</h1>
+        
+        <div class="info">
+            <strong>📋 قبل البدء:</strong>
+            <ul>
+                <li>استبدل <code>YOUR_ACCESS_TOKEN</code> بـ Access Token الفعلي</li>
+                <li>استبدل IDs (1, 10, 2, 20, 115) بـ IDs الفعلية في النظام</li>
+                <li>استبدل FieldCodes و GridCodes بـ Codes الفعلية</li>
+                <li>Base URL: <code>http://localhost:5000</code> (أو URL الفعلي)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Test 1: Full Copy -->
+    <div class="container">
+        <div class="test-case">
+            <h3>✅ Test 1: Purchase Request → Purchase Order (Full Copy)</h3>
+            <p><strong>الوصف:</strong> نسخ كامل مع جميع الخيارات: Fields + Grid + Attachments + Link + Workflow</p>
+            
+            <div class="api-url">
+                <strong>API URL:</strong> POST http://localhost:5000/api/CopyToDocument/execute
+            </div>
+            
+            <button class="copy-btn" onclick="copyToClipboard('json1')">📋 نسخ JSON</button>
+            
+            <div class="json-block" id="json1">
+{
+  "config": {
+    "sourceDocumentTypeId": 1,
+    "sourceFormId": 10,
+    "targetDocumentTypeId": 2,
+    "targetFormId": 20,
+    "createNewDocument": true,
+    "initialStatus": "Draft",
+    "fieldMapping": {
+      "REQUEST_AMOUNT": "ORDER_AMOUNT",
+      "REQUEST_DATE": "ORDER_DATE",
+      "SUPPLIER_NAME": "VENDOR_NAME",
+      "REQUEST_DESCRIPTION": "ORDER_DESCRIPTION"
+    },
+    "gridMapping": {
+      "REQUEST_ITEMS": "ORDER_ITEMS"
+    },
+    "copyCalculatedFields": true,
+    "copyGridRows": true,
+    "startWorkflow": true,
+    "linkDocuments": true,
+    "copyAttachments": true,
+    "copyMetadata": false,
+    "overrideTargetDefaults": false,
+    "metadataFields": []
+  },
+  "sourceSubmissionId": 115,
+  "actionId": null,
+  "ruleId": null
+}
+            </div>
+            
+            <div class="success">
+                <strong>Expected Response (Success):</strong>
+                <div class="json-block">
+{
+  "statusCode": 200,
+  "message": "CopyToDocument executed successfully",
+  "data": {
+    "success": true,
+    "targetDocumentId": 116,
+    "targetDocumentNumber": "PO-000116",
+    "errorMessage": null,
+    "fieldsCopied": 4,
+    "gridRowsCopied": 5,
+    "actionId": null,
+    "sourceSubmissionId": 115
+  }
+}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test 2: Using Codes -->
+    <div class="container">
+        <div class="test-case">
+            <h3>✅ Test 2: Purchase Request → Purchase Order (Using Codes)</h3>
+            <p><strong>الوصف:</strong> نسخ باستخدام Codes بدلاً من IDs</p>
+            
+            <div class="api-url">
+                <strong>API URL:</strong> POST http://localhost:5000/api/CopyToDocument/execute-by-codes
+            </div>
+            
+            <button class="copy-btn" onclick="copyToClipboard('json2')">📋 نسخ JSON</button>
+            
+            <div class="json-block" id="json2">
+{
+  "config": {
+    "sourceDocumentTypeCode": "PURCHASE_REQUEST",
+    "sourceFormCode": "PR_FORM",
+    "targetDocumentTypeCode": "PURCHASE_ORDER",
+    "targetFormCode": "PO_FORM",
+    "createNewDocument": true,
+    "initialStatus": "Draft",
+    "fieldMapping": {
+      "REQUEST_AMOUNT": "ORDER_AMOUNT",
+      "REQUEST_DATE": "ORDER_DATE",
+      "SUPPLIER_NAME": "VENDOR_NAME"
+    },
+    "gridMapping": {
+      "REQUEST_ITEMS": "ORDER_ITEMS"
+    },
+    "copyCalculatedFields": true,
+    "copyGridRows": true,
+    "startWorkflow": true,
+    "linkDocuments": true,
+    "copyAttachments": true,
+    "copyMetadata": false,
+    "overrideTargetDefaults": false,
+    "metadataFields": []
+  },
+  "sourceSubmissionId": 115,
+  "actionId": null,
+  "ruleId": null
+}
+            </div>
+        </div>
+    </div>
+
+    <!-- Test 3: Without Attachments -->
+    <div class="container">
+        <div class="test-case">
+            <h3>✅ Test 3: Purchase Request → Purchase Order (Without Attachments)</h3>
+            <p><strong>الوصف:</strong> نسخ بدون Attachments</p>
+            
+            <div class="api-url">
+                <strong>API URL:</strong> POST http://localhost:5000/api/CopyToDocument/execute
+            </div>
+            
+            <button class="copy-btn" onclick="copyToClipboard('json3')">📋 نسخ JSON</button>
+            
+            <div class="json-block" id="json3">
+{
+  "config": {
+    "sourceDocumentTypeId": 1,
+    "sourceFormId": 10,
+    "targetDocumentTypeId": 2,
+    "targetFormId": 20,
+    "createNewDocument": true,
+    "initialStatus": "Draft",
+    "fieldMapping": {
+      "REQUEST_AMOUNT": "ORDER_AMOUNT",
+      "REQUEST_DATE": "ORDER_DATE",
+      "SUPPLIER_NAME": "VENDOR_NAME"
+    },
+    "gridMapping": {
+      "REQUEST_ITEMS": "ORDER_ITEMS"
+    },
+    "copyCalculatedFields": true,
+    "copyGridRows": true,
+    "startWorkflow": true,
+    "linkDocuments": true,
+    "copyAttachments": false,
+    "copyMetadata": false,
+    "overrideTargetDefaults": false,
+    "metadataFields": []
+  },
+  "sourceSubmissionId": 115
+}
+            </div>
+        </div>
+    </div>
+
+    <!-- Test 4: Without Workflow -->
+    <div class="container">
+        <div class="test-case">
+            <h3>✅ Test 4: Purchase Request → Purchase Order (Without Workflow)</h3>
+            <p><strong>الوصف:</strong> نسخ بدون بدء Workflow</p>
+            
+            <div class="api-url">
+                <strong>API URL:</strong> POST http://localhost:5000/api/CopyToDocument/execute
+            </div>
+            
+            <button class="copy-btn" onclick="copyToClipboard('json4')">📋 نسخ JSON</button>
+            
+            <div class="json-block" id="json4">
+{
+  "config": {
+    "sourceDocumentTypeId": 1,
+    "sourceFormId": 10,
+    "targetDocumentTypeId": 2,
+    "targetFormId": 20,
+    "createNewDocument": true,
+    "initialStatus": "Draft",
+    "fieldMapping": {
+      "REQUEST_AMOUNT": "ORDER_AMOUNT",
+      "REQUEST_DATE": "ORDER_DATE",
+      "SUPPLIER_NAME": "VENDOR_NAME"
+    },
+    "gridMapping": {
+      "REQUEST_ITEMS": "ORDER_ITEMS"
+    },
+    "copyCalculatedFields": true,
+    "copyGridRows": true,
+    "startWorkflow": false,
+    "linkDocuments": true,
+    "copyAttachments": true,
+    "copyMetadata": false,
+    "overrideTargetDefaults": false,
+    "metadataFields": []
+  },
+  "sourceSubmissionId": 115
+}
+            </div>
+        </div>
+    </div>
+
+    <!-- Test 5: With Metadata -->
+    <div class="container">
+        <div class="test-case">
+            <h3>✅ Test 5: Purchase Request → Purchase Order (With Metadata)</h3>
+            <p><strong>الوصف:</strong> نسخ مع Metadata</p>
+            
+            <div class="api-url">
+                <strong>API URL:</strong> POST http://localhost:5000/api/CopyToDocument/execute
+            </div>
+            
+            <button class="copy-btn" onclick="copyToClipboard('json5')">📋 نسخ JSON</button>
+            
+            <div class="json-block" id="json5">
+{
+  "config": {
+    "sourceDocumentTypeId": 1,
+    "sourceFormId": 10,
+    "targetDocumentTypeId": 2,
+    "targetFormId": 20,
+    "createNewDocument": true,
+    "initialStatus": "Draft",
+    "fieldMapping": {
+      "REQUEST_AMOUNT": "ORDER_AMOUNT",
+      "REQUEST_DATE": "ORDER_DATE"
+    },
+    "gridMapping": {
+      "REQUEST_ITEMS": "ORDER_ITEMS"
+    },
+    "copyCalculatedFields": true,
+    "copyGridRows": true,
+    "startWorkflow": true,
+    "linkDocuments": true,
+    "copyAttachments": true,
+    "copyMetadata": true,
+    "overrideTargetDefaults": false,
+    "metadataFields": [
+      "SubmittedDate",
+      "SubmittedByUserId",
+      "Status"
+    ]
+  },
+  "sourceSubmissionId": 115
+}
+            </div>
+        </div>
+    </div>
+
+    <!-- Audit Tests -->
+    <div class="container">
+        <h2>📊 Audit Tests</h2>
+        
+        <div class="test-case">
+            <h3>Test 6: Get All Audit Records</h3>
+            <div class="api-url">
+                GET http://localhost:5000/api/CopyToDocument/audit?page=1&pageSize=50
+            </div>
+        </div>
+        
+        <div class="test-case">
+            <h3>Test 7: Get Audit by Source Submission ID</h3>
+            <div class="api-url">
+                GET http://localhost:5000/api/CopyToDocument/audit/submission/115
+            </div>
+        </div>
+        
+        <div class="test-case">
+            <h3>Test 8: Get Audit by Target Document ID</h3>
+            <div class="api-url">
+                GET http://localhost:5000/api/CopyToDocument/audit/target/116
+            </div>
+        </div>
+    </div>
+
+    <!-- cURL Examples -->
+    <div class="container">
+        <h2>💻 cURL Examples</h2>
+        
+        <div class="test-case">
+            <h3>cURL: Test 1 (Full Copy)</h3>
+            <button class="copy-btn" onclick="copyToClipboard('curl1')">📋 نسخ cURL</button>
+            <div class="json-block" id="curl1">
+curl -X POST "http://localhost:5000/api/CopyToDocument/execute" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{
+    "config": {
+      "sourceDocumentTypeId": 1,
+      "sourceFormId": 10,
+      "targetDocumentTypeId": 2,
+      "targetFormId": 20,
+      "createNewDocument": true,
+      "initialStatus": "Draft",
+      "fieldMapping": {
+        "REQUEST_AMOUNT": "ORDER_AMOUNT",
+        "REQUEST_DATE": "ORDER_DATE",
+        "SUPPLIER_NAME": "VENDOR_NAME"
+      },
+      "gridMapping": {
+        "REQUEST_ITEMS": "ORDER_ITEMS"
+      },
+      "copyCalculatedFields": true,
+      "copyGridRows": true,
+      "startWorkflow": true,
+      "linkDocuments": true,
+      "copyAttachments": true
+    },
+    "sourceSubmissionId": 115
+  }'
+            </div>
+        </div>
+        
+        <div class="test-case">
+            <h3>cURL: Get Audit by Submission</h3>
+            <button class="copy-btn" onclick="copyToClipboard('curl2')">📋 نسخ cURL</button>
+            <div class="json-block" id="curl2">
+curl -X GET "http://localhost:5000/api/CopyToDocument/audit/submission/115" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent || element.innerText;
+            
+            navigator.clipboard.writeText(text).then(function() {
+                alert('تم النسخ بنجاح! ✅');
+            }, function(err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('تم النسخ بنجاح! ✅');
+            });
+        }
+    </script>
+</body>
+</html>
+
