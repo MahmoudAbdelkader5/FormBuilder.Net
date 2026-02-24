@@ -24,7 +24,7 @@ namespace FormBuilder.API.Controllers
         // GET ALL FORM SUBMISSION VALUES
         // ================================
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionValuesService.GetAllAsync();
             return StatusCode(result.StatusCode, result);
@@ -34,7 +34,7 @@ namespace FormBuilder.API.Controllers
         // GET BY ID
         // ================================
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionValuesService.GetByIdAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -44,7 +44,7 @@ namespace FormBuilder.API.Controllers
         // GET BY SUBMISSION ID
         // ================================
         [HttpGet("submission/{submissionId}")]
-        public async Task<IActionResult> GetBySubmissionId(int submissionId)
+        public async Task<IActionResult> GetBySubmissionId(int submissionId, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionValuesService.GetBySubmissionIdAsync(submissionId);
             return StatusCode(result.StatusCode, result);
@@ -54,7 +54,7 @@ namespace FormBuilder.API.Controllers
         // GET BY FIELD ID
         // ================================
         [HttpGet("field/{fieldId}")]
-        public async Task<IActionResult> GetByFieldId(int fieldId)
+        public async Task<IActionResult> GetByFieldId(int fieldId, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionValuesService.GetByFieldIdAsync(fieldId);
             return StatusCode(result.StatusCode, result);
@@ -64,7 +64,7 @@ namespace FormBuilder.API.Controllers
         // GET BY SUBMISSION AND FIELD
         // ================================
         [HttpGet("submission/{submissionId}/field/{fieldId}")]
-        public async Task<IActionResult> GetBySubmissionAndField(int submissionId, int fieldId)
+        public async Task<IActionResult> GetBySubmissionAndField(int submissionId, int fieldId, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionValuesService.GetBySubmissionAndFieldAsync(submissionId, fieldId);
             return StatusCode(result.StatusCode, result);
@@ -74,7 +74,7 @@ namespace FormBuilder.API.Controllers
         // CREATE NEW FORM SUBMISSION VALUE
         // ================================
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateFormSubmissionValueDto createDto)
+        public async Task<IActionResult> Create([FromBody] CreateFormSubmissionValueDto createDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -87,7 +87,7 @@ namespace FormBuilder.API.Controllers
         // CREATE BULK FORM SUBMISSION VALUES
         // ================================
         [HttpPost("bulk")]
-        public async Task<IActionResult> CreateBulk([FromBody] BulkFormSubmissionValuesDto bulkDto)
+        public async Task<IActionResult> CreateBulk([FromBody] BulkFormSubmissionValuesDto bulkDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -100,7 +100,7 @@ namespace FormBuilder.API.Controllers
         // UPDATE FORM SUBMISSION VALUE
         // ================================
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateFormSubmissionValueDto updateDto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateFormSubmissionValueDto updateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -113,7 +113,7 @@ namespace FormBuilder.API.Controllers
         // UPDATE BY FIELD
         // ================================
         [HttpPut("submission/{submissionId}/field/{fieldId}")]
-        public async Task<IActionResult> UpdateByField(int submissionId, int fieldId, [FromBody] UpdateFormSubmissionValueDto updateDto)
+        public async Task<IActionResult> UpdateByField(int submissionId, int fieldId, [FromBody] UpdateFormSubmissionValueDto updateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -126,7 +126,7 @@ namespace FormBuilder.API.Controllers
         // DELETE FORM SUBMISSION VALUE
         // ================================
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionValuesService.DeleteAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -136,7 +136,7 @@ namespace FormBuilder.API.Controllers
         // DELETE BY SUBMISSION ID
         // ================================
         [HttpDelete("submission/{submissionId}")]
-        public async Task<IActionResult> DeleteBySubmissionId(int submissionId)
+        public async Task<IActionResult> DeleteBySubmissionId(int submissionId, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionValuesService.DeleteBySubmissionIdAsync(submissionId);
             return StatusCode(result.StatusCode, result);
@@ -146,7 +146,7 @@ namespace FormBuilder.API.Controllers
         // CHECK EXISTS
         // ================================
         [HttpGet("{id}/exists")]
-        public async Task<IActionResult> Exists(int id)
+        public async Task<IActionResult> Exists(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionValuesService.ExistsAsync(id);
             return StatusCode(result.StatusCode, result);

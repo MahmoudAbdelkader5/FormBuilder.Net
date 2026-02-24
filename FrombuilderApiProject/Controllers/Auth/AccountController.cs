@@ -167,7 +167,7 @@ namespace FormBuilder.API.Controllers
         /// </summary>
         [HttpGet("Users/active")]
         [Authorize]
-        public async Task<IActionResult> GetActiveUsers()
+        public async Task<IActionResult> GetActiveUsers(CancellationToken cancellationToken = default)
         {
             var users = await _context.TblUsers
                 .Where(u => u.IsActive)
@@ -192,7 +192,7 @@ namespace FormBuilder.API.Controllers
         /// </summary>
         [HttpGet("UserGroups/active")]
         [Authorize]
-        public async Task<IActionResult> GetActiveUserGroups()
+        public async Task<IActionResult> GetActiveUserGroups(CancellationToken cancellationToken = default)
         {
             var userGroups = await _context.TblUserGroups
                 .Where(ug => ug.IsActive)

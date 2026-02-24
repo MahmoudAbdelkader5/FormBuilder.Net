@@ -26,7 +26,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET ALL FORM FIELDS
         // ================================
         [HttpGet]
-        public async Task<IActionResult> GetAllFormFields()
+        public async Task<IActionResult> GetAllFormFields(CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetAllAsync();
             return result.ToActionResult();
@@ -36,7 +36,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET ACTIVE FORM FIELDS
         // ================================
         [HttpGet("active")]
-        public async Task<IActionResult> GetActiveFormFields()
+        public async Task<IActionResult> GetActiveFormFields(CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetActiveAsync();
             return result.ToActionResult();
@@ -46,7 +46,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET FORM FIELD BY ID
         // ================================
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetFormFieldById(int id)
+        public async Task<IActionResult> GetFormFieldById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetByIdAsync(id, asNoTracking: true);
             return result.ToActionResult();
@@ -56,7 +56,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET FORM FIELD BY FIELD CODE
         // ================================
         [HttpGet("code/{fieldCode}")]
-        public async Task<IActionResult> GetFormFieldByCode(string fieldCode)
+        public async Task<IActionResult> GetFormFieldByCode(string fieldCode, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetByFieldCodeAsync(fieldCode);
             return result.ToActionResult();
@@ -66,7 +66,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET FORM FIELDS BY TAB ID
         // ================================
         [HttpGet("tab/{tabId}")]
-        public async Task<IActionResult> GetFormFieldsByTabId(int tabId)
+        public async Task<IActionResult> GetFormFieldsByTabId(int tabId, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetByTabIdAsync(tabId);
             return result.ToActionResult();
@@ -76,7 +76,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET FORM FIELDS BY FORM ID
         // ================================
         [HttpGet("form/{formBuilderId}")]
-        public async Task<IActionResult> GetFormFieldsByFormId(int formBuilderId)
+        public async Task<IActionResult> GetFormFieldsByFormId(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetByFormIdAsync(formBuilderId);
             return result.ToActionResult();
@@ -86,7 +86,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET FORM FIELDS BY GRID ID
         // ================================
         [HttpGet("grid/{gridId}")]
-        public async Task<IActionResult> GetFormFieldsByGridId(int gridId)
+        public async Task<IActionResult> GetFormFieldsByGridId(int gridId, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetFieldsByGridIdAsync(gridId);
             return result.ToActionResult();
@@ -96,7 +96,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET MANDATORY FIELDS BY TAB ID
         // ================================
         [HttpGet("tab/{tabId}/mandatory")]
-        public async Task<IActionResult> GetMandatoryFields(int tabId)
+        public async Task<IActionResult> GetMandatoryFields(int tabId, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetMandatoryFieldsAsync(tabId);
             return result.ToActionResult();
@@ -106,7 +106,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET VISIBLE FIELDS BY TAB ID
         // ================================
         [HttpGet("tab/{tabId}/visible")]
-        public async Task<IActionResult> GetVisibleFields(int tabId)
+        public async Task<IActionResult> GetVisibleFields(int tabId, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetVisibleFieldsAsync(tabId);
             return result.ToActionResult();
@@ -116,7 +116,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET EDITABLE FIELDS BY TAB ID
         // ================================
         [HttpGet("tab/{tabId}/editable")]
-        public async Task<IActionResult> GetEditableFields(int tabId)
+        public async Task<IActionResult> GetEditableFields(int tabId, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetEditableFieldsAsync(tabId);
             return result.ToActionResult();
@@ -126,7 +126,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET USAGE COUNT
         // ================================
         [HttpGet("{id:int}/usage-count")]
-        public async Task<IActionResult> GetFormFieldUsageCount(int id)
+        public async Task<IActionResult> GetFormFieldUsageCount(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetUsageCountAsync(id);
             return result.ToActionResult();
@@ -136,7 +136,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET FIELDS COUNT BY TAB
         // ================================
         [HttpGet("tab/{tabId}/count")]
-        public async Task<IActionResult> GetFieldsCountByTab(int tabId)
+        public async Task<IActionResult> GetFieldsCountByTab(int tabId, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetFieldsCountByTabAsync(tabId);
             return result.ToActionResult();
@@ -146,7 +146,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET FIELDS COUNT BY FORM
         // ================================
         [HttpGet("form/{formBuilderId}/count")]
-        public async Task<IActionResult> GetFieldsCountByForm(int formBuilderId)
+        public async Task<IActionResult> GetFieldsCountByForm(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.GetFieldsCountByFormAsync(formBuilderId);
             return result.ToActionResult();
@@ -157,7 +157,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // ================================
         [HttpPost]
         [RequirePermission("FormField_Allow_Create")]
-        public async Task<IActionResult> CreateFormField([FromBody] CreateFormFieldDto createFormFieldDto)
+        public async Task<IActionResult> CreateFormField([FromBody] CreateFormFieldDto createFormFieldDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -177,7 +177,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // ================================
         [HttpPut("{id:int}")]
         [RequirePermission("FormField_Allow_Edit")]
-        public async Task<IActionResult> UpdateFormField(int id, [FromBody] UpdateFormFieldDto updateFormFieldDto)
+        public async Task<IActionResult> UpdateFormField(int id, [FromBody] UpdateFormFieldDto updateFormFieldDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -194,7 +194,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // ================================
         [HttpDelete("{id:int}")]
         [RequirePermission("FormField_Allow_Delete")]
-        public async Task<IActionResult> DeleteFormField(int id)
+        public async Task<IActionResult> DeleteFormField(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.DeleteAsync(id);
             if (result.Success) return NoContent();
@@ -206,7 +206,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // ================================
         [HttpDelete("{id:int}/soft")]
         [RequirePermission("FormField_Allow_Delete")]
-        public async Task<IActionResult> SoftDeleteFormField(int id)
+        public async Task<IActionResult> SoftDeleteFormField(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.SoftDeleteAsync(id);
             if (result.Success) return NoContent();
@@ -218,7 +218,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // ================================
         [HttpPost("{id:int}/restore")]
         [RequirePermission("FormField_Allow_Manage")]
-        public async Task<IActionResult> RestoreFormField(int id)
+        public async Task<IActionResult> RestoreFormField(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formFieldService.RestoreAsync(id);
             return result.ToActionResult();

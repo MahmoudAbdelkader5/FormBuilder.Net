@@ -1,7 +1,7 @@
 {
   "format": 1,
   "restore": {
-    "D:\\trioapps\\FormBuilderApiProject\\frombuilderApiProject\\FormBuilder.ApiProject.csproj": {}
+    "D:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\FormBuilder.ApiProject.csproj": {}
   },
   "projects": {
     "D:\\trioapps\\FormBuilderApiProject\\FormBuilder.Core\\FormBuilder.Core.csproj": {
@@ -303,14 +303,14 @@
         }
       }
     },
-    "D:\\trioapps\\FormBuilderApiProject\\frombuilderApiProject\\FormBuilder.ApiProject.csproj": {
+    "D:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\FormBuilder.ApiProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\trioapps\\FormBuilderApiProject\\frombuilderApiProject\\FormBuilder.ApiProject.csproj",
+        "projectUniqueName": "D:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\FormBuilder.ApiProject.csproj",
         "projectName": "FormBuilder.ApiProject",
-        "projectPath": "D:\\trioapps\\FormBuilderApiProject\\frombuilderApiProject\\FormBuilder.ApiProject.csproj",
+        "projectPath": "D:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\FormBuilder.ApiProject.csproj",
         "packagesPath": "C:\\Users\\master\\.nuget\\packages\\",
-        "outputPath": "D:\\trioapps\\FormBuilderApiProject\\frombuilderApiProject\\obj\\",
+        "outputPath": "D:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

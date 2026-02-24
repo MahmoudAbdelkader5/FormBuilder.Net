@@ -99,7 +99,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPost("connections/{sapConfigId:int}/relogin")]
         [RequirePermission("SapHanaConfig_Allow_Manage")]
-        public async Task<IActionResult> ReLogin(int sapConfigId)
+        public async Task<IActionResult> ReLogin(int sapConfigId, CancellationToken cancellationToken = default)
         {
             try
             {

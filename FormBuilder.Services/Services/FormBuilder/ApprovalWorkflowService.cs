@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FormBuilder.Services
@@ -41,7 +42,7 @@ namespace FormBuilder.Services
             return ServiceResult<IEnumerable<ApprovalWorkflowDto>>.Ok(dtos);
         }
 
-        public async Task<ApiResponse> GetAllAsync()
+        public async Task<ApiResponse> GetAllAsync(CancellationToken cancellationToken = default)
         {
             var result = await base.GetAllAsync();
             return ConvertToApiResponse(result);
@@ -61,13 +62,13 @@ namespace FormBuilder.Services
             return ServiceResult<ApprovalWorkflowDto>.Ok(dto);
         }
 
-        public async Task<ApiResponse> GetByIdAsync(int id)
+        public async Task<ApiResponse> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             var result = await base.GetByIdAsync(id);
             return ConvertToApiResponse(result);
         }
 
-        public async Task<ApiResponse> CreateAsync(ApprovalWorkflowCreateDto dto)
+        public async Task<ApiResponse> CreateAsync(ApprovalWorkflowCreateDto dto, CancellationToken cancellationToken = default)
         {
             var result = await base.CreateAsync(dto);
 
@@ -150,16 +151,16 @@ namespace FormBuilder.Services
         }
 
         // Explicit interface implementation for ApiResponse - calls the ServiceResult override via base class
-        async Task<ApiResponse> IApprovalWorkflowService.UpdateAsync(int id, ApprovalWorkflowUpdateDto dto)
+        async Task<ApiResponse> IApprovalWorkflowService.UpdateAsync(int id, ApprovalWorkflowUpdateDto dto, CancellationToken cancellationToken)
         {
             // Call the override by invoking it through the base class method signature
             // We use a helper to avoid signature conflicts
-            var result = await UpdateAsyncInternal(id, dto);
+            var result = await UpdateAsyncInternal(id, dto, cancellationToken);
             return ConvertToApiResponse(result);
         }
 
         // Helper method to avoid signature conflict - contains the actual update logic
-        private async Task<ServiceResult<ApprovalWorkflowDto>> UpdateAsyncInternal(int id, ApprovalWorkflowUpdateDto dto)
+        private async Task<ServiceResult<ApprovalWorkflowDto>> UpdateAsyncInternal(int id, ApprovalWorkflowUpdateDto dto, CancellationToken cancellationToken = default)
         {
             if (dto == null)
             {
@@ -252,7 +253,7 @@ namespace FormBuilder.Services
             return ValidationResult.Success();
         }
 
-        public async Task<ApiResponse> DeleteAsync(int id)
+        public async Task<ApiResponse> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
             // Use Repository.SingleOrDefaultAsync directly (without IsDeleted filter) to get entity even if already deleted
             // This is needed because GetByIdAsync excludes deleted records
@@ -283,15 +284,15 @@ namespace FormBuilder.Services
             return new ApiResponse(200, "Approval workflow deleted successfully");
         }
 
-        public async Task<ApiResponse> ToggleActiveAsync(int id, bool isActive)
+        public async Task<ApiResponse> ToggleActiveAsync(int id, bool isActive, CancellationToken cancellationToken = default)
         {
             var result = await base.ToggleActiveAsync(id, isActive);
             return ConvertToApiResponse(result);
         }
 
-        public async Task<ApiResponse> GetByNameAsync(string name)
+        public async Task<ApiResponse> GetByNameAsync(string name, CancellationToken cancellationToken = default)
         {
-            var entity = await _unitOfWork.ApprovalWorkflowRepository.GetByNameAsync(name);
+            var entity = await _unitOfWork.ApprovalWorkflowRepository.GetByNameAsync(name, cancellationToken);
             if (entity == null)
             {
                 var message = _localizer?["ApprovalWorkflow_NotFound"] ?? "Workflow not found";
@@ -302,30 +303,30 @@ namespace FormBuilder.Services
             return new ApiResponse(200, "Workflow retrieved", dto);
         }
 
-        public async Task<ApiResponse> GetActiveAsync()
+        public async Task<ApiResponse> GetActiveAsync(CancellationToken cancellationToken = default)
         {
             var result = await base.GetActiveAsync();
             return ConvertToApiResponse(result);
         }
 
-        public async Task<ApiResponse> ExistsAsync(int id)
+        public async Task<ApiResponse> ExistsAsync(int id, CancellationToken cancellationToken = default)
         {
             var exists = await _unitOfWork.ApprovalWorkflowRepository.AnyAsync(x => x.Id == id);
             return new ApiResponse(200, "Existence checked", exists);
         }
 
-        public async Task<ApiResponse> NameExistsAsync(string name, int? excludeId = null)
+        public async Task<ApiResponse> NameExistsAsync(string name, int? excludeId = null, CancellationToken cancellationToken = default)
         {
-            var exists = await _unitOfWork.ApprovalWorkflowRepository.NameExistsAsync(name, excludeId);
+            var exists = await _unitOfWork.ApprovalWorkflowRepository.NameExistsAsync(name, excludeId, cancellationToken);
             return new ApiResponse(200, "Name existence checked", exists);
         }
 
         /// <summary>
         /// يتأكد من وجود Stage افتراضي للـ Workflow - يُنشئ واحد إذا لم يكن موجود
         /// </summary>
-        public async Task<ApiResponse> EnsureDefaultStageAsync(int workflowId)
+        public async Task<ApiResponse> EnsureDefaultStageAsync(int workflowId, CancellationToken cancellationToken = default)
         {
-            var workflow = await _unitOfWork.ApprovalWorkflowRepository.GetByIdAsync(workflowId);
+            var workflow = await _unitOfWork.ApprovalWorkflowRepository.GetByIdAsync(workflowId, cancellationToken);
             if (workflow == null)
             {
                 return new ApiResponse(404, "Workflow not found");
@@ -358,7 +359,7 @@ namespace FormBuilder.Services
         /// <summary>
         /// يُصلح جميع الـ Workflows التي ليس لها stages
         /// </summary>
-        public async Task<ApiResponse> FixAllWorkflowsWithoutStagesAsync()
+        public async Task<ApiResponse> FixAllWorkflowsWithoutStagesAsync(CancellationToken cancellationToken = default)
         {
             var allWorkflows = await _unitOfWork.ApprovalWorkflowRepository.GetAllAsync();
             var fixedCount = 0;

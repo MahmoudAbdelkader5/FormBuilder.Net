@@ -25,7 +25,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET ALL FIELD OPTIONS
         // ================================
         [HttpGet]
-        public async Task<IActionResult> GetAllFieldOptions()
+        public async Task<IActionResult> GetAllFieldOptions(CancellationToken cancellationToken = default)
         {
             var result = await _fieldOptionsService.GetAllAsync();
             return result.ToActionResult();
@@ -35,7 +35,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET FIELD OPTIONS BY FIELD ID
         // ================================
         [HttpGet("field/{fieldId}")]
-        public async Task<IActionResult> GetFieldOptionsByFieldId(int fieldId)
+        public async Task<IActionResult> GetFieldOptionsByFieldId(int fieldId, CancellationToken cancellationToken = default)
         {
             var result = await _fieldOptionsService.GetByFieldIdAsync(fieldId);
             return result.ToActionResult();
@@ -45,7 +45,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET ACTIVE FIELD OPTIONS BY FIELD ID
         // ================================
         [HttpGet("field/{fieldId}/active")]
-        public async Task<IActionResult> GetActiveFieldOptionsByFieldId(int fieldId)
+        public async Task<IActionResult> GetActiveFieldOptionsByFieldId(int fieldId, CancellationToken cancellationToken = default)
         {
             var result = await _fieldOptionsService.GetActiveByFieldIdAsync(fieldId);
             return result.ToActionResult();
@@ -55,7 +55,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET FIELD OPTION BY ID
         // ================================
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetFieldOptionById(int id)
+        public async Task<IActionResult> GetFieldOptionById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _fieldOptionsService.GetByIdAsync(id, asNoTracking: true);
             return result.ToActionResult();
@@ -65,7 +65,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET DEFAULT OPTION BY FIELD ID
         // ================================
         [HttpGet("field/{fieldId}/default")]
-        public async Task<IActionResult> GetDefaultOption(int fieldId)
+        public async Task<IActionResult> GetDefaultOption(int fieldId, CancellationToken cancellationToken = default)
         {
             var result = await _fieldOptionsService.GetDefaultOptionAsync(fieldId);
             return result.ToActionResult();
@@ -75,7 +75,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET OPTIONS COUNT BY FIELD ID
         // ================================
         [HttpGet("field/{fieldId}/count")]
-        public async Task<IActionResult> GetOptionsCount(int fieldId)
+        public async Task<IActionResult> GetOptionsCount(int fieldId, CancellationToken cancellationToken = default)
         {
             var result = await _fieldOptionsService.GetOptionsCountAsync(fieldId);
             return result.ToActionResult();
@@ -85,7 +85,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // CREATE FIELD OPTION
         // ================================
         [HttpPost]
-        public async Task<IActionResult> CreateFieldOption([FromBody] CreateFieldOptionDto createFieldOptionDto)
+        public async Task<IActionResult> CreateFieldOption([FromBody] CreateFieldOptionDto createFieldOptionDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -104,7 +104,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // CREATE BULK FIELD OPTIONS
         // ================================
         [HttpPost("bulk")]
-        public async Task<IActionResult> CreateBulkFieldOptions([FromBody] System.Collections.Generic.List<CreateFieldOptionDto> createDtos)
+        public async Task<IActionResult> CreateBulkFieldOptions([FromBody] System.Collections.Generic.List<CreateFieldOptionDto> createDtos, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -119,7 +119,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // UPDATE FIELD OPTION
         // ================================
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateFieldOption(int id, [FromBody] UpdateFieldOptionDto updateFieldOptionDto)
+        public async Task<IActionResult> UpdateFieldOption(int id, [FromBody] UpdateFieldOptionDto updateFieldOptionDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -135,7 +135,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // DELETE FIELD OPTION (HARD DELETE)
         // ================================
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteFieldOption(int id)
+        public async Task<IActionResult> DeleteFieldOption(int id, CancellationToken cancellationToken = default)
         {
             var result = await _fieldOptionsService.DeleteAsync(id);
             if (result.Success) return NoContent();
@@ -146,7 +146,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // SOFT DELETE FIELD OPTION
         // ================================
         [HttpDelete("{id:int}/soft")]
-        public async Task<IActionResult> SoftDeleteFieldOption(int id)
+        public async Task<IActionResult> SoftDeleteFieldOption(int id, CancellationToken cancellationToken = default)
         {
             var result = await _fieldOptionsService.SoftDeleteAsync(id);
             if (result.Success) return NoContent();

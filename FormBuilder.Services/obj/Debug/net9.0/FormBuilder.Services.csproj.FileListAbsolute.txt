@@ -143,3 +143,5 @@ D:\trioapps\FormBuilderApiProject\FormBuilder.Services\obj\Debug\net9.0\FormBuil
 D:\trioapps\FormBuilderApiProject\FormBuilder.Services\obj\Debug\net9.0\refint\FormBuilder.Services.dll
 D:\trioapps\FormBuilderApiProject\FormBuilder.Services\obj\Debug\net9.0\FormBuilder.Services.pdb
 D:\trioapps\FormBuilderApiProject\FormBuilder.Services\obj\Debug\net9.0\ref\FormBuilder.Services.dll
+D:\trioapps\FormBuilderApiProject\FormBuilder.Services\obj\Debug\net9.0\ar\FormBuilder.Services.resources.cs
+D:\trioapps\FormBuilderApiProject\FormBuilder.Services\obj\Debug\net9.0\en\FormBuilder.Services.resources.cs

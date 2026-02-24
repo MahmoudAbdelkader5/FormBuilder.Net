@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FormBuilder.Infrastructure.Repositories
@@ -19,17 +20,17 @@ namespace FormBuilder.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<FORM_SUBMISSIONS?> GetByIdAsync(int id)
+        public async Task<FORM_SUBMISSIONS?> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             return await _context.FORM_SUBMISSIONS
                 .Include(fs => fs.FORM_BUILDER)
                 .Include(fs => fs.DOCUMENT_TYPES)
                 .Include(fs => fs.DOCUMENT_SERIES)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(fs => fs.Id == id);
+                .FirstOrDefaultAsync(fs => fs.Id == id, cancellationToken);
         }
 
-        public async Task<FORM_SUBMISSIONS?> GetByIdWithDetailsAsync(int id)
+        public async Task<FORM_SUBMISSIONS?> GetByIdWithDetailsAsync(int id, CancellationToken cancellationToken = default)
         {
             var submission = await _context.FORM_SUBMISSIONS
                 .Include(fs => fs.FORM_BUILDER)
@@ -44,7 +45,7 @@ namespace FormBuilder.Infrastructure.Repositories
                 // Note: Cells are loaded separately in Service layer to avoid tracking conflicts
                 // and to handle AsNoTracking() limitations with filtered collections
                 .AsNoTracking()
-                .FirstOrDefaultAsync(fs => fs.Id == id && !fs.IsDeleted);
+                .FirstOrDefaultAsync(fs => fs.Id == id && !fs.IsDeleted, cancellationToken);
 
             // Note: Cells are loaded separately in Service layer due to AsNoTracking() limitations
             // The Include chain above will attempt to load cells, but if it fails due to filtering,
@@ -53,36 +54,36 @@ namespace FormBuilder.Infrastructure.Repositories
             return submission;
         }
 
-        public async Task<FORM_SUBMISSIONS?> GetByDocumentNumberAsync(string documentNumber)
+        public async Task<FORM_SUBMISSIONS?> GetByDocumentNumberAsync(string documentNumber, CancellationToken cancellationToken = default)
         {
             return await _context.FORM_SUBMISSIONS
                 .Include(fs => fs.FORM_BUILDER)
                 .Include(fs => fs.DOCUMENT_TYPES)
                 .Include(fs => fs.DOCUMENT_SERIES)
-                .FirstOrDefaultAsync(fs => fs.DocumentNumber == documentNumber && !fs.IsDeleted);
+                .FirstOrDefaultAsync(fs => fs.DocumentNumber == documentNumber && !fs.IsDeleted, cancellationToken);
         }
 
-        public async Task<IEnumerable<FORM_SUBMISSIONS>> GetByFormBuilderIdAsync(int formBuilderId)
+        public async Task<IEnumerable<FORM_SUBMISSIONS>> GetByFormBuilderIdAsync(int formBuilderId, CancellationToken cancellationToken = default)
         {
             return await _context.FORM_SUBMISSIONS
                 .Include(fs => fs.DOCUMENT_TYPES)
                 .Include(fs => fs.DOCUMENT_SERIES)
                 .Where(fs => fs.FormBuilderId == formBuilderId)
                 .OrderByDescending(fs => fs.CreatedDate)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<FORM_SUBMISSIONS>> GetByDocumentTypeIdAsync(int documentTypeId)
+        public async Task<IEnumerable<FORM_SUBMISSIONS>> GetByDocumentTypeIdAsync(int documentTypeId, CancellationToken cancellationToken = default)
         {
             return await _context.FORM_SUBMISSIONS
                 .Include(fs => fs.FORM_BUILDER)
                 .Include(fs => fs.DOCUMENT_SERIES)
                 .Where(fs => fs.DocumentTypeId == documentTypeId)
                 .OrderByDescending(fs => fs.CreatedDate)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<FORM_SUBMISSIONS>> GetByUserIdAsync(string userId)
+        public async Task<IEnumerable<FORM_SUBMISSIONS>> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
         {
             return await _context.FORM_SUBMISSIONS
                 .Include(fs => fs.FORM_BUILDER)
@@ -90,10 +91,10 @@ namespace FormBuilder.Infrastructure.Repositories
                 .Include(fs => fs.DOCUMENT_SERIES)
                 .Where(fs => fs.SubmittedByUserId == userId)
                 .OrderByDescending(fs => fs.CreatedDate)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<FORM_SUBMISSIONS>> GetByStatusAsync(string status)
+        public async Task<IEnumerable<FORM_SUBMISSIONS>> GetByStatusAsync(string status, CancellationToken cancellationToken = default)
         {
             return await _context.FORM_SUBMISSIONS
                 .Include(fs => fs.FORM_BUILDER)
@@ -101,10 +102,10 @@ namespace FormBuilder.Infrastructure.Repositories
                 .Include(fs => fs.DOCUMENT_SERIES)
                 .Where(fs => fs.Status == status)
                 .OrderByDescending(fs => fs.CreatedDate)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<FORM_SUBMISSIONS>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
+        public async Task<IEnumerable<FORM_SUBMISSIONS>> GetByDateRangeAsync(DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default)
         {
             return await _context.FORM_SUBMISSIONS
                 .Include(fs => fs.FORM_BUILDER)
@@ -112,49 +113,49 @@ namespace FormBuilder.Infrastructure.Repositories
                 .Include(fs => fs.DOCUMENT_SERIES)
                 .Where(fs => fs.CreatedDate >= startDate && fs.CreatedDate <= endDate)
                 .OrderByDescending(fs => fs.CreatedDate)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<bool> DocumentNumberExistsAsync(string documentNumber)
+        public async Task<bool> DocumentNumberExistsAsync(string documentNumber, CancellationToken cancellationToken = default)
         {
             return await _context.FORM_SUBMISSIONS
-                .AnyAsync(fs => fs.DocumentNumber == documentNumber && !fs.IsDeleted);
+                .AnyAsync(fs => fs.DocumentNumber == documentNumber && !fs.IsDeleted, cancellationToken);
         }
 
-        public async Task<int> GetNextVersionAsync(int formBuilderId)
+        public async Task<int> GetNextVersionAsync(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var currentVersion = await _context.FORM_SUBMISSIONS
                 .Where(fs => fs.FormBuilderId == formBuilderId && !fs.IsDeleted)
-                .MaxAsync(fs => (int?)fs.Version) ?? 0;
+                .MaxAsync(fs => (int?)fs.Version, cancellationToken) ?? 0;
 
             return currentVersion + 1;
         }
 
-        public async Task<IEnumerable<FORM_SUBMISSIONS>> GetSubmissionsWithDetailsAsync()
+        public async Task<IEnumerable<FORM_SUBMISSIONS>> GetSubmissionsWithDetailsAsync(CancellationToken cancellationToken = default)
         {
             return await _context.FORM_SUBMISSIONS
                 .Include(fs => fs.FORM_BUILDER)
                 .Include(fs => fs.DOCUMENT_TYPES)
                 .Include(fs => fs.DOCUMENT_SERIES)
                 .OrderByDescending(fs => fs.CreatedDate)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<bool> HasSubmissionsAsync(int formBuilderId)
+        public async Task<bool> HasSubmissionsAsync(int formBuilderId, CancellationToken cancellationToken = default)
         {
             return await _context.FORM_SUBMISSIONS
-                .AnyAsync(fs => fs.FormBuilderId == formBuilderId && !fs.IsDeleted);
+                .AnyAsync(fs => fs.FormBuilderId == formBuilderId && !fs.IsDeleted, cancellationToken);
         }
 
-        public async Task UpdateStatusAsync(int submissionId, string status)
+        public async Task UpdateStatusAsync(int submissionId, string status, CancellationToken cancellationToken = default)
         {
-            var submission = await _context.FORM_SUBMISSIONS.FindAsync(submissionId);
+            var submission = await _context.FORM_SUBMISSIONS.FindAsync(new object?[] { submissionId }, cancellationToken);
             if (submission != null)
             {
                 submission.Status = status;
                 submission.UpdatedDate = DateTime.UtcNow;
                 _context.FORM_SUBMISSIONS.Update(submission);
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
             }
         }
     }

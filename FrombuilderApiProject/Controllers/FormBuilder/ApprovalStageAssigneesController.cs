@@ -22,7 +22,7 @@ namespace FormBuilder.API.Controllers
         // GET: api/ApprovalStageAssignees/stage/1
         [HttpGet("stage/{stageId}")]
         [RequirePermission("ApprovalStageAssignee_Allow_View")]
-        public async Task<IActionResult> GetByStageId(int stageId)
+        public async Task<IActionResult> GetByStageId(int stageId, CancellationToken cancellationToken = default)
         {
             var response = await _service.GetByStageIdAsync(stageId);
             return StatusCode(response.StatusCode, response);
@@ -31,7 +31,7 @@ namespace FormBuilder.API.Controllers
         // GET: api/ApprovalStageAssignees/5
         [HttpGet("{id}")]
         [RequirePermission("ApprovalStageAssignee_Allow_View")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var response = await _service.GetByIdAsync(id);
             return StatusCode(response.StatusCode, response);
@@ -40,7 +40,7 @@ namespace FormBuilder.API.Controllers
         // POST: api/ApprovalStageAssignees
         [HttpPost]
         [RequirePermission("ApprovalStageAssignee_Allow_Create")]
-        public async Task<IActionResult> Create([FromBody] ApprovalStageAssigneesCreateDto dto)
+        public async Task<IActionResult> Create([FromBody] ApprovalStageAssigneesCreateDto dto, CancellationToken cancellationToken = default)
         {
             var response = await _service.CreateAsync(dto);
             return StatusCode(response.StatusCode, response);
@@ -49,7 +49,7 @@ namespace FormBuilder.API.Controllers
         // PUT: api/ApprovalStageAssignees/5
         [HttpPut("{id}")]
         [RequirePermission("ApprovalStageAssignee_Allow_Edit")]
-        public async Task<IActionResult> Update(int id, [FromBody] ApprovalStageAssigneesUpdateDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] ApprovalStageAssigneesUpdateDto dto, CancellationToken cancellationToken = default)
         {
             var response = await _service.UpdateAsync(id, dto);
             return StatusCode(response.StatusCode, response);
@@ -58,7 +58,7 @@ namespace FormBuilder.API.Controllers
         // POST: api/ApprovalStageAssignees/bulk-update
         [HttpPost("bulk-update")]
         [RequirePermission("ApprovalStageAssignee_Allow_Manage")]
-        public async Task<IActionResult> BulkUpdate([FromBody] StageAssigneesBulkDto dto)
+        public async Task<IActionResult> BulkUpdate([FromBody] StageAssigneesBulkDto dto, CancellationToken cancellationToken = default)
         {
             var response = await _service.BulkUpdateAsync(dto);
             return StatusCode(response.StatusCode, response);
@@ -67,7 +67,7 @@ namespace FormBuilder.API.Controllers
         // DELETE: api/ApprovalStageAssignees/5
         [HttpDelete("{id}")]
         [RequirePermission("ApprovalStageAssignee_Allow_Delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var response = await _service.DeleteAsync(id);
             return StatusCode(response.StatusCode, response);
@@ -76,7 +76,7 @@ namespace FormBuilder.API.Controllers
         // POST: api/ApprovalStageAssignees/update-missing-role-ids
         [HttpPost("update-missing-role-ids")]
         [RequirePermission("ApprovalStageAssignee_Allow_Manage")]
-        public async Task<IActionResult> UpdateMissingRoleIds()
+        public async Task<IActionResult> UpdateMissingRoleIds(CancellationToken cancellationToken = default)
         {
             var response = await _service.UpdateMissingRoleIdsAsync();
             return StatusCode(response.StatusCode, response);

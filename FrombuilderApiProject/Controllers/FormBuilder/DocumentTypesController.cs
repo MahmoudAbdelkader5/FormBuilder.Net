@@ -1,4 +1,4 @@
-﻿using FormBuilder.API.Attributes;
+using FormBuilder.API.Attributes;
 using FormBuilder.API.Models.DTOs;
 using FormBuilder.Domain.Interfaces.Services;
 using FormBuilder.API.Extensions;
@@ -23,7 +23,7 @@ namespace FormBuilder.API.Controllers
  
         [HttpGet]
         [RequirePermission("Document_Allow_View")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
         {
             var result = await _documentTypeService.GetAllAsync();
             return result.ToActionResult();
@@ -32,7 +32,7 @@ namespace FormBuilder.API.Controllers
        
         [HttpGet("{id}")]
         [RequirePermission("Document_Allow_View")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _documentTypeService.GetByIdAsync(id);
             return result.ToActionResult();
@@ -41,7 +41,7 @@ namespace FormBuilder.API.Controllers
        
         [HttpGet("code/{code}")]
         [RequirePermission("Document_Allow_View")]
-        public async Task<IActionResult> GetByCode(string code)
+        public async Task<IActionResult> GetByCode(string code, CancellationToken cancellationToken = default)
         {
             var result = await _documentTypeService.GetByCodeAsync(code);
             return result.ToActionResult();
@@ -50,7 +50,7 @@ namespace FormBuilder.API.Controllers
       
         [HttpGet("active")]
         [RequirePermission("Document_Allow_View")]
-        public async Task<IActionResult> GetActive()
+        public async Task<IActionResult> GetActive(CancellationToken cancellationToken = default)
         {
             var result = await _documentTypeService.GetActiveAsync();
             return result.ToActionResult();
@@ -59,7 +59,7 @@ namespace FormBuilder.API.Controllers
       
         [HttpGet("parent-menu/{parentMenuId}")]
         [RequirePermission("Document_Allow_View")]
-        public async Task<IActionResult> GetByParentMenuId(int parentMenuId)
+        public async Task<IActionResult> GetByParentMenuId(int parentMenuId, CancellationToken cancellationToken = default)
         {
             var result = await _documentTypeService.GetByParentMenuIdAsync(parentMenuId);
             return result.ToActionResult();
@@ -68,7 +68,7 @@ namespace FormBuilder.API.Controllers
         
         [HttpGet("parent-menu/null")]
         [RequirePermission("Document_Allow_View")]
-        public async Task<IActionResult> GetRootMenuItems()
+        public async Task<IActionResult> GetRootMenuItems(CancellationToken cancellationToken = default)
         {
             var result = await _documentTypeService.GetByParentMenuIdAsync(null);
             return result.ToActionResult();
@@ -77,7 +77,7 @@ namespace FormBuilder.API.Controllers
         
         [HttpPost]
         [RequirePermission("Document_Allow_Create")]
-        public async Task<IActionResult> Create([FromBody] CreateDocumentTypeDto createDto)
+        public async Task<IActionResult> Create([FromBody] CreateDocumentTypeDto createDto, CancellationToken cancellationToken = default)
         {
             var result = await _documentTypeService.CreateAsync(createDto);
             if (result.Success && result.Data != null)
@@ -90,7 +90,7 @@ namespace FormBuilder.API.Controllers
       
         [HttpPut("{id}")]
         [RequirePermission("Document_Allow_Edit")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateDocumentTypeDto updateDto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateDocumentTypeDto updateDto, CancellationToken cancellationToken = default)
         {
             var result = await _documentTypeService.UpdateAsync(id, updateDto);
             if (result.Success) return NoContent();
@@ -102,7 +102,7 @@ namespace FormBuilder.API.Controllers
         
         [HttpDelete("{id}")]
         [RequirePermission("Document_Allow_Delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var result = await _documentTypeService.DeleteAsync(id);
             if (result.Success) return NoContent();

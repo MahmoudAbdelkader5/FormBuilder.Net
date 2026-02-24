@@ -23,7 +23,7 @@ namespace FormBuilder.API.Controllers
         // GET: api/ApprovalStage/workflow/1
         [HttpGet("workflow/{workflowId}")]
         [RequirePermission("ApprovalStage_Allow_View")]
-        public async Task<IActionResult> GetAll(int workflowId)
+        public async Task<IActionResult> GetAll(int workflowId, CancellationToken cancellationToken = default)
         {
             var response = await _service.GetAllAsync(workflowId);
             return StatusCode(response.StatusCode, response);
@@ -32,7 +32,7 @@ namespace FormBuilder.API.Controllers
         // GET: api/ApprovalStage/5
         [HttpGet("{id}")]
         [RequirePermission("ApprovalStage_Allow_View")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var response = await _service.GetByIdAsync(id);
             return StatusCode(response.StatusCode, response);
@@ -41,7 +41,7 @@ namespace FormBuilder.API.Controllers
         // POST: api/ApprovalStage
         [HttpPost]
         [RequirePermission("ApprovalStage_Allow_Create")]
-        public async Task<IActionResult> Create([FromBody] ApprovalStageCreateDto dto)
+        public async Task<IActionResult> Create([FromBody] ApprovalStageCreateDto dto, CancellationToken cancellationToken = default)
         {
             var response = await _service.CreateAsync(dto);
             return StatusCode(response.StatusCode, response);
@@ -50,7 +50,7 @@ namespace FormBuilder.API.Controllers
         // PUT: api/ApprovalStage/5
         [HttpPut("{id}")]
         [RequirePermission("ApprovalStage_Allow_Edit")]
-        public async Task<IActionResult> Update(int id, [FromBody] ApprovalStageUpdateDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] ApprovalStageUpdateDto dto, CancellationToken cancellationToken = default)
         {
             var response = await _service.UpdateAsync(id, dto);
             return StatusCode(response.StatusCode, response);
@@ -59,7 +59,7 @@ namespace FormBuilder.API.Controllers
         // PATCH: api/ApprovalStage/5/toggle-active
         [HttpPatch("{id}/toggle-active")]
         [RequirePermission("ApprovalStage_Allow_Manage")]
-        public async Task<IActionResult> ToggleActive(int id, [FromQuery] bool isActive)
+        public async Task<IActionResult> ToggleActive(int id, [FromQuery] bool isActive, CancellationToken cancellationToken = default)
         {
             var response = await _service.ToggleActiveAsync(id, isActive);
             return StatusCode(response.StatusCode, response);
@@ -68,7 +68,7 @@ namespace FormBuilder.API.Controllers
         // DELETE: api/ApprovalStage/5
         [HttpDelete("{id}")]
         [RequirePermission("ApprovalStage_Allow_Delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var response = await _service.DeleteAsync(id);
             return StatusCode(response.StatusCode, response);
@@ -77,7 +77,7 @@ namespace FormBuilder.API.Controllers
         // GET: api/ApprovalStage/workflow/{workflowId}/form-fields
         [HttpGet("workflow/{workflowId}/form-fields")]
         [RequirePermission("ApprovalStage_Allow_View")]
-        public async Task<IActionResult> GetFormFieldsByWorkflowId(int workflowId)
+        public async Task<IActionResult> GetFormFieldsByWorkflowId(int workflowId, CancellationToken cancellationToken = default)
         {
             var response = await _service.GetFormFieldsByWorkflowIdAsync(workflowId);
             return StatusCode(response.StatusCode, response);

@@ -21,7 +21,7 @@ namespace FormBuilder.API.Controllers.Webhooks
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] JsonElement payload)
+        public async Task<IActionResult> Post([FromBody] JsonElement payload, CancellationToken cancellationToken = default)
         {
             var envelopeId = ReadString(payload, "data", "envelopeId")
                              ?? ReadString(payload, "data", "envelopeSummary", "envelopeId")

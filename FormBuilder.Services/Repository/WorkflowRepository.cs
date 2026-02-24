@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FormBuilder.Infrastructure.Repositories
@@ -39,52 +40,52 @@ namespace FormBuilder.Infrastructure.Repositories
             _context.APPROVAL_WORKFLOWS.Update(entity);
         }
 
-        public async Task<APPROVAL_WORKFLOWS> GetByIdAsync(int id)
+        public async Task<APPROVAL_WORKFLOWS> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             return await _context.APPROVAL_WORKFLOWS
                 .Where(w => w.Id == id && !w.IsDeleted)
                 .Include(w => w.DOCUMENT_TYPES)
                 .Include(w => w.APPROVAL_STAGES)
                     .ThenInclude(s => s.APPROVAL_STAGE_ASSIGNEES)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<APPROVAL_WORKFLOWS> GetByNameAsync(string name)
+        public async Task<APPROVAL_WORKFLOWS> GetByNameAsync(string name, CancellationToken cancellationToken = default)
         {
             return await _context.APPROVAL_WORKFLOWS
                 .Where(w => w.Name == name && !w.IsDeleted)
                 .Include(w => w.DOCUMENT_TYPES)
                 .Include(w => w.APPROVAL_STAGES)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<APPROVAL_WORKFLOWS>> GetAllAsync()
+        public async Task<IEnumerable<APPROVAL_WORKFLOWS>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             return await _context.APPROVAL_WORKFLOWS
                 .Where(w => !w.IsDeleted)
                 .Include(w => w.DOCUMENT_TYPES)
                 .Include(w => w.APPROVAL_STAGES)
                     .ThenInclude(s => s.APPROVAL_STAGE_ASSIGNEES)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<APPROVAL_WORKFLOWS>> GetActiveAsync()
+        public async Task<IEnumerable<APPROVAL_WORKFLOWS>> GetActiveAsync(CancellationToken cancellationToken = default)
         {
             return await _context.APPROVAL_WORKFLOWS
                 .Where(w => w.IsActive && !w.IsDeleted)
                 .Include(w => w.DOCUMENT_TYPES)
                 .Include(w => w.APPROVAL_STAGES)
                     .ThenInclude(s => s.APPROVAL_STAGE_ASSIGNEES)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<bool> NameExistsAsync(string name, int? excludeId = null)
+        public async Task<bool> NameExistsAsync(string name, int? excludeId = null, CancellationToken cancellationToken = default)
         {
             var query = _context.APPROVAL_WORKFLOWS.AsQueryable();
             query = query.Where(w => w.Name == name && !w.IsDeleted);
             if (excludeId.HasValue)
                 query = query.Where(w => w.Id != excludeId.Value);
-            return await query.AnyAsync();
+            return await query.AnyAsync(cancellationToken);
         }
 
         // Override GetAllAsync to exclude deleted records
@@ -113,20 +114,20 @@ namespace FormBuilder.Infrastructure.Repositories
             return await _context.APPROVAL_WORKFLOWS.Where(w => !w.IsDeleted).AnyAsync(predicate);
         }
 
-        public async Task<bool> IsActiveAsync(int id)
+        public async Task<bool> IsActiveAsync(int id, CancellationToken cancellationToken = default)
         {
             return await _context.APPROVAL_WORKFLOWS
-                .AnyAsync(w => w.Id == id && w.IsActive);
+                .AnyAsync(w => w.Id == id && w.IsActive, cancellationToken);
         }
 
-        public async Task<APPROVAL_WORKFLOWS> GetActiveWorkflowByDocumentTypeIdAsync(int documentTypeId)
+        public async Task<APPROVAL_WORKFLOWS> GetActiveWorkflowByDocumentTypeIdAsync(int documentTypeId, CancellationToken cancellationToken = default)
         {
             return await _context.APPROVAL_WORKFLOWS
                 .Where(w => w.DocumentTypeId == documentTypeId && w.IsActive && !w.IsDeleted)
                 .Include(w => w.DOCUMENT_TYPES)
                 .Include(w => w.APPROVAL_STAGES)
                     .ThenInclude(s => s.APPROVAL_STAGE_ASSIGNEES)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
         }
     }
 }

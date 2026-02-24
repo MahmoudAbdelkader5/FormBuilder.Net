@@ -27,7 +27,7 @@ public class UserPermissionController : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = "Administration")]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
     {
         var permissions = await _permissionService.GetAllAsync();
         return Ok(permissions);
@@ -35,14 +35,14 @@ public class UserPermissionController : ControllerBase
 
     [HttpGet("user/{userId}")]
     [Authorize(Roles = "Administration")]
-    public async Task<IActionResult> GetUserPermissions(int userId)
+    public async Task<IActionResult> GetUserPermissions(int userId, CancellationToken cancellationToken = default)
     {
         var permissions = await _permissionService.GetUserPermissionsAsync(userId);
         return Ok(permissions);
     }
 
     [HttpGet("current-user")]
-    public async Task<IActionResult> GetCurrentUserPermissions()
+    public async Task<IActionResult> GetCurrentUserPermissions(CancellationToken cancellationToken = default)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
         if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
@@ -53,7 +53,7 @@ public class UserPermissionController : ControllerBase
     }
 
     [HttpPost("check")]
-    public async Task<IActionResult> CheckPermission([FromBody] CheckPermissionRequestDto request)
+    public async Task<IActionResult> CheckPermission([FromBody] CheckPermissionRequestDto request, CancellationToken cancellationToken = default)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
         if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
@@ -64,7 +64,7 @@ public class UserPermissionController : ControllerBase
     }
 
     [HttpPost("check-multiple")]
-    public async Task<IActionResult> CheckMultiplePermissions([FromBody] CheckPermissionsRequestDto request)
+    public async Task<IActionResult> CheckMultiplePermissions([FromBody] CheckPermissionsRequestDto request, CancellationToken cancellationToken = default)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
         if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId))
@@ -76,7 +76,7 @@ public class UserPermissionController : ControllerBase
 
     [HttpGet("role/{roleId}")]
     [Authorize(Roles = "Administration")]
-    public async Task<IActionResult> GetRolePermissions(int roleId)
+    public async Task<IActionResult> GetRolePermissions(int roleId, CancellationToken cancellationToken = default)
     {
         var permissions = await _permissionService.GetRolePermissionsAsync(roleId);
         return Ok(permissions);
@@ -84,7 +84,7 @@ public class UserPermissionController : ControllerBase
 
     [HttpGet("matrix")]
     [Authorize(Roles = "Administration")]
-    public async Task<IActionResult> GetPermissionMatrix()
+    public async Task<IActionResult> GetPermissionMatrix(CancellationToken cancellationToken = default)
     {
         var matrix = await _permissionService.GetPermissionMatrixAsync();
         return Ok(matrix);
@@ -95,7 +95,7 @@ public class UserPermissionController : ControllerBase
     /// </summary>
     [HttpPost]
     [Authorize(Roles = "Administration")]
-    public async Task<IActionResult> Create([FromBody] CreatePermissionRequestDto dto)
+    public async Task<IActionResult> Create([FromBody] CreatePermissionRequestDto dto, CancellationToken cancellationToken = default)
     {
         if (dto == null || string.IsNullOrWhiteSpace(dto.Name))
             return BadRequest(new { message = "Name is required" });

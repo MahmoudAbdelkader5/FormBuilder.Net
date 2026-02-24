@@ -27,7 +27,7 @@ namespace FormBuilder.API.Controllers
 
         // POST: api/ApprovalWorkflowRuntime/activate-stage
         [HttpPost("activate-stage")]
-        public async Task<IActionResult> ActivateStageForSubmission([FromBody] JsonElement body)
+        public async Task<IActionResult> ActivateStageForSubmission([FromBody] JsonElement body, CancellationToken cancellationToken = default)
         {
             int submissionId;
 
@@ -64,7 +64,7 @@ namespace FormBuilder.API.Controllers
 
         // GET: api/ApprovalWorkflowRuntime/resolve-approvers/stage/1
         [HttpGet("resolve-approvers/stage/{stageId}")]
-        public async Task<IActionResult> ResolveApproversForStage(int stageId)
+        public async Task<IActionResult> ResolveApproversForStage(int stageId, CancellationToken cancellationToken = default)
         {
             var response = await _service.ResolveApproversForStageAsync(stageId);
             return StatusCode(response.StatusCode, response);
@@ -72,7 +72,7 @@ namespace FormBuilder.API.Controllers
 
         // GET: api/ApprovalWorkflowRuntime/check-delegation/userId
         [HttpGet("check-delegation/{userId}")]
-        public async Task<IActionResult> CheckDelegation(string userId)
+        public async Task<IActionResult> CheckDelegation(string userId, CancellationToken cancellationToken = default)
         {
             var response = await _service.CheckDelegationAsync(userId);
             return StatusCode(response.StatusCode, response);
@@ -80,7 +80,7 @@ namespace FormBuilder.API.Controllers
 
         // POST: api/ApprovalWorkflowRuntime/process-action
         [HttpPost("process-action")]
-        public async Task<IActionResult> ProcessApprovalAction([FromBody] ApprovalActionDto dto)
+        public async Task<IActionResult> ProcessApprovalAction([FromBody] ApprovalActionDto dto, CancellationToken cancellationToken = default)
         {
             var response = await _service.ProcessApprovalActionAsync(dto);
             return StatusCode(response.StatusCode, response);
@@ -88,7 +88,7 @@ namespace FormBuilder.API.Controllers
 
         // POST: api/ApprovalWorkflowRuntime/request-signature
         [HttpPost("request-signature")]
-        public async Task<IActionResult> RequestStageSignature([FromBody] RequestStageSignatureDto dto)
+        public async Task<IActionResult> RequestStageSignature([FromBody] RequestStageSignatureDto dto, CancellationToken cancellationToken = default)
         {
             if (dto == null)
                 return BadRequest(new { statusCode = 400, message = "Request body is required" });
@@ -107,7 +107,7 @@ namespace FormBuilder.API.Controllers
 
         // GET: api/ApprovalWorkflowRuntime/inbox/userId
         [HttpGet("inbox/{userId}")]
-        public async Task<IActionResult> GetApprovalInbox(string userId)
+        public async Task<IActionResult> GetApprovalInbox(string userId, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("=== GetApprovalInbox Request ===");
             _logger.LogInformation("Received userId: '{UserId}' (Type: {Type}, Length: {Length})", 
@@ -144,7 +144,7 @@ namespace FormBuilder.API.Controllers
 
         // GET: api/ApprovalWorkflowRuntime/inbox-debug/userId
         [HttpGet("inbox-debug/{userId}")]
-        public async Task<IActionResult> DebugInbox(string userId)
+        public async Task<IActionResult> DebugInbox(string userId, CancellationToken cancellationToken = default)
         {
             var response = await _service.GetInboxDebugInfoAsync(userId);
             return StatusCode(response.StatusCode, response);

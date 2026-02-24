@@ -161,7 +161,7 @@ builder.Services.AddSwaggerGen(c =>
 // -----------------------------
 
 // Security / Auth DbContext
-builder.Services.AddDbContext<AkhmanageItContext>(options =>
+builder.Services.AddDbContextPool<AkhmanageItContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("AuthConnection");
 
@@ -184,7 +184,7 @@ builder.Services.AddDbContext<AkhmanageItContext>(options =>
 });
 
 // Business / Forms DbContext
-builder.Services.AddDbContext<FormBuilderDbContext>(options =>
+builder.Services.AddDbContextPool<FormBuilderDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -224,6 +224,10 @@ builder.Services.AddDataProtection()
 // HttpClient for External API Calls
 // Configure named HttpClient with automatic decompression
 // -----------------------------
+// Register the default HttpClient factory explicitly so services that depend on
+// IHttpClientFactory can always be activated.
+builder.Services.AddHttpClient();
+
 builder.Services.AddHttpClient("ExternalApi")
     .ConfigurePrimaryHttpMessageHandler(sp => new HttpClientHandler
     {
@@ -321,20 +325,18 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 
-    // Events for debugging
-    options.Events = new JwtBearerEvents
+    // Keep auth event logging only in development to avoid per-request console overhead in production.
+    if (builder.Environment.IsDevelopment())
     {
-        OnAuthenticationFailed = context =>
+        options.Events = new JwtBearerEvents
         {
-            Console.WriteLine($"Authentication failed: {context.Exception.Message}");
-            return Task.CompletedTask;
-        },
-        OnTokenValidated = context =>
-        {
-            Console.WriteLine("Token validated successfully");
-            return Task.CompletedTask;
-        }
-    };
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                return Task.CompletedTask;
+            }
+        };
+    }
 });
 
 // -----------------------------

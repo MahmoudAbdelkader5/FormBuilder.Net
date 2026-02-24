@@ -1,4 +1,4 @@
-﻿using FormBuilder.API.Models.DTOs;
+using FormBuilder.API.Models.DTOs;
 using FormBuilder.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +28,7 @@ namespace FormBuilder.API.Controllers
         /// Get all form attachment types with FormBuilder and AttachmentType details
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.GetAllAsync();
             return StatusCode(result.StatusCode, result);
@@ -38,7 +38,7 @@ namespace FormBuilder.API.Controllers
         /// Get form attachment type by ID with FormBuilder and AttachmentType details
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.GetByIdAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -48,7 +48,7 @@ namespace FormBuilder.API.Controllers
         /// Get form attachment types by FormBuilder ID
         /// </summary>
         [HttpGet("form-builder/{formBuilderId}")]
-        public async Task<IActionResult> GetByFormBuilderId(int formBuilderId)
+        public async Task<IActionResult> GetByFormBuilderId(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.GetByFormBuilderIdAsync(formBuilderId);
             return StatusCode(result.StatusCode, result);
@@ -58,7 +58,7 @@ namespace FormBuilder.API.Controllers
         /// Get form attachment types by AttachmentType ID
         /// </summary>
         [HttpGet("attachment-type/{attachmentTypeId}")]
-        public async Task<IActionResult> GetByAttachmentTypeId(int attachmentTypeId)
+        public async Task<IActionResult> GetByAttachmentTypeId(int attachmentTypeId, CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.GetByAttachmentTypeIdAsync(attachmentTypeId);
             return StatusCode(result.StatusCode, result);
@@ -68,7 +68,7 @@ namespace FormBuilder.API.Controllers
         /// Get all active form attachment types
         /// </summary>
         [HttpGet("active")]
-        public async Task<IActionResult> GetActive()
+        public async Task<IActionResult> GetActive(CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.GetActiveAsync();
             return StatusCode(result.StatusCode, result);
@@ -78,7 +78,7 @@ namespace FormBuilder.API.Controllers
         /// Get active form attachment types by FormBuilder ID
         /// </summary>
         [HttpGet("form-builder/{formBuilderId}/active")]
-        public async Task<IActionResult> GetActiveByFormBuilderId(int formBuilderId)
+        public async Task<IActionResult> GetActiveByFormBuilderId(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.GetActiveByFormBuilderIdAsync(formBuilderId);
             return StatusCode(result.StatusCode, result);
@@ -88,7 +88,7 @@ namespace FormBuilder.API.Controllers
         /// Get mandatory form attachment types by FormBuilder ID
         /// </summary>
         [HttpGet("form-builder/{formBuilderId}/mandatory")]
-        public async Task<IActionResult> GetMandatoryByFormBuilderId(int formBuilderId)
+        public async Task<IActionResult> GetMandatoryByFormBuilderId(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.GetMandatoryByFormBuilderIdAsync(formBuilderId);
             return StatusCode(result.StatusCode, result);
@@ -98,7 +98,7 @@ namespace FormBuilder.API.Controllers
         /// Check if form builder has any mandatory attachments
         /// </summary>
         [HttpGet("form-builder/{formBuilderId}/has-mandatory")]
-        public async Task<IActionResult> HasMandatoryAttachments(int formBuilderId)
+        public async Task<IActionResult> HasMandatoryAttachments(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.HasMandatoryAttachmentsAsync(formBuilderId);
             return StatusCode(result.StatusCode, result);
@@ -108,7 +108,7 @@ namespace FormBuilder.API.Controllers
         /// Check if form attachment type exists
         /// </summary>
         [HttpGet("{id}/exists")]
-        public async Task<IActionResult> Exists(int id)
+        public async Task<IActionResult> Exists(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.ExistsAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -118,7 +118,7 @@ namespace FormBuilder.API.Controllers
         /// Check if form attachment type is active
         /// </summary>
         [HttpGet("{id}/is-active")]
-        public async Task<IActionResult> IsActive(int id)
+        public async Task<IActionResult> IsActive(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.IsActiveAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -132,7 +132,7 @@ namespace FormBuilder.API.Controllers
         /// Create a new form attachment type association
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateFormAttachmentTypeDto createDto)
+        public async Task<IActionResult> Create([FromBody] CreateFormAttachmentTypeDto createDto, CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.CreateAsync(createDto);
             return StatusCode(result.StatusCode, result);
@@ -147,7 +147,7 @@ namespace FormBuilder.API.Controllers
         /// Update an existing form attachment type association
         /// </summary>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateFormAttachmentTypeDto updateDto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateFormAttachmentTypeDto updateDto, CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.UpdateAsync(id, updateDto);
             return StatusCode(result.StatusCode, result);
@@ -163,7 +163,7 @@ namespace FormBuilder.API.Controllers
         /// Delete a form attachment type association by ID
         /// </summary>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.DeleteAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -173,7 +173,7 @@ namespace FormBuilder.API.Controllers
         /// Delete all form attachment type associations by FormBuilder ID
         /// </summary>
         [HttpDelete("form-builder/{formBuilderId}")]
-        public async Task<IActionResult> DeleteByFormBuilderId(int formBuilderId)
+        public async Task<IActionResult> DeleteByFormBuilderId(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formAttachmentTypeService.DeleteByFormBuilderIdAsync(formBuilderId);
             return StatusCode(result.StatusCode, result);

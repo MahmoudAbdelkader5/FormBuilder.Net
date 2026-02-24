@@ -68,8 +68,6 @@ D:\trioapps\FormBuilderApiProject\frombuilderApiProject\bin\Release\net9.0\Micro
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\bin\Release\net9.0\MimeKit.dll
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\bin\Release\net9.0\Mono.TextTemplating.dll
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\bin\Release\net9.0\Newtonsoft.Json.dll
-D:\trioapps\FormBuilderApiProject\frombuilderApiProject\bin\Release\net9.0\BouncyCastle.Crypto.dll
-D:\trioapps\FormBuilderApiProject\frombuilderApiProject\bin\Release\net9.0\RestSharp.dll
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\bin\Release\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\bin\Release\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\bin\Release\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll

@@ -31,7 +31,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET: api/FormTabs
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<FormTabDto>), 200)]
-        public async Task<IActionResult> GetAllTabs([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+        public async Task<IActionResult> GetAllTabs([FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
         {
             var result = await _formTabService.GetPagedAsync(page, pageSize);
             return result.ToActionResult();
@@ -41,7 +41,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(FormTabDto), 200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetTabById(int id)
+        public async Task<IActionResult> GetTabById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formTabService.GetByIdAsync(id, asNoTracking: true);
             return result.ToActionResult();
@@ -50,7 +50,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET: api/FormTabs/form/{formBuilderId}
         [HttpGet("form/{formBuilderId}")]
         [ProducesResponseType(typeof(IEnumerable<FormTabDto>), 200)]
-        public async Task<IActionResult> GetTabsByFormId(int formBuilderId)
+        public async Task<IActionResult> GetTabsByFormId(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formTabService.GetByFormIdAsync(formBuilderId);
             return result.ToActionResult();
@@ -60,7 +60,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpGet("code/{tabCode}")]
         [ProducesResponseType(typeof(FormTabDto), 200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetTabByCode(string tabCode)
+        public async Task<IActionResult> GetTabByCode(string tabCode, CancellationToken cancellationToken = default)
         {
             var result = await _formTabService.GetByCodeAsync(tabCode, asNoTracking: true);
             return result.ToActionResult();
@@ -73,7 +73,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
         [ProducesResponseType(401)]
-        public async Task<IActionResult> CreateTab([FromBody] CreateFormTabDto createDto)
+        public async Task<IActionResult> CreateTab([FromBody] CreateFormTabDto createDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -100,7 +100,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
-        public async Task<IActionResult> UpdateTab(int id, [FromBody] UpdateFormTabDto updateDto)
+        public async Task<IActionResult> UpdateTab(int id, [FromBody] UpdateFormTabDto updateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -115,7 +115,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [RequirePermission("FormTab_Allow_Delete")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> DeleteTab(int id)
+        public async Task<IActionResult> DeleteTab(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formTabService.DeleteAsync(id);
             if (result.Success) return NoContent();
@@ -127,7 +127,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [RequirePermission("FormTab_Allow_Manage")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> ToggleActive(int id, [FromBody] bool isActive)
+        public async Task<IActionResult> ToggleActive(int id, [FromBody] bool isActive, CancellationToken cancellationToken = default)
         {
             var result = await _formTabService.ToggleActiveAsync(id, isActive);
             if (result.Success) return NoContent();
@@ -139,7 +139,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [RequirePermission("FormTab_Allow_Manage")]
         [ProducesResponseType(typeof(FormTabDto), 200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> RestoreTab(int id)
+        public async Task<IActionResult> RestoreTab(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formTabService.RestoreAsync(id);
             return result.ToActionResult();
@@ -148,7 +148,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET: api/FormTabs/check-code/{formBuilderId}/{tabCode}
         [HttpGet("check-code/{formBuilderId}/{tabCode}")]
         [ProducesResponseType(typeof(object), 200)]
-        public async Task<IActionResult> CheckTabCodeUnique(int formBuilderId, string tabCode, [FromQuery] int? ignoreId = null)
+        public async Task<IActionResult> CheckTabCodeUnique(int formBuilderId, string tabCode, [FromQuery] int? ignoreId = null, CancellationToken cancellationToken = default)
         {
             var result = await _formTabService.CodeExistsAsync(formBuilderId, tabCode, ignoreId);
             if (result.Success)
@@ -168,7 +168,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET: api/FormTabs/{id}/exists
         [HttpGet("{id}/exists")]
         [ProducesResponseType(typeof(object), 200)]
-        public async Task<IActionResult> TabExists(int id)
+        public async Task<IActionResult> TabExists(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formTabService.ExistsAsync(id);
             if (result.Success)
@@ -188,7 +188,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET: api/FormTabs/deleted
         [HttpGet("deleted")]
         [ProducesResponseType(typeof(IEnumerable<FormTabDto>), 200)]
-        public async Task<IActionResult> GetDeletedTabs([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+        public async Task<IActionResult> GetDeletedTabs([FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
         {
             var result = await _formTabService.GetPagedDeletedAsync(page, pageSize);
             return result.ToActionResult();
@@ -197,7 +197,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         // GET: api/FormTabs/all-including-deleted
         [HttpGet("all-including-deleted")]
         [ProducesResponseType(typeof(IEnumerable<FormTabDto>), 200)]
-        public async Task<IActionResult> GetAllTabsIncludingDeleted()
+        public async Task<IActionResult> GetAllTabsIncludingDeleted(CancellationToken cancellationToken = default)
         {
             var result = await _formTabService.GetAllIncludingDeletedAsync();
             return result.ToActionResult();

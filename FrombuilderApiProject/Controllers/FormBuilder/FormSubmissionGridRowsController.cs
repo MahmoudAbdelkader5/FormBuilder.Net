@@ -158,10 +158,9 @@ namespace FormBuilder.API.Controllers
         [ProducesResponseType(typeof(ApiResponse<List<FormSubmissionGridRowDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> SaveBulkGridData(
-            int submissionId, 
+        public async Task<IActionResult> SaveBulkGridData(int submissionId, 
             int gridId, 
-            [FromBody] List<SaveFormSubmissionGridDto> rows)
+            [FromBody] List<SaveFormSubmissionGridDto> rows, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -180,7 +179,7 @@ namespace FormBuilder.API.Controllers
         [HttpGet("submission/{submissionId}/grid/{gridId}/complete")]
         [ProducesResponseType(typeof(ApiResponse<List<FormSubmissionGridRowWithCellsDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetCompleteGridData(int submissionId, int gridId)
+        public async Task<IActionResult> GetCompleteGridData(int submissionId, int gridId, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionGridRowService.GetCompleteGridDataAsync(submissionId, gridId);
             return StatusCode(result.StatusCode, result);
@@ -189,10 +188,9 @@ namespace FormBuilder.API.Controllers
         [HttpPost("submission/{submissionId}/grid/{gridId}/validate")]
         [ProducesResponseType(typeof(ApiResponse<GridValidationResultDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ValidateGridData(
-            int submissionId, 
+        public async Task<IActionResult> ValidateGridData(int submissionId, 
             int gridId, 
-            [FromBody] List<SaveFormSubmissionGridDto> rows)
+            [FromBody] List<SaveFormSubmissionGridDto> rows, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));

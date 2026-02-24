@@ -35,7 +35,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// <param name="userId">User ID</param>
         /// <returns>List of permissions with userPermissionName</returns>
         [HttpGet("by-user/{userId}")]
-        public async Task<IActionResult> GetByUser(int userId)
+        public async Task<IActionResult> GetByUser(int userId, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("[Permissions] Getting permissions for UserId: {UserId}", userId);
 
@@ -128,7 +128,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// <param name="username">Username</param>
         /// <returns>List of permissions with userPermissionName</returns>
         [HttpGet("by-username/{username}")]
-        public async Task<IActionResult> GetByUsername(string username)
+        public async Task<IActionResult> GetByUsername(string username, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("[Permissions] Getting permissions for Username: {Username}", username);
 
@@ -207,7 +207,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// <param name="userGroupId">User Group ID</param>
         /// <returns>List of permissions with userPermissionName</returns>
         [HttpGet("by-group/{userGroupId}")]
-        public async Task<IActionResult> GetByUserGroup(int userGroupId)
+        public async Task<IActionResult> GetByUserGroup(int userGroupId, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("[Permissions] Getting permissions for UserGroup: {UserGroupId}", userGroupId);
 
@@ -249,7 +249,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// <param name="userId">User ID</param>
         /// <returns>User details with groups information</returns>
         [HttpGet("debug/user/{userId}")]
-        public async Task<IActionResult> GetUserDebugInfo(int userId)
+        public async Task<IActionResult> GetUserDebugInfo(int userId, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("[Permissions] Getting debug info for UserId: {UserId}", userId);
 
@@ -328,7 +328,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// <param name="roleName">Role/UserGroup Name</param>
         /// <returns>List of permissions with userPermissionName</returns>
         [HttpGet("by-role/{roleName}")]
-        public async Task<IActionResult> GetByRoleName(string roleName)
+        public async Task<IActionResult> GetByRoleName(string roleName, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("[Permissions] Getting permissions for Role: {RoleName}", roleName);
 
@@ -371,7 +371,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// </summary>
         [HttpPost]
         [Authorize(Roles = "Administration")]
-        public async Task<IActionResult> Create([FromBody] CreateUserGroupPermissionDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateUserGroupPermissionDto dto, CancellationToken cancellationToken = default)
         {
             if (dto == null)
                 return BadRequest(new ApiResponse(400, "Invalid request"));
@@ -432,7 +432,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// </summary>
         [HttpPut("{userGroupId:int}/{permissionName}")]
         [Authorize(Roles = "Administration")]
-        public async Task<IActionResult> Update(int userGroupId, string permissionName, [FromBody] UpdateUserGroupPermissionDto dto)
+        public async Task<IActionResult> Update(int userGroupId, string permissionName, [FromBody] UpdateUserGroupPermissionDto dto, CancellationToken cancellationToken = default)
         {
             if (userGroupId <= 0 || string.IsNullOrWhiteSpace(permissionName))
                 return BadRequest(new ApiResponse(400, "Invalid route parameters"));
@@ -508,7 +508,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// </summary>
         [HttpDelete("{userGroupId:int}/{permissionName}")]
         [Authorize(Roles = "Administration")]
-        public async Task<IActionResult> Delete(int userGroupId, string permissionName)
+        public async Task<IActionResult> Delete(int userGroupId, string permissionName, CancellationToken cancellationToken = default)
         {
             if (userGroupId <= 0 || string.IsNullOrWhiteSpace(permissionName))
                 return BadRequest(new ApiResponse(400, "Invalid route parameters"));
@@ -534,7 +534,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// </summary>
         [HttpPut("by-group/{userGroupId:int}/sync")]
         [Authorize(Roles = "Administration")]
-        public async Task<IActionResult> SyncGroupPermissions(int userGroupId, [FromBody] SyncUserGroupPermissionsDto dto)
+        public async Task<IActionResult> SyncGroupPermissions(int userGroupId, [FromBody] SyncUserGroupPermissionsDto dto, CancellationToken cancellationToken = default)
         {
             if (userGroupId <= 0)
                 return BadRequest(new ApiResponse(400, "Invalid userGroupId"));

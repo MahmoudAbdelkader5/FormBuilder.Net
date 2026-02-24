@@ -23,7 +23,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpGet]
         [RequirePermission("SapHanaConfig_Allow_View")]
-        public async Task<IActionResult> GetAll([FromQuery] bool includeInactive = true)
+        public async Task<IActionResult> GetAll([FromQuery] bool includeInactive = true, CancellationToken cancellationToken = default)
         {
             var result = await _configsService.GetAllAsync(includeInactive);
             return result.ToActionResult();
@@ -31,7 +31,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpGet("{id}")]
         [RequirePermission("SapHanaConfig_Allow_View")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _configsService.GetByIdAsync(id);
             return result.ToActionResult();
@@ -39,7 +39,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPost]
         [RequirePermission("SapHanaConfig_Allow_Create")]
-        public async Task<IActionResult> Create([FromBody] CreateSapHanaConfigDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateSapHanaConfigDto dto, CancellationToken cancellationToken = default)
         {
             var result = await _configsService.CreateAsync(dto);
             if (result.Success && result.Data != null)
@@ -51,7 +51,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPut("{id}")]
         [RequirePermission("SapHanaConfig_Allow_Edit")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateSapHanaConfigDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateSapHanaConfigDto dto, CancellationToken cancellationToken = default)
         {
             var result = await _configsService.UpdateAsync(id, dto);
             return result.ToActionResult();
@@ -59,7 +59,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpDelete("{id}")]
         [RequirePermission("SapHanaConfig_Allow_Delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var result = await _configsService.DeleteAsync(id);
             if (result.Success) return NoContent();
@@ -68,7 +68,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPatch("{id}/activate")]
         [RequirePermission("SapHanaConfig_Allow_Manage")]
-        public async Task<IActionResult> Activate(int id)
+        public async Task<IActionResult> Activate(int id, CancellationToken cancellationToken = default)
         {
             var result = await _configsService.ToggleActiveAsync(id, true);
             if (result.Success) return NoContent();
@@ -77,7 +77,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPatch("{id}/deactivate")]
         [RequirePermission("SapHanaConfig_Allow_Manage")]
-        public async Task<IActionResult> Deactivate(int id)
+        public async Task<IActionResult> Deactivate(int id, CancellationToken cancellationToken = default)
         {
             var result = await _configsService.ToggleActiveAsync(id, false);
             if (result.Success) return NoContent();

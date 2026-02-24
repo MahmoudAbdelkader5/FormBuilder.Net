@@ -22,7 +22,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpGet]
         [RequirePermission("EmailTemplate_Allow_View")]
-        public async Task<IActionResult> GetAll([FromQuery] int? documentTypeId = null, [FromQuery] bool includeInactive = true)
+        public async Task<IActionResult> GetAll([FromQuery] int? documentTypeId = null, [FromQuery] bool includeInactive = true, CancellationToken cancellationToken = default)
         {
             var result = await _service.GetAllAsync(documentTypeId, includeInactive);
             return result.ToActionResult();
@@ -30,7 +30,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpGet("{id}")]
         [RequirePermission("EmailTemplate_Allow_View")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.GetByIdAsync(id);
             return result.ToActionResult();
@@ -38,7 +38,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPost]
         [RequirePermission("EmailTemplate_Allow_Create")]
-        public async Task<IActionResult> Create([FromBody] CreateEmailTemplateDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateEmailTemplateDto dto, CancellationToken cancellationToken = default)
         {
             var result = await _service.CreateAsync(dto);
             if (result.Success && result.Data != null)
@@ -50,7 +50,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPut("{id}")]
         [RequirePermission("EmailTemplate_Allow_Edit")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateEmailTemplateDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateEmailTemplateDto dto, CancellationToken cancellationToken = default)
         {
             var result = await _service.UpdateAsync(id, dto);
             return result.ToActionResult();
@@ -58,7 +58,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpDelete("{id}")]
         [RequirePermission("EmailTemplate_Allow_Delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.DeleteAsync(id);
             if (result.Success) return NoContent();
@@ -67,7 +67,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPatch("{id}/activate")]
         [RequirePermission("EmailTemplate_Allow_Manage")]
-        public async Task<IActionResult> Activate(int id)
+        public async Task<IActionResult> Activate(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.ToggleActiveAsync(id, true);
             if (result.Success) return NoContent();
@@ -76,7 +76,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPatch("{id}/deactivate")]
         [RequirePermission("EmailTemplate_Allow_Manage")]
-        public async Task<IActionResult> Deactivate(int id)
+        public async Task<IActionResult> Deactivate(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.ToggleActiveAsync(id, false);
             if (result.Success) return NoContent();

@@ -33,7 +33,7 @@ namespace FormBuilder.API.Controllers
         /// Test sending a simple email
         /// </summary>
         [HttpPost("send-simple")]
-        public async Task<IActionResult> SendSimpleEmail([FromBody] SendTestEmailDto dto)
+        public async Task<IActionResult> SendSimpleEmail([FromBody] SendTestEmailDto dto, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace FormBuilder.API.Controllers
         /// Test email template processing
         /// </summary>
         [HttpPost("test-template")]
-        public async Task<IActionResult> TestTemplate([FromBody] TestTemplateDto dto)
+        public async Task<IActionResult> TestTemplate([FromBody] TestTemplateDto dto, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace FormBuilder.API.Controllers
         /// Test sending submission confirmation email
         /// </summary>
         [HttpPost("test-submission-confirmation/{submissionId}")]
-        public async Task<IActionResult> TestSubmissionConfirmation(int submissionId)
+        public async Task<IActionResult> TestSubmissionConfirmation(int submissionId, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -130,7 +130,7 @@ namespace FormBuilder.API.Controllers
         /// Test sending approval required email
         /// </summary>
         [HttpPost("test-approval-required")]
-        public async Task<IActionResult> TestApprovalRequired([FromBody] TestApprovalRequiredDto dto)
+        public async Task<IActionResult> TestApprovalRequired([FromBody] TestApprovalRequiredDto dto, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -169,7 +169,7 @@ namespace FormBuilder.API.Controllers
         /// Test sending approval result email
         /// </summary>
         [HttpPost("test-approval-result")]
-        public async Task<IActionResult> TestApprovalResult([FromBody] TestApprovalResultDto dto)
+        public async Task<IActionResult> TestApprovalResult([FromBody] TestApprovalResultDto dto, CancellationToken cancellationToken = default)
         {
             try
             {

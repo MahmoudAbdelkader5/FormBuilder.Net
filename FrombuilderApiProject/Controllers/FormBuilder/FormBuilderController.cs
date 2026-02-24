@@ -32,7 +32,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpGet]
         [RequirePermission("FormBuilder_Allow_View")]
         [ProducesResponseType(typeof(IEnumerable<FormBuilderDto>), 200)]
-        public async Task<IActionResult> GetAllForms([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+        public async Task<IActionResult> GetAllForms([FromQuery] int page = 1, [FromQuery] int pageSize = 20, CancellationToken cancellationToken = default)
         {
             var result = await _formBuilderService.GetPagedAsync(page, pageSize);
             return result.ToActionResult();
@@ -42,7 +42,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [RequirePermission("FormBuilder_Allow_View")]
         [ProducesResponseType(typeof(FormBuilderDto), 200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetFormById(int id)
+        public async Task<IActionResult> GetFormById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formBuilderService.GetByIdAsync(id, asNoTracking: true);
             return result.ToActionResult();
@@ -53,7 +53,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(404)]
         [AllowAnonymous]
 
-        public async Task<IActionResult> GetFormByCode(string formCode)
+        public async Task<IActionResult> GetFormByCode(string formCode, CancellationToken cancellationToken = default)
         {
             var result = await _formBuilderService.GetByCodeAsync(formCode, asNoTracking: true);
             return result.ToActionResult();
@@ -65,7 +65,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(typeof(FormBuilderDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
-        public async Task<IActionResult> CreateForm([FromBody] CreateFormBuilderDto createDto)
+        public async Task<IActionResult> CreateForm([FromBody] CreateFormBuilderDto createDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -97,7 +97,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
-        public async Task<IActionResult> UpdateForm(int id, [FromBody] UpdateFormBuilderDto updateDto)
+        public async Task<IActionResult> UpdateForm(int id, [FromBody] UpdateFormBuilderDto updateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -114,7 +114,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [RequirePermission("FormBuilder_Allow_Delete")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> DeleteForm(int id)
+        public async Task<IActionResult> DeleteForm(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formBuilderService.DeleteAsync(id);
             if (result.Success) return NoContent();
@@ -126,7 +126,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [RequirePermission("FormBuilder_Allow_Manage")]
         [ProducesResponseType(typeof(FormBuilderDto), 200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> ToggleActive(int id, [FromBody] bool isActive)
+        public async Task<IActionResult> ToggleActive(int id, [FromBody] bool isActive, CancellationToken cancellationToken = default)
         {
             var result = await _formBuilderService.ToggleActiveAsync(id, isActive);
             return result.ToActionResult();
@@ -137,7 +137,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [RequirePermission("FormBuilder_Allow_Manage")]
         [ProducesResponseType(typeof(FormBuilderDto), 200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> RestoreForm(int id)
+        public async Task<IActionResult> RestoreForm(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formBuilderService.RestoreAsync(id);
             return result.ToActionResult();
@@ -150,7 +150,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
-        public async Task<IActionResult> DuplicateForm(int id, [FromBody] DuplicateFormRequestDto? requestDto = null)
+        public async Task<IActionResult> DuplicateForm(int id, [FromBody] DuplicateFormRequestDto? requestDto = null, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {

@@ -23,7 +23,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// Get all users
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
         {
             var users = await _context.TblUsers
                 .Select(u => new
@@ -46,7 +46,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// Get active users only
         /// </summary>
         [HttpGet("active")]
-        public async Task<IActionResult> GetActive()
+        public async Task<IActionResult> GetActive(CancellationToken cancellationToken = default)
         {
             var users = await _context.TblUsers
                 .Where(u => u.IsActive)
@@ -70,7 +70,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// Get user by ID
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var user = await _context.TblUsers
                 .Where(u => u.Id == id)

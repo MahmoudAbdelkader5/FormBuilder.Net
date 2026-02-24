@@ -30,7 +30,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpGet]
         [RequirePermission("DocumentSeries_Allow_View")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
         {
             var result = await _documentSeriesService.GetAllAsync();
             return StatusCode(result.StatusCode, result);
@@ -41,7 +41,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpGet("{id}")]
         [RequirePermission("DocumentSeries_Allow_View")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _documentSeriesService.GetByIdAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -52,7 +52,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpGet("code/{seriesCode}")]
         [RequirePermission("DocumentSeries_Allow_View")]
-        public async Task<IActionResult> GetBySeriesCode(string seriesCode)
+        public async Task<IActionResult> GetBySeriesCode(string seriesCode, CancellationToken cancellationToken = default)
         {
             var result = await _documentSeriesService.GetBySeriesCodeAsync(seriesCode);
             return StatusCode(result.StatusCode, result);
@@ -63,7 +63,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpGet("document-type/{documentTypeId}")]
         [RequirePermission("DocumentSeries_Allow_View")]
-        public async Task<IActionResult> GetByDocumentTypeId(int documentTypeId)
+        public async Task<IActionResult> GetByDocumentTypeId(int documentTypeId, CancellationToken cancellationToken = default)
         {
             var result = await _documentSeriesService.GetByDocumentTypeIdAsync(documentTypeId);
             return StatusCode(result.StatusCode, result);
@@ -74,7 +74,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpGet("project/{projectId}")]
         [RequirePermission("DocumentSeries_Allow_View")]
-        public async Task<IActionResult> GetByProjectId(int projectId)
+        public async Task<IActionResult> GetByProjectId(int projectId, CancellationToken cancellationToken = default)
         {
             var result = await _documentSeriesService.GetByProjectIdAsync(projectId);
             return StatusCode(result.StatusCode, result);
@@ -85,7 +85,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpGet("active")]
         [RequirePermission("DocumentSeries_Allow_View")]
-        public async Task<IActionResult> GetActive()
+        public async Task<IActionResult> GetActive(CancellationToken cancellationToken = default)
         {
             var result = await _documentSeriesService.GetActiveAsync();
             return StatusCode(result.StatusCode, result);
@@ -96,7 +96,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpGet("default")]
         [RequirePermission("DocumentSeries_Allow_View")]
-        public async Task<IActionResult> GetDefaultSeries([FromQuery] int documentTypeId, [FromQuery] int projectId)
+        public async Task<IActionResult> GetDefaultSeries([FromQuery] int documentTypeId, [FromQuery] int projectId, CancellationToken cancellationToken = default)
         {
             var result = await _documentSeriesService.GetDefaultSeriesAsync(documentTypeId, projectId);
             return StatusCode(result.StatusCode, result);
@@ -107,7 +107,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpPost]
         [RequirePermission("DocumentSeries_Allow_Create")]
-        public async Task<IActionResult> Create([FromBody] CreateDocumentSeriesDto createDto)
+        public async Task<IActionResult> Create([FromBody] CreateDocumentSeriesDto createDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -121,7 +121,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpPut("{id}")]
         [RequirePermission("DocumentSeries_Allow_Edit")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateDocumentSeriesDto updateDto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateDocumentSeriesDto updateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -135,7 +135,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpDelete("{id}")]
         [RequirePermission("DocumentSeries_Allow_Delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var result = await _documentSeriesService.DeleteAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -146,7 +146,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpPatch("{id}/toggle-active")]
         [RequirePermission("DocumentSeries_Allow_Manage")]
-        public async Task<IActionResult> ToggleActive(int id, [FromBody] bool isActive)
+        public async Task<IActionResult> ToggleActive(int id, [FromBody] bool isActive, CancellationToken cancellationToken = default)
         {
             var result = await _documentSeriesService.ToggleActiveAsync(id, isActive);
             return StatusCode(result.StatusCode, result);
@@ -157,7 +157,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpPatch("{id}/set-default")]
         [RequirePermission("DocumentSeries_Allow_Manage")]
-        public async Task<IActionResult> SetAsDefault(int id)
+        public async Task<IActionResult> SetAsDefault(int id, CancellationToken cancellationToken = default)
         {
             var result = await _documentSeriesService.SetAsDefaultAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -168,7 +168,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpGet("{id}/next-number")]
         [RequirePermission("DocumentSeries_Allow_View")]
-        public async Task<IActionResult> GetNextNumber(int id)
+        public async Task<IActionResult> GetNextNumber(int id, CancellationToken cancellationToken = default)
         {
             var result = await _documentSeriesService.GetNextNumberAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -179,7 +179,7 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpGet("{id}/exists")]
         [RequirePermission("DocumentSeries_Allow_View")]
-        public async Task<IActionResult> Exists(int id)
+        public async Task<IActionResult> Exists(int id, CancellationToken cancellationToken = default)
         {
             var result = await _documentSeriesService.ExistsAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -190,10 +190,9 @@ namespace FormBuilder.API.Controllers
         // ================================
         [HttpPost("test-generate/{submissionId}")]
         [RequirePermission("DocumentSeries_Allow_Manage")]
-        public async Task<IActionResult> TestGenerateNumber(
-            int submissionId,
+        public async Task<IActionResult> TestGenerateNumber(int submissionId,
             [FromQuery] string generatedOn = "Submit",
-            [FromQuery] string? generatedByUserId = null)
+            [FromQuery] string? generatedByUserId = null, CancellationToken cancellationToken = default)
         {
             var generationResult = await _documentNumberGeneratorService
                 .GenerateForSubmissionAsync(submissionId, generatedOn, generatedByUserId);

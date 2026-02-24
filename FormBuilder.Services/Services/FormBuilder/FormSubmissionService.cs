@@ -15,6 +15,7 @@ using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -102,16 +103,16 @@ namespace FormBuilder.Services
 
         protected override IBaseRepository<FORM_SUBMISSIONS> Repository => _unitOfWork.FormSubmissionsRepository;
 
-        public async Task<ApiResponse> GetAllAsync()
+        public async Task<ApiResponse> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            var submissions = await _unitOfWork.FormSubmissionsRepository.GetSubmissionsWithDetailsAsync();
+            var submissions = await _unitOfWork.FormSubmissionsRepository.GetSubmissionsWithDetailsAsync(cancellationToken);
             var submissionDtos = _mapper.Map<IEnumerable<FormSubmissionDto>>(submissions);
             return new ApiResponse(200, "All form submissions retrieved successfully", submissionDtos);
         }
 
-        public async Task<ApiResponse> GetByIdAsync(int id)
+        public async Task<ApiResponse> GetByIdAsync(int id, CancellationToken cancellationToken = default)
         {
-            var submission = await _unitOfWork.FormSubmissionsRepository.GetByIdWithDetailsAsync(id);
+            var submission = await _unitOfWork.FormSubmissionsRepository.GetByIdWithDetailsAsync(id, cancellationToken);
             if (submission == null)
                 return new ApiResponse(404, "Form submission not found");
 
@@ -198,9 +199,9 @@ namespace FormBuilder.Services
             return new ApiResponse(200, "Form submission retrieved successfully", submissionDto);
         }
 
-        public async Task<ApiResponse> GetByIdWithDetailsAsync(int id)
+        public async Task<ApiResponse> GetByIdWithDetailsAsync(int id, CancellationToken cancellationToken = default)
         {
-            var submission = await _unitOfWork.FormSubmissionsRepository.GetByIdWithDetailsAsync(id);
+            var submission = await _unitOfWork.FormSubmissionsRepository.GetByIdWithDetailsAsync(id, cancellationToken);
             if (submission == null)
                 return new ApiResponse(404, "Form submission not found");
 
@@ -287,9 +288,9 @@ namespace FormBuilder.Services
             return new ApiResponse(200, "Form submission with details retrieved successfully", submissionDto);
         }
 
-        public async Task<ApiResponse> GetByDocumentNumberAsync(string documentNumber)
+        public async Task<ApiResponse> GetByDocumentNumberAsync(string documentNumber, CancellationToken cancellationToken = default)
         {
-            var submission = await _unitOfWork.FormSubmissionsRepository.GetByDocumentNumberAsync(documentNumber);
+            var submission = await _unitOfWork.FormSubmissionsRepository.GetByDocumentNumberAsync(documentNumber, cancellationToken);
             if (submission == null)
                 return new ApiResponse(404, "Form submission not found");
 
@@ -297,30 +298,30 @@ namespace FormBuilder.Services
             return new ApiResponse(200, "Form submission retrieved successfully", submissionDto);
         }
 
-        public async Task<ApiResponse> GetByFormBuilderIdAsync(int formBuilderId)
+        public async Task<ApiResponse> GetByFormBuilderIdAsync(int formBuilderId, CancellationToken cancellationToken = default)
         {
-            var submissions = await _unitOfWork.FormSubmissionsRepository.GetByFormBuilderIdAsync(formBuilderId);
+            var submissions = await _unitOfWork.FormSubmissionsRepository.GetByFormBuilderIdAsync(formBuilderId, cancellationToken);
             var submissionDtos = _mapper.Map<IEnumerable<FormSubmissionDto>>(submissions);
             return new ApiResponse(200, "Form submissions retrieved successfully", submissionDtos);
         }
 
-        public async Task<ApiResponse> GetByDocumentTypeIdAsync(int documentTypeId)
+        public async Task<ApiResponse> GetByDocumentTypeIdAsync(int documentTypeId, CancellationToken cancellationToken = default)
         {
-            var submissions = await _unitOfWork.FormSubmissionsRepository.GetByDocumentTypeIdAsync(documentTypeId);
+            var submissions = await _unitOfWork.FormSubmissionsRepository.GetByDocumentTypeIdAsync(documentTypeId, cancellationToken);
             var submissionDtos = _mapper.Map<IEnumerable<FormSubmissionDto>>(submissions);
             return new ApiResponse(200, "Form submissions retrieved successfully", submissionDtos);
         }
 
-        public async Task<ApiResponse> GetByUserIdAsync(string userId)
+        public async Task<ApiResponse> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
         {
-            var submissions = await _unitOfWork.FormSubmissionsRepository.GetByUserIdAsync(userId);
+            var submissions = await _unitOfWork.FormSubmissionsRepository.GetByUserIdAsync(userId, cancellationToken);
             var submissionDtos = _mapper.Map<IEnumerable<FormSubmissionDto>>(submissions);
             return new ApiResponse(200, "User form submissions retrieved successfully", submissionDtos);
         }
 
-        public async Task<ApiResponse> GetByStatusAsync(string status)
+        public async Task<ApiResponse> GetByStatusAsync(string status, CancellationToken cancellationToken = default)
         {
-            var submissions = await _unitOfWork.FormSubmissionsRepository.GetByStatusAsync(status);
+            var submissions = await _unitOfWork.FormSubmissionsRepository.GetByStatusAsync(status, cancellationToken);
             var submissionDtos = _mapper.Map<IEnumerable<FormSubmissionDto>>(submissions);
             return new ApiResponse(200, "Form submissions by status retrieved successfully", submissionDtos);
         }
@@ -329,7 +330,7 @@ namespace FormBuilder.Services
         /// Get draft submission by formBuilderId, projectId, and submittedByUserId
         /// Returns the most recent draft submission if found, otherwise returns 404
         /// </summary>
-        public async Task<ApiResponse> GetDraftAsync(int formBuilderId, int projectId, string submittedByUserId)
+        public async Task<ApiResponse> GetDraftAsync(int formBuilderId, int projectId, string submittedByUserId, CancellationToken cancellationToken = default)
         {
             // First, get all series IDs for the project to filter efficiently
             var projectSeries = await _unitOfWork.DocumentSeriesRepository.GetByProjectIdAsync(projectId);
@@ -386,7 +387,7 @@ namespace FormBuilder.Services
         /// Get existing draft submission or create a new one if none exists
         /// This is a convenience method that combines GET and POST operations
         /// </summary>
-        public async Task<ApiResponse> GetOrCreateDraftAsync(int formBuilderId, int projectId, string submittedByUserId, int? seriesId = null)
+        public async Task<ApiResponse> GetOrCreateDraftAsync(int formBuilderId, int projectId, string submittedByUserId, int? seriesId = null, CancellationToken cancellationToken = default)
         {
             // First, try to get existing draft
             var existingDraft = await GetDraftAsync(formBuilderId, projectId, submittedByUserId);
@@ -401,7 +402,7 @@ namespace FormBuilder.Services
             return await CreateDraftAsync(formBuilderId, projectId, submittedByUserId, seriesId);
         }
 
-        public async Task<ApiResponse> CreateAsync(CreateFormSubmissionDto createDto)
+        public async Task<ApiResponse> CreateAsync(CreateFormSubmissionDto createDto, CancellationToken cancellationToken = default)
         {
             if (createDto == null)
                 return new ApiResponse(400, "DTO is required");
@@ -425,7 +426,7 @@ namespace FormBuilder.Services
                     var documentNumber = $"{series.SeriesCode}-{nextNumber:D6}";
 
                     // Check if document number already exists (double-check before insert)
-                    var exists = await _unitOfWork.FormSubmissionsRepository.DocumentNumberExistsAsync(documentNumber);
+                    var exists = await _unitOfWork.FormSubmissionsRepository.DocumentNumberExistsAsync(documentNumber, cancellationToken);
                     if (exists)
                     {
                         attempts++;
@@ -438,7 +439,7 @@ namespace FormBuilder.Services
                     }
 
                     // Get next version
-                    var version = await _unitOfWork.FormSubmissionsRepository.GetNextVersionAsync(createDto.FormBuilderId);
+                    var version = await _unitOfWork.FormSubmissionsRepository.GetNextVersionAsync(createDto.FormBuilderId, cancellationToken);
 
                     var entity = _mapper.Map<FORM_SUBMISSIONS>(createDto);
                     entity.DocumentNumber = documentNumber;
@@ -454,7 +455,7 @@ namespace FormBuilder.Services
                     _unitOfWork.FormSubmissionsRepository.Add(entity);
                     await _unitOfWork.CompleteAsyn();
 
-                    createdEntity = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(entity.Id);
+                    createdEntity = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(entity.Id, cancellationToken);
                     break; // Success, exit retry loop
                 }
                 catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && 
@@ -498,7 +499,7 @@ namespace FormBuilder.Services
         /// 4. Creates a draft record without final document number
         /// 5. Final number is generated on Submit/Approval based on series.GenerateOn
         /// </summary>
-        public async Task<ApiResponse> CreateDraftAsync(int formBuilderId, int projectId, string submittedByUserId, int? seriesId = null)
+        public async Task<ApiResponse> CreateDraftAsync(int formBuilderId, int projectId, string submittedByUserId, int? seriesId = null, CancellationToken cancellationToken = default)
         {
             // 0. Evaluate Pre-Open Blocking Rules (before form creation)
             if (_ruleEvaluationService != null)
@@ -629,7 +630,7 @@ namespace FormBuilder.Services
 
             // 4. Do not generate document number at draft creation.
             // Final number is generated by the Document Series engine on Submit/Approval.
-            var version = await _unitOfWork.FormSubmissionsRepository.GetNextVersionAsync(formBuilderId);
+            var version = await _unitOfWork.FormSubmissionsRepository.GetNextVersionAsync(formBuilderId, cancellationToken);
 
             var entity = new FORM_SUBMISSIONS
             {
@@ -652,7 +653,7 @@ namespace FormBuilder.Services
             _unitOfWork.FormSubmissionsRepository.Add(entity);
             await _unitOfWork.CompleteAsyn();
 
-            var createdEntity = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(entity.Id);
+            var createdEntity = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(entity.Id, cancellationToken);
             if (createdEntity == null)
                 return new ApiResponse(500, "Failed to create draft form submission.");
 
@@ -660,7 +661,7 @@ namespace FormBuilder.Services
             return new ApiResponse(200, "Draft form submission created successfully", submissionDto);
         }
 
-        public async Task<ApiResponse> CreateDraftAsync(CreateDraftDto createDraftDto)
+        public async Task<ApiResponse> CreateDraftAsync(CreateDraftDto createDraftDto, CancellationToken cancellationToken = default)
         {
             if (createDraftDto == null)
                 return new ApiResponse(400, "DTO is required");
@@ -699,7 +700,7 @@ namespace FormBuilder.Services
             return await CreateDraftAsync(createDraftDto.FormBuilderId, projectId, userId, createDraftDto.SeriesId);
         }
 
-        public async Task<ApiResponse> UpdateAsync(int id, UpdateFormSubmissionDto updateDto)
+        public async Task<ApiResponse> UpdateAsync(int id, UpdateFormSubmissionDto updateDto, CancellationToken cancellationToken = default)
         {
             if (updateDto == null)
                 return new ApiResponse(400, "DTO is required");
@@ -743,12 +744,12 @@ namespace FormBuilder.Services
             _unitOfWork.FormSubmissionsRepository.Update(entity);
             await _unitOfWork.CompleteAsyn();
 
-            var updatedEntity = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(id);
+            var updatedEntity = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(id, cancellationToken);
             var submissionDto = _mapper.Map<FormSubmissionDto>(updatedEntity);
             return new ApiResponse(200, "Form submission updated successfully", submissionDto);
         }
 
-        public async Task<ApiResponse> DeleteAsync(int id)
+        public async Task<ApiResponse> DeleteAsync(int id, CancellationToken cancellationToken = default)
         {
             // Check if submission exists (and not already deleted)
             var entity = await _unitOfWork.FormSubmissionsRepository.SingleOrDefaultAsync(
@@ -800,7 +801,7 @@ namespace FormBuilder.Services
             await _unitOfWork.CompleteAsyn();
         }
 
-        public async Task<ApiResponse> SubmitAsync(SubmitFormDto submitDto)
+        public async Task<ApiResponse> SubmitAsync(SubmitFormDto submitDto, CancellationToken cancellationToken = default)
         {
             var entity = await _unitOfWork.FormSubmissionsRepository.SingleOrDefaultAsync(s => s.Id == submitDto.SubmissionId && !s.IsDeleted, asNoTracking: false);
             if (entity == null)
@@ -940,7 +941,7 @@ namespace FormBuilder.Services
                     if (activationResult.StatusCode == 200)
                     {
                         // Get the activated stage ID from the result or from the updated submission
-                        var updatedSubmission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(entity.Id);
+                        var updatedSubmission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(entity.Id, cancellationToken);
                         activatedStageId = updatedSubmission?.StageId;
 
                         // ✅ TRIGGER: FormSubmitted - Execute trigger after workflow activation (StageId assigned)
@@ -972,7 +973,7 @@ namespace FormBuilder.Services
             // Ensure trigger is executed even when there is no workflow or activation fails.
             if (entity.Status == "Submitted" && !formSubmittedTriggerExecuted)
             {
-                var updatedSubmission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(entity.Id);
+                var updatedSubmission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(entity.Id, cancellationToken);
                 if (updatedSubmission != null)
                 {
                     await _triggersService.ExecuteFormSubmittedTriggerAsync(updatedSubmission);
@@ -991,7 +992,7 @@ namespace FormBuilder.Services
             // Do NOT send any emails directly from here.
 
             // Reload to ensure response reflects latest StageId/Status updates (workflow activation may update StageId in DB)
-            var latestSubmission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(entity.Id) ?? entity;
+            var latestSubmission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(entity.Id, cancellationToken) ?? entity;
             var signatureResult = await HandlePostSubmitSignatureAsync(latestSubmission, submittedByUserId);
 
             return new ApiResponse(200, "Form submission submitted successfully", new SubmitFormResponseDto
@@ -1003,9 +1004,9 @@ namespace FormBuilder.Services
             });
         }
 
-        public async Task<ApiResponse> GetSigningUrlAsync(int submissionId, string requestedByUserId)
+        public async Task<ApiResponse> GetSigningUrlAsync(int submissionId, string requestedByUserId, CancellationToken cancellationToken = default)
         {
-            var submission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(submissionId);
+            var submission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(submissionId, cancellationToken);
             if (submission == null || submission.IsDeleted)
                 return new ApiResponse(404, "Form submission not found");
 
@@ -1036,7 +1037,7 @@ namespace FormBuilder.Services
             });
         }
 
-        public async Task<ApiResponse> UpdateStatusAsync(int id, string status)
+        public async Task<ApiResponse> UpdateStatusAsync(int id, string status, CancellationToken cancellationToken = default)
         {
             var entity = await _unitOfWork.FormSubmissionsRepository.SingleOrDefaultAsync(s => s.Id == id, asNoTracking: false);
             if (entity == null)
@@ -1048,7 +1049,7 @@ namespace FormBuilder.Services
             _unitOfWork.FormSubmissionsRepository.Update(entity);
             await _unitOfWork.CompleteAsyn();
 
-            var updatedEntity = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(id);
+            var updatedEntity = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(id, cancellationToken);
             var submissionDto = _mapper.Map<FormSubmissionDto>(updatedEntity);
             return new ApiResponse(200, $"Form submission status updated to {status} successfully", submissionDto);
         }
@@ -1056,7 +1057,7 @@ namespace FormBuilder.Services
         /// <summary>
         /// الموافقة على Submission وإنشاء سجل في Approval History
         /// </summary>
-        public async Task<ApiResponse> ApproveSubmissionAsync(ApproveSubmissionDto dto)
+        public async Task<ApiResponse> ApproveSubmissionAsync(ApproveSubmissionDto dto, CancellationToken cancellationToken = default)
         {
             // Security: Route all approval actions through runtime service to enforce
             // stage assignee authorization and delegation rules.
@@ -1075,7 +1076,7 @@ namespace FormBuilder.Services
         /// <summary>
         /// رفض Submission وإنشاء سجل في Approval History
         /// </summary>
-        public async Task<ApiResponse> RejectSubmissionAsync(RejectSubmissionDto dto)
+        public async Task<ApiResponse> RejectSubmissionAsync(RejectSubmissionDto dto, CancellationToken cancellationToken = default)
         {
             // Security: Route all rejection actions through runtime service to enforce
             // stage assignee authorization and delegation rules.
@@ -1091,19 +1092,19 @@ namespace FormBuilder.Services
             return await _approvalWorkflowRuntimeService.ProcessApprovalActionAsync(actionDto);
         }
 
-        public async Task<ApiResponse> ExistsAsync(int id)
+        public async Task<ApiResponse> ExistsAsync(int id, CancellationToken cancellationToken = default)
         {
             var exists = await _unitOfWork.FormSubmissionsRepository.AnyAsync(s => s.Id == id);
             return new ApiResponse(200, "Form submission existence checked successfully", exists);
         }
 
-        public async Task<ApiResponse> SaveFormSubmissionDataAsync(SaveFormSubmissionDataDto saveDto, string? resolvedUserId = null)
+        public async Task<ApiResponse> SaveFormSubmissionDataAsync(SaveFormSubmissionDataDto saveDto, string? resolvedUserId = null, CancellationToken cancellationToken = default)
         {
             if (saveDto == null)
                 return new ApiResponse(400, "DTO is required");
 
             // التحقق من Submission
-            var submission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(saveDto.SubmissionId);
+            var submission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(saveDto.SubmissionId, cancellationToken);
             if (submission == null)
                 return new ApiResponse(404, "Submission not found");
 
@@ -1243,7 +1244,7 @@ namespace FormBuilder.Services
             }
 
             // إعادة تحميل Submission المحدثة للعودة بها
-            var updatedSubmission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(saveDto.SubmissionId);
+            var updatedSubmission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(saveDto.SubmissionId, cancellationToken);
             var submissionDto = _mapper.Map<FormSubmissionDto>(updatedSubmission);
             
             var statusMessage = updatedSubmission?.Status == "Draft"

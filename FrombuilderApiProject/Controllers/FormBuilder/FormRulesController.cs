@@ -47,7 +47,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [RequirePermission("FormRule_Allow_View")]
         [ProducesResponseType(typeof(IEnumerable<FormRuleDto>), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetAllRules()
+        public async Task<IActionResult> GetAllRules(CancellationToken cancellationToken = default)
         {
             var rules = await _formRulesService.GetAllRulesAsync();
             return Ok(rules);
@@ -58,7 +58,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(typeof(FormRuleDto), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetRuleById(int id)
+        public async Task<IActionResult> GetRuleById(int id, CancellationToken cancellationToken = default)
         {
             var rule = await _formRulesService.GetRuleByIdAsync(id);
             if (rule == null)
@@ -132,7 +132,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CreateRule([FromBody] CreateFormRuleDto createDto)
+        public async Task<IActionResult> CreateRule([FromBody] CreateFormRuleDto createDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -233,7 +233,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> UpdateRule(int id, [FromBody] UpdateFormRuleDto updateDto)
+        public async Task<IActionResult> UpdateRule(int id, [FromBody] UpdateFormRuleDto updateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -286,7 +286,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> DeleteRule(int id)
+        public async Task<IActionResult> DeleteRule(int id, CancellationToken cancellationToken = default)
         {
             var isDeleted = await _formRulesService.DeleteRuleAsync(id);
 
@@ -306,7 +306,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> RestoreRule(int id)
+        public async Task<IActionResult> RestoreRule(int id, CancellationToken cancellationToken = default)
         {
             var isRestored = await _formRulesService.RestoreRuleAsync(id);
 
@@ -325,7 +325,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpGet("check-name/{ruleName}/form/{formBuilderId}")]
         [ProducesResponseType(typeof(object), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CheckRuleNameUnique(int formBuilderId, string ruleName, [FromQuery] int? ignoreId = null)
+        public async Task<IActionResult> CheckRuleNameUnique(int formBuilderId, string ruleName, [FromQuery] int? ignoreId = null, CancellationToken cancellationToken = default)
         {
             var isUnique = await _formRulesService.IsRuleNameUniqueAsync(formBuilderId, ruleName, ignoreId);
             return Ok(new
@@ -340,7 +340,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpGet("{id}/exists")]
         [ProducesResponseType(typeof(object), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> RuleExists(int id)
+        public async Task<IActionResult> RuleExists(int id, CancellationToken cancellationToken = default)
         {
             var exists = await _formRulesService.RuleExistsAsync(id);
             return Ok(new
@@ -359,7 +359,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(typeof(object), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CreateRulesBulk([FromBody] List<CreateFormRuleDto> createDtos)
+        public async Task<IActionResult> CreateRulesBulk([FromBody] List<CreateFormRuleDto> createDtos, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -461,7 +461,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpGet("form/{formBuilderId}")]
         [ProducesResponseType(typeof(IEnumerable<FormRuleDto>), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetRulesByFormId(int formBuilderId)
+        public async Task<IActionResult> GetRulesByFormId(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var allRules = await _formRulesService.GetAllRulesAsync();
             var formRules = allRules.Where(r => r.FormBuilderId == formBuilderId).ToList();
@@ -473,7 +473,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [AllowAnonymous] // Allow anonymous access for public form viewing
         [ProducesResponseType(typeof(IEnumerable<FormRuleDto>), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetActiveRulesByFormId(int formBuilderId)
+        public async Task<IActionResult> GetActiveRulesByFormId(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var activeRules = await _formRulesService.GetActiveRulesByFormIdAsync(formBuilderId);
             return Ok(activeRules);
@@ -482,7 +482,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpGet("stats")]
         [ProducesResponseType(typeof(object), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetRulesStats()
+        public async Task<IActionResult> GetRulesStats(CancellationToken cancellationToken = default)
         {
             var allRules = await _formRulesService.GetAllRulesAsync();
             var totalRules = allRules.Count();
@@ -517,7 +517,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(typeof(object), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> ValidateFormRules([FromBody] ValidateFormRulesRequestDto request)
+        public async Task<IActionResult> ValidateFormRules([FromBody] ValidateFormRulesRequestDto request, CancellationToken cancellationToken = default)
         {
             if (request == null || request.FormBuilderId <= 0)
             {
@@ -753,7 +753,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> EvaluateRule([FromBody] EvaluateRuleRequestDto request)
+        public async Task<IActionResult> EvaluateRule([FromBody] EvaluateRuleRequestDto request, CancellationToken cancellationToken = default)
         {
             if (request == null || request.RuleId <= 0)
             {
@@ -957,7 +957,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(typeof(object), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> ApplyRulesToForm([FromBody] ApplyRulesRequestDto request)
+        public async Task<IActionResult> ApplyRulesToForm([FromBody] ApplyRulesRequestDto request, CancellationToken cancellationToken = default)
         {
             if (request == null || request.FormBuilderId <= 0)
             {
@@ -1157,7 +1157,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(typeof(BlockingRuleResultDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> EvaluateBlockingRules([FromBody] EvaluateBlockingRulesRequestDto request)
+        public async Task<IActionResult> EvaluateBlockingRules([FromBody] EvaluateBlockingRulesRequestDto request, CancellationToken cancellationToken = default)
         {
             if (request == null || request.FormBuilderId <= 0)
             {
@@ -1211,7 +1211,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpGet("blocking-rules/{formBuilderId}")]
         [ProducesResponseType(typeof(object), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetBlockingRules(int formBuilderId, [FromQuery] string? evaluationPhase = null)
+        public async Task<IActionResult> GetBlockingRules(int formBuilderId, [FromQuery] string? evaluationPhase = null, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -1271,14 +1271,13 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpGet("blocking-audit-logs")]
         [ProducesResponseType(typeof(IEnumerable<object>), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetBlockingAuditLogs(
-            [FromQuery] int? formBuilderId = null,
+        public async Task<IActionResult> GetBlockingAuditLogs([FromQuery] int? formBuilderId = null,
             [FromQuery] int? submissionId = null,
             [FromQuery] string? evaluationPhase = null,
             [FromQuery] int? ruleId = null,
             [FromQuery] bool? isBlocked = null,
             [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 50)
+            [FromQuery] int pageSize = 50, CancellationToken cancellationToken = default)
         {
             try
             {

@@ -22,7 +22,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpGet]
         [RequirePermission("SmtpConfig_Allow_View")]
-        public async Task<IActionResult> GetAll([FromQuery] bool includeInactive = true)
+        public async Task<IActionResult> GetAll([FromQuery] bool includeInactive = true, CancellationToken cancellationToken = default)
         {
             var result = await _service.GetAllAsync(includeInactive);
             return result.ToActionResult();
@@ -30,7 +30,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpGet("{id}")]
         [RequirePermission("SmtpConfig_Allow_View")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.GetByIdAsync(id);
             return result.ToActionResult();
@@ -38,7 +38,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPost]
         [RequirePermission("SmtpConfig_Allow_Create")]
-        public async Task<IActionResult> Create([FromBody] CreateSmtpConfigDto dto)
+        public async Task<IActionResult> Create([FromBody] CreateSmtpConfigDto dto, CancellationToken cancellationToken = default)
         {
             var result = await _service.CreateAsync(dto);
             if (result.Success && result.Data != null)
@@ -50,7 +50,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPut("{id}")]
         [RequirePermission("SmtpConfig_Allow_Edit")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateSmtpConfigDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateSmtpConfigDto dto, CancellationToken cancellationToken = default)
         {
             var result = await _service.UpdateAsync(id, dto);
             return result.ToActionResult();
@@ -58,7 +58,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpDelete("{id}")]
         [RequirePermission("SmtpConfig_Allow_Delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.DeleteAsync(id);
             if (result.Success) return NoContent();
@@ -67,7 +67,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPatch("{id}/activate")]
         [RequirePermission("SmtpConfig_Allow_Manage")]
-        public async Task<IActionResult> Activate(int id)
+        public async Task<IActionResult> Activate(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.ToggleActiveAsync(id, true);
             if (result.Success) return NoContent();
@@ -76,7 +76,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPatch("{id}/deactivate")]
         [RequirePermission("SmtpConfig_Allow_Manage")]
-        public async Task<IActionResult> Deactivate(int id)
+        public async Task<IActionResult> Deactivate(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.ToggleActiveAsync(id, false);
             if (result.Success) return NoContent();

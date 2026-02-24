@@ -23,7 +23,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// Get all user groups
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
         {
             var userGroups = await _context.TblUserGroups
                 .Select(ug => new
@@ -45,7 +45,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// Get active user groups only
         /// </summary>
         [HttpGet("active")]
-        public async Task<IActionResult> GetActive()
+        public async Task<IActionResult> GetActive(CancellationToken cancellationToken = default)
         {
             var userGroups = await _context.TblUserGroups
                 .Where(ug => ug.IsActive)
@@ -68,7 +68,7 @@ namespace FormBuilder.API.Controllers.Auth
         /// Get user group by ID
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var userGroup = await _context.TblUserGroups
                 .Where(ug => ug.Id == id)

@@ -459,3 +459,5 @@ D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\FormBui
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\FormBuilder.ApiProject.genruntimeconfig.cache
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\ref\FormBuilder.ApiProject.dll
 D:\trioapps\FormBuilderApiProject\frombuilderApiProject\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+D:\trioapps\FormBuilderApiProject\FrombuilderApiProject\obj\Debug\net9.0\ar\FormBuilder.ApiProject.resources.cs
+D:\trioapps\FormBuilderApiProject\FrombuilderApiProject\obj\Debug\net9.0\en\FormBuilder.ApiProject.resources.cs

@@ -26,7 +26,7 @@ namespace FormBuilder.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(ApiResponse<List<FormSubmissionAttachmentDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionAttachmentsService.GetAllAsync();
             return StatusCode(result.StatusCode, result);
@@ -36,7 +36,7 @@ namespace FormBuilder.API.Controllers
         [HttpGet("submission/{submissionId}/field/{fieldId}")]
         [ProducesResponseType(typeof(ApiResponse<List<FormSubmissionAttachmentDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetBySubmissionAndField(int submissionId, int fieldId)
+        public async Task<IActionResult> GetBySubmissionAndField(int submissionId, int fieldId, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionAttachmentsService.GetBySubmissionAndFieldAsync(submissionId, fieldId);
             return StatusCode(result.StatusCode, result);
@@ -45,7 +45,7 @@ namespace FormBuilder.API.Controllers
         [HttpGet("submission/{submissionId}/stats")]
         [ProducesResponseType(typeof(ApiResponse<AttachmentStatsDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAttachmentStats(int submissionId)
+        public async Task<IActionResult> GetAttachmentStats(int submissionId, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionAttachmentsService.GetAttachmentStatsAsync(submissionId);
             return StatusCode(result.StatusCode, result);
@@ -54,7 +54,7 @@ namespace FormBuilder.API.Controllers
         [HttpGet("submission/{submissionId}")]
         [ProducesResponseType(typeof(ApiResponse<List<FormSubmissionAttachmentDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetBySubmissionId(int submissionId)
+        public async Task<IActionResult> GetBySubmissionId(int submissionId, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionAttachmentsService.GetBySubmissionIdAsync(submissionId);
             return StatusCode(result.StatusCode, result);
@@ -63,7 +63,7 @@ namespace FormBuilder.API.Controllers
         [HttpGet("field/{fieldId}")]
         [ProducesResponseType(typeof(ApiResponse<List<FormSubmissionAttachmentDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetByFieldId(int fieldId)
+        public async Task<IActionResult> GetByFieldId(int fieldId, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionAttachmentsService.GetByFieldIdAsync(fieldId);
             return StatusCode(result.StatusCode, result);
@@ -72,7 +72,7 @@ namespace FormBuilder.API.Controllers
         [HttpGet("{id}/exists")]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Exists(int id)
+        public async Task<IActionResult> Exists(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionAttachmentsService.ExistsAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -82,7 +82,7 @@ namespace FormBuilder.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DownloadFile(int id)
+        public async Task<IActionResult> DownloadFile(int id, CancellationToken cancellationToken = default)
         {
             var attachmentResult = await _formSubmissionAttachmentsService.GetByIdAsync(id);
             if (attachmentResult.StatusCode != 200 || attachmentResult.Data == null)
@@ -106,7 +106,7 @@ namespace FormBuilder.API.Controllers
         [ProducesResponseType(typeof(ApiResponse<FormSubmissionAttachmentDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionAttachmentsService.GetByIdAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -116,7 +116,7 @@ namespace FormBuilder.API.Controllers
         [ProducesResponseType(typeof(ApiResponse<FormSubmissionAttachmentDto>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create([FromBody] CreateFormSubmissionAttachmentDto createDto)
+        public async Task<IActionResult> Create([FromBody] CreateFormSubmissionAttachmentDto createDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -129,7 +129,7 @@ namespace FormBuilder.API.Controllers
         [ProducesResponseType(typeof(ApiResponse<List<FormSubmissionAttachmentDto>>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateBulk([FromBody] BulkAttachmentsDto bulkDto)
+        public async Task<IActionResult> CreateBulk([FromBody] BulkAttachmentsDto bulkDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -143,7 +143,7 @@ namespace FormBuilder.API.Controllers
         [ProducesResponseType(typeof(ApiResponse<FormSubmissionAttachmentDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UploadFile([FromForm] UploadAttachmentRequest request)
+        public async Task<IActionResult> UploadFile([FromForm] UploadAttachmentRequest request, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -167,7 +167,7 @@ namespace FormBuilder.API.Controllers
         [ProducesResponseType(typeof(ApiResponse<List<AttachmentUploadResultDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UploadMultipleFiles([FromForm] UploadMultipleAttachmentsRequest request)
+        public async Task<IActionResult> UploadMultipleFiles([FromForm] UploadMultipleAttachmentsRequest request, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -191,7 +191,7 @@ namespace FormBuilder.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateFormSubmissionAttachmentDto updateDto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateFormSubmissionAttachmentDto updateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -204,7 +204,7 @@ namespace FormBuilder.API.Controllers
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionAttachmentsService.DeleteAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -213,7 +213,7 @@ namespace FormBuilder.API.Controllers
         [HttpDelete("submission/{submissionId}")]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteBySubmissionId(int submissionId)
+        public async Task<IActionResult> DeleteBySubmissionId(int submissionId, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionAttachmentsService.DeleteBySubmissionIdAsync(submissionId);
             return StatusCode(result.StatusCode, result);
@@ -222,7 +222,7 @@ namespace FormBuilder.API.Controllers
         [HttpDelete("submission/{submissionId}/field/{fieldId}")]
         [ProducesResponseType(typeof(ApiResponse<bool>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> DeleteBySubmissionAndField(int submissionId, int fieldId)
+        public async Task<IActionResult> DeleteBySubmissionAndField(int submissionId, int fieldId, CancellationToken cancellationToken = default)
         {
             var result = await _formSubmissionAttachmentsService.DeleteBySubmissionAndFieldAsync(submissionId, fieldId);
             return StatusCode(result.StatusCode, result);

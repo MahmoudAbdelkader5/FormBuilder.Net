@@ -21,7 +21,7 @@ namespace FormBuilder.API.Controllers
 
         // GET: api/FormulaVariables
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
         {
             var result = await _service.GetAllAsync();
             return StatusCode(result.StatusCode, result);
@@ -29,7 +29,7 @@ namespace FormBuilder.API.Controllers
 
         // GET: api/FormulaVariables/5
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.GetByIdAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -37,7 +37,7 @@ namespace FormBuilder.API.Controllers
 
         // POST: api/FormulaVariables
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] FormulaVariableCreateDto dto)
+        public async Task<IActionResult> Create([FromBody] FormulaVariableCreateDto dto, CancellationToken cancellationToken = default)
         {
             var result = await _service.CreateAsync(dto);
             return StatusCode(result.StatusCode, result);
@@ -45,7 +45,7 @@ namespace FormBuilder.API.Controllers
 
         // PUT: api/FormulaVariables/5
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromBody] FormulaVariableUpdateDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] FormulaVariableUpdateDto dto, CancellationToken cancellationToken = default)
         {
             var result = await _service.UpdateAsync(id, dto);
             return StatusCode(result.StatusCode, result);
@@ -53,7 +53,7 @@ namespace FormBuilder.API.Controllers
 
         // DELETE: api/FormulaVariables/5
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.DeleteAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -61,7 +61,7 @@ namespace FormBuilder.API.Controllers
 
         // GET: api/FormulaVariables/Exists/5
         [HttpGet("Exists/{id:int}")]
-        public async Task<IActionResult> Exists(int id)
+        public async Task<IActionResult> Exists(int id, CancellationToken cancellationToken = default)
         {
             var result = await _service.ExistsAsync(id);
             return StatusCode(result.StatusCode, result);

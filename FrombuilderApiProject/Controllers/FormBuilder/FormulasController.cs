@@ -27,7 +27,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpGet("form-builder/{formBuilderId}")]
         [RequirePermission("Formula_Allow_View")]
-        public async Task<IActionResult> GetByFormBuilder(int formBuilderId)
+        public async Task<IActionResult> GetByFormBuilder(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetAllAsync(formBuilderId);
             return result.ToActionResult();
@@ -35,7 +35,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpGet("{id}")]
         [RequirePermission("Formula_Allow_View")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetByIdAsync(id);
             return result.ToActionResult();
@@ -43,7 +43,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpGet("code/{code}/{formBuilderId}")]
         [RequirePermission("Formula_Allow_View")]
-        public async Task<IActionResult> GetByCode(string code, int formBuilderId)
+        public async Task<IActionResult> GetByCode(string code, int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetByCodeAsync(code, formBuilderId);
             return result.ToActionResult();
@@ -51,7 +51,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPost]
         [RequirePermission("Formula_Allow_Create")]
-        public async Task<IActionResult> Create([FromBody] CreateFormulaDto createDto)
+        public async Task<IActionResult> Create([FromBody] CreateFormulaDto createDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -66,7 +66,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPut("{id}")]
         [RequirePermission("Formula_Allow_Edit")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateFormulaDto updateDto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateFormulaDto updateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -81,7 +81,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpDelete("{id}")]
         [RequirePermission("Formula_Allow_Delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.DeleteAsync(id);
             if (result.Success)
@@ -93,7 +93,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpDelete("form-builder/{formBuilderId}")]
         [RequirePermission("Formula_Allow_Delete")]
-        public async Task<IActionResult> DeleteByFormBuilder(int formBuilderId)
+        public async Task<IActionResult> DeleteByFormBuilder(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.DeleteByFormBuilderIdAsync(formBuilderId);
             return result.ToActionResult();
@@ -105,7 +105,7 @@ namespace FormBuilder.API.Controllers
 
         [HttpPatch("{id}/toggle-active")]
         [RequirePermission("Formula_Allow_Manage")]
-        public async Task<IActionResult> ToggleActive(int id, [FromBody] bool isActive)
+        public async Task<IActionResult> ToggleActive(int id, [FromBody] bool isActive, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.ToggleActiveAsync(id, isActive);
             if (result.Success)
@@ -116,14 +116,14 @@ namespace FormBuilder.API.Controllers
         }
 
         [HttpGet("form-builder/{formBuilderId}/active")]
-        public async Task<IActionResult> GetActive(int formBuilderId)
+        public async Task<IActionResult> GetActive(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetActiveAsync(formBuilderId);
             return result.ToActionResult();
         }
 
         [HttpGet("form-builder/{formBuilderId}/inactive")]
-        public async Task<IActionResult> GetInactive(int formBuilderId)
+        public async Task<IActionResult> GetInactive(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetInactiveAsync(formBuilderId);
             return result.ToActionResult();
@@ -134,35 +134,35 @@ namespace FormBuilder.API.Controllers
         #region Query Operations
 
         [HttpGet("with-details")]
-        public async Task<IActionResult> GetFormulasWithDetails([FromQuery] int formBuilderId = 0)
+        public async Task<IActionResult> GetFormulasWithDetails([FromQuery] int formBuilderId = 0, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetFormulasWithDetailsAsync(formBuilderId);
             return result.ToActionResult();
         }
 
         [HttpGet("{id}/with-details")]
-        public async Task<IActionResult> GetByIdWithDetails(int id)
+        public async Task<IActionResult> GetByIdWithDetails(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetByIdWithDetailsAsync(id);
             return result.ToActionResult();
         }
 
         [HttpGet("result-field/{resultFieldId}")]
-        public async Task<IActionResult> GetByResultField(int? resultFieldId)
+        public async Task<IActionResult> GetByResultField(int? resultFieldId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetByResultFieldAsync(resultFieldId);
             return result.ToActionResult();
         }
 
         [HttpGet("form-builder/{formBuilderId}/without-result-field")]
-        public async Task<IActionResult> GetFormulasWithoutResultField(int formBuilderId)
+        public async Task<IActionResult> GetFormulasWithoutResultField(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetFormulasWithoutResultFieldAsync(formBuilderId);
             return result.ToActionResult();
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchFormulas([FromQuery] string term, [FromQuery] int formBuilderId)
+        public async Task<IActionResult> SearchFormulas([FromQuery] string term, [FromQuery] int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.SearchFormulasAsync(term, formBuilderId);
             return result.ToActionResult();
@@ -173,7 +173,7 @@ namespace FormBuilder.API.Controllers
         #region Validation Operations
 
         [HttpPost("validate-expression")]
-        public async Task<IActionResult> ValidateExpression([FromBody] ValidateExpressionDto validationDto)
+        public async Task<IActionResult> ValidateExpression([FromBody] ValidateExpressionDto validationDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -183,7 +183,7 @@ namespace FormBuilder.API.Controllers
         }
 
         [HttpPost("validate-expression-with-details")]
-        public async Task<IActionResult> ValidateExpressionWithDetails([FromBody] ValidateExpressionDto validationDto)
+        public async Task<IActionResult> ValidateExpressionWithDetails([FromBody] ValidateExpressionDto validationDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -193,21 +193,21 @@ namespace FormBuilder.API.Controllers
         }
 
         [HttpGet("check-code-exists")]
-        public async Task<IActionResult> CodeExists([FromQuery] string code, [FromQuery] int formBuilderId, [FromQuery] int? excludeId = null)
+        public async Task<IActionResult> CodeExists([FromQuery] string code, [FromQuery] int formBuilderId, [FromQuery] int? excludeId = null, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.CodeExistsAsync(code, formBuilderId, excludeId);
             return result.ToActionResult();
         }
 
         [HttpGet("{id}/is-active")]
-        public async Task<IActionResult> IsActive(int id)
+        public async Task<IActionResult> IsActive(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.IsActiveAsync(id);
             return result.ToActionResult();
         }
 
         [HttpGet("form-builder/{formBuilderId}/has-active")]
-        public async Task<IActionResult> HasActiveFormulas(int formBuilderId)
+        public async Task<IActionResult> HasActiveFormulas(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.HasActiveFormulasAsync(formBuilderId);
             return result.ToActionResult();
@@ -218,21 +218,21 @@ namespace FormBuilder.API.Controllers
         #region Utility Operations
 
         [HttpGet("{id}/referenced-field-codes")]
-        public async Task<IActionResult> GetReferencedFieldCodes(int id)
+        public async Task<IActionResult> GetReferencedFieldCodes(int id, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetReferencedFieldCodesAsync(id);
             return result.ToActionResult();
         }
 
         [HttpGet("form-builder/{formBuilderId}/count")]
-        public async Task<IActionResult> CountFormulas(int formBuilderId)
+        public async Task<IActionResult> CountFormulas(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.CountFormulasAsync(formBuilderId);
             return result.ToActionResult();
         }
 
         [HttpPatch("{id}/expression")]
-        public async Task<IActionResult> UpdateFormulaExpression(int id, [FromBody] string expressionText)
+        public async Task<IActionResult> UpdateFormulaExpression(int id, [FromBody] string expressionText, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.UpdateFormulaExpressionAsync(id, expressionText);
             if (result.Success)
@@ -243,7 +243,7 @@ namespace FormBuilder.API.Controllers
         }
 
         [HttpGet("form-builder/{formBuilderId}/field-codes")]
-        public async Task<IActionResult> GetFieldCodesForForm(int formBuilderId)
+        public async Task<IActionResult> GetFieldCodesForForm(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetFieldCodesForFormAsync(formBuilderId);
             return result.ToActionResult();
@@ -254,21 +254,21 @@ namespace FormBuilder.API.Controllers
         #region FORMULA_VARIABLES Operations
 
         [HttpGet("{formulaId}/variables")]
-        public async Task<IActionResult> GetFormulaVariables(int formulaId)
+        public async Task<IActionResult> GetFormulaVariables(int formulaId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetFormulaVariablesAsync(formulaId);
             return result.ToActionResult();
         }
 
         [HttpGet("{formulaId}/variables/count")]
-        public async Task<IActionResult> CountVariables(int formulaId)
+        public async Task<IActionResult> CountVariables(int formulaId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.CountVariablesAsync(formulaId);
             return result.ToActionResult();
         }
 
         [HttpGet("{formulaId}/has-variables")]
-        public async Task<IActionResult> HasVariables(int formulaId)
+        public async Task<IActionResult> HasVariables(int formulaId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.HasVariablesAsync(formulaId);
             return result.ToActionResult();
@@ -279,21 +279,21 @@ namespace FormBuilder.API.Controllers
         #region Additional Formula Operations
 
         [HttpGet("by-field/{fieldId}")]
-        public async Task<IActionResult> GetFormulasByField(int fieldId)
+        public async Task<IActionResult> GetFormulasByField(int fieldId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetFormulasByFieldAsync(fieldId);
             return result.ToActionResult();
         }
 
         [HttpGet("form-builder/{formBuilderId}/statistics")]
-        public async Task<IActionResult> GetFormulaStatistics(int formBuilderId)
+        public async Task<IActionResult> GetFormulaStatistics(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.GetFormulaStatisticsAsync(formBuilderId);
             return result.ToActionResult();
         }
 
         [HttpPost("batch-update-status")]
-        public async Task<IActionResult> BatchUpdateFormulaStatus([FromBody] BatchUpdateFormulaStatusDto batchDto)
+        public async Task<IActionResult> BatchUpdateFormulaStatus([FromBody] BatchUpdateFormulaStatusDto batchDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -303,7 +303,7 @@ namespace FormBuilder.API.Controllers
         }
 
         [HttpPost("{sourceFormulaId}/duplicate")]
-        public async Task<IActionResult> DuplicateFormula(int sourceFormulaId, [FromBody] DuplicateFormulaDto duplicateDto)
+        public async Task<IActionResult> DuplicateFormula(int sourceFormulaId, [FromBody] DuplicateFormulaDto duplicateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -321,14 +321,14 @@ namespace FormBuilder.API.Controllers
         #region Formula Calculation Endpoints
 
         [HttpPost("{formulaId}/calculate")]
-        public async Task<IActionResult> CalculateFormula(int formulaId, [FromBody] Dictionary<string, object> fieldValues)
+        public async Task<IActionResult> CalculateFormula(int formulaId, [FromBody] Dictionary<string, object> fieldValues, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.CalculateFormulaAsync(formulaId, fieldValues);
             return result.ToActionResult();
         }
 
         [HttpPost("calculate-expression")]
-        public async Task<IActionResult> CalculateExpression([FromBody] CalculateExpressionDto calculateDto)
+        public async Task<IActionResult> CalculateExpression([FromBody] CalculateExpressionDto calculateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -338,7 +338,7 @@ namespace FormBuilder.API.Controllers
         }
 
         [HttpPost("calculate-advanced")]
-        public async Task<IActionResult> CalculateAdvanced([FromBody] CalculateAdvancedDto calculateDto)
+        public async Task<IActionResult> CalculateAdvanced([FromBody] CalculateAdvancedDto calculateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -351,7 +351,7 @@ namespace FormBuilder.API.Controllers
         }
 
         [HttpPost("calculate-safe")]
-        public async Task<IActionResult> CalculateSafe([FromBody] CalculateExpressionDto calculateDto)
+        public async Task<IActionResult> CalculateSafe([FromBody] CalculateExpressionDto calculateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -364,14 +364,14 @@ namespace FormBuilder.API.Controllers
         }
 
         [HttpPost("form-builder/{formBuilderId}/batch-calculate")]
-        public async Task<IActionResult> BatchCalculateFormulas(int formBuilderId, [FromBody] Dictionary<string, object> fieldValues)
+        public async Task<IActionResult> BatchCalculateFormulas(int formBuilderId, [FromBody] Dictionary<string, object> fieldValues, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.BatchCalculateFormulasAsync(formBuilderId, fieldValues);
             return result.ToActionResult();
         }
 
         [HttpPost("preview-calculation")]
-        public async Task<IActionResult> PreviewCalculation([FromBody] PreviewCalculationDto previewDto)
+        public async Task<IActionResult> PreviewCalculation([FromBody] PreviewCalculationDto previewDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -381,7 +381,7 @@ namespace FormBuilder.API.Controllers
         }
 
         [HttpGet("{formulaId}/test-with-samples")]
-        public async Task<IActionResult> TestFormulaWithSampleData(int formulaId)
+        public async Task<IActionResult> TestFormulaWithSampleData(int formulaId, CancellationToken cancellationToken = default)
         {
             var result = await _formulaService.TestFormulaWithSampleDataAsync(formulaId);
             return result.ToActionResult();

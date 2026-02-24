@@ -30,7 +30,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpGet("form/{formBuilderId}")]
         [ProducesResponseType(typeof(DocumentSettingsDto), 200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetDocumentSettings(int formBuilderId)
+        public async Task<IActionResult> GetDocumentSettings(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _documentSettingsService.GetDocumentSettingsAsync(formBuilderId);
             return result.ToActionResult();
@@ -43,7 +43,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpPost]
         [ProducesResponseType(typeof(DocumentSettingsDto), 200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> SaveDocumentSettings([FromBody] SaveDocumentSettingsDto dto)
+        public async Task<IActionResult> SaveDocumentSettings([FromBody] SaveDocumentSettingsDto dto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -60,7 +60,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpDelete("form/{formBuilderId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> DeleteDocumentSettings(int formBuilderId)
+        public async Task<IActionResult> DeleteDocumentSettings(int formBuilderId, CancellationToken cancellationToken = default)
         {
             var result = await _documentSettingsService.DeleteDocumentSettingsAsync(formBuilderId);
             if (result.Success) return NoContent();
@@ -76,11 +76,10 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(typeof(DocumentSettingsDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> AutoConfigureDefaults(
-            int formBuilderId, 
+        public async Task<IActionResult> AutoConfigureDefaults(int formBuilderId, 
             [FromQuery] int projectId,
             [FromQuery] string? documentCode = null,
-            [FromQuery] string? seriesCode = null)
+            [FromQuery] string? seriesCode = null, CancellationToken cancellationToken = default)
         {
             if (projectId <= 0)
             {

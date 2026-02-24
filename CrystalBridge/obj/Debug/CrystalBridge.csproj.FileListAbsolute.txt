@@ -83,9 +83,6 @@ D:\trioapps\FormBuilderApiProject\CrystalBridge\obj\Debug\CrystalBridge.csproj.C
 D:\trioapps\FormBuilderApiProject\CrystalBridge\obj\Debug\CrystalB.6BE242F4.Up2Date
 D:\trioapps\FormBuilderApiProject\CrystalBridge\obj\Debug\CrystalBridge.dll
 D:\trioapps\FormBuilderApiProject\CrystalBridge\obj\Debug\CrystalBridge.pdb
-D:\trioapps\FormBuilderApiProject\CrystalBridge\bin\CrystalDecisions.CrystalReports.Engine.dll
-D:\trioapps\FormBuilderApiProject\CrystalBridge\bin\CrystalDecisions.ReportSource.dll
-D:\trioapps\FormBuilderApiProject\CrystalBridge\bin\CrystalDecisions.Shared.dll
 D:\trioapps\FormBuilderApiProject\CrystalBridge\bin\CrystalDecisions.ReportAppServer.DataDefModel.dll
 D:\trioapps\FormBuilderApiProject\CrystalBridge\bin\CrystalDecisions.ReportAppServer.ClientDoc.dll
 D:\trioapps\FormBuilderApiProject\CrystalBridge\bin\CrystalDecisions.ReportAppServer.ReportDefModel.dll

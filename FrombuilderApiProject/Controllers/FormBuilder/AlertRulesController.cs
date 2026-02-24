@@ -25,7 +25,7 @@ namespace FormBuilder.API.Controllers
         /// </summary>
         [HttpGet]
         [RequirePermission("AlertRule_Allow_View")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken = default)
         {
             var result = await _alertRuleService.GetAllAsync();
             return StatusCode(result.StatusCode, result);
@@ -36,7 +36,7 @@ namespace FormBuilder.API.Controllers
         /// </summary>
         [HttpGet("{id}")]
         [RequirePermission("AlertRule_Allow_View")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken = default)
         {
             var result = await _alertRuleService.GetByIdAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -47,7 +47,7 @@ namespace FormBuilder.API.Controllers
         /// </summary>
         [HttpGet("document-type/{documentTypeId}")]
         [RequirePermission("AlertRule_Allow_View")]
-        public async Task<IActionResult> GetByDocumentTypeId(int documentTypeId)
+        public async Task<IActionResult> GetByDocumentTypeId(int documentTypeId, CancellationToken cancellationToken = default)
         {
             var result = await _alertRuleService.GetByDocumentTypeIdAsync(documentTypeId);
             return StatusCode(result.StatusCode, result);
@@ -58,7 +58,7 @@ namespace FormBuilder.API.Controllers
         /// </summary>
         [HttpGet("trigger-type/{triggerType}")]
         [RequirePermission("AlertRule_Allow_View")]
-        public async Task<IActionResult> GetByTriggerType(string triggerType)
+        public async Task<IActionResult> GetByTriggerType(string triggerType, CancellationToken cancellationToken = default)
         {
             var result = await _alertRuleService.GetByTriggerTypeAsync(triggerType);
             return StatusCode(result.StatusCode, result);
@@ -69,7 +69,7 @@ namespace FormBuilder.API.Controllers
         /// </summary>
         [HttpGet("active")]
         [RequirePermission("AlertRule_Allow_View")]
-        public async Task<IActionResult> GetActiveByDocumentTypeAndTrigger([FromQuery] int documentTypeId, [FromQuery] string triggerType)
+        public async Task<IActionResult> GetActiveByDocumentTypeAndTrigger([FromQuery] int documentTypeId, [FromQuery] string triggerType, CancellationToken cancellationToken = default)
         {
             var result = await _alertRuleService.GetActiveByDocumentTypeAndTriggerAsync(documentTypeId, triggerType);
             return StatusCode(result.StatusCode, result);
@@ -80,7 +80,7 @@ namespace FormBuilder.API.Controllers
         /// </summary>
         [HttpPost]
         [RequirePermission("AlertRule_Allow_Create")]
-        public async Task<IActionResult> Create([FromBody] CreateAlertRuleDto createDto)
+        public async Task<IActionResult> Create([FromBody] CreateAlertRuleDto createDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -94,7 +94,7 @@ namespace FormBuilder.API.Controllers
         /// </summary>
         [HttpPut("{id}")]
         [RequirePermission("AlertRule_Allow_Edit")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateAlertRuleDto updateDto)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateAlertRuleDto updateDto, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
                 return BadRequest(new ApiResponse(400, "Invalid data", ModelState));
@@ -108,7 +108,7 @@ namespace FormBuilder.API.Controllers
         /// </summary>
         [HttpDelete("{id}")]
         [RequirePermission("AlertRule_Allow_Delete")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken = default)
         {
             var result = await _alertRuleService.DeleteAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -119,7 +119,7 @@ namespace FormBuilder.API.Controllers
         /// </summary>
         [HttpPatch("{id}/activate")]
         [RequirePermission("AlertRule_Allow_Manage")]
-        public async Task<IActionResult> Activate(int id)
+        public async Task<IActionResult> Activate(int id, CancellationToken cancellationToken = default)
         {
             var result = await _alertRuleService.ActivateAsync(id);
             return StatusCode(result.StatusCode, result);
@@ -130,7 +130,7 @@ namespace FormBuilder.API.Controllers
         /// </summary>
         [HttpPatch("{id}/deactivate")]
         [RequirePermission("AlertRule_Allow_Manage")]
-        public async Task<IActionResult> Deactivate(int id)
+        public async Task<IActionResult> Deactivate(int id, CancellationToken cancellationToken = default)
         {
             var result = await _alertRuleService.DeactivateAsync(id);
             return StatusCode(result.StatusCode, result);

@@ -23,9 +23,8 @@ namespace FormBuilder.API.Controllers
         }
 
         [HttpGet("jwt")]
-        public async Task<IActionResult> TestJwtAsync(
-            [FromQuery] string? expectedAccountId = null,
-            [FromQuery] string? expectedBaseUri = null)
+        public async Task<IActionResult> TestJwtAsync([FromQuery] string? expectedAccountId = null,
+            [FromQuery] string? expectedBaseUri = null, CancellationToken cancellationToken = default)
         {
             var authServer = Environment.GetEnvironmentVariable("DS_AUTH_SERVER");
             var integrationKey = Environment.GetEnvironmentVariable("DS_INTEGRATION_KEY");

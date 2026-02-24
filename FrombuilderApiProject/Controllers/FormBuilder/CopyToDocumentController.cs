@@ -60,7 +60,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> ExecuteCopyToDocument([FromBody] ExecuteCopyToDocumentRequestDto request)
+        public async Task<IActionResult> ExecuteCopyToDocument([FromBody] ExecuteCopyToDocumentRequestDto request, CancellationToken cancellationToken = default)
         {
             return await ExecuteCopyToDocumentInternalAsync(request, convertCodesToIds: false);
         }
@@ -74,7 +74,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> ExecuteCopyToDocumentByCodes([FromBody] ExecuteCopyToDocumentByCodesRequestDto request)
+        public async Task<IActionResult> ExecuteCopyToDocumentByCodes([FromBody] ExecuteCopyToDocumentByCodesRequestDto request, CancellationToken cancellationToken = default)
         {
             return await ExecuteCopyToDocumentInternalAsync(request, convertCodesToIds: true);
         }
@@ -341,12 +341,11 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpGet("audit")]
         [ProducesResponseType(typeof(IEnumerable<CopyToDocumentAuditDto>), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetAllAuditRecords(
-            [FromQuery] int? targetDocumentId = null,
+        public async Task<IActionResult> GetAllAuditRecords([FromQuery] int? targetDocumentId = null,
             [FromQuery] int? ruleId = null,
             [FromQuery] bool? success = null,
             [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 50)
+            [FromQuery] int pageSize = 50, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -423,7 +422,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [ProducesResponseType(typeof(CopyToDocumentAuditDto), 200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetAuditRecordById(int id)
+        public async Task<IActionResult> GetAuditRecordById(int id, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -472,7 +471,7 @@ namespace FormBuilder.ApiProject.Controllers.FormBuilder
         [HttpGet("audit/target/{targetDocumentId}")]
         [ProducesResponseType(typeof(IEnumerable<CopyToDocumentAuditDto>), 200)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> GetAuditRecordsByTargetDocumentId(int targetDocumentId)
+        public async Task<IActionResult> GetAuditRecordsByTargetDocumentId(int targetDocumentId, CancellationToken cancellationToken = default)
         {
             try
             {
