@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FormBuilder.Services")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute(" ")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+62fedb26e13d8cdbad105bf093361a1bb7800493")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3c826593d303f00674051cfdf14c201dbec395f0")]
 [assembly: System.Reflection.AssemblyProductAttribute("FormBuilder.Services")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FormBuilder.Services")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

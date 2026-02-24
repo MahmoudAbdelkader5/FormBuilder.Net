@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qekWuzRs7Rc=",
+  "dgSpecHash": "ia9+OYUs3X4=",
   "success": true,
-  "projectFilePath": "D:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\FormBuilder.ApiProject.csproj",
+  "projectFilePath": "d:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\FormBuilder.ApiProject.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\master\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\master\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",

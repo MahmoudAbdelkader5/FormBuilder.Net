@@ -28,6 +28,9 @@ namespace FormBuilder.API.Extensions
     {
         public static IServiceCollection AddFormBuilderServices(this IServiceCollection services)
         {
+            // Ensure IHttpClientFactory is available for services that call external APIs.
+            services.AddHttpClient();
+
             // AutoMapper profiles
             services.AddAutoMapper(typeof(FormBuilderProfile).Assembly);
 
