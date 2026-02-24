@@ -7200,11 +7200,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\FormBuilder.ApiProject.csproj",
+      "projectUniqueName": "D:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\FormBuilder.ApiProject.csproj",
       "projectName": "FormBuilder.ApiProject",
-      "projectPath": "d:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\FormBuilder.ApiProject.csproj",
+      "projectPath": "D:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\FormBuilder.ApiProject.csproj",
       "packagesPath": "C:\\Users\\master\\.nuget\\packages\\",
-      "outputPath": "d:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\obj\\",
+      "outputPath": "D:\\trioapps\\FormBuilderApiProject\\FrombuilderApiProject\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -7226,11 +7226,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "d:\\trioapps\\FormBuilderApiProject\\FormBuilder.Core\\FormBuilder.Core.csproj": {
-              "projectPath": "d:\\trioapps\\FormBuilderApiProject\\FormBuilder.Core\\FormBuilder.Core.csproj"
+            "D:\\trioapps\\FormBuilderApiProject\\FormBuilder.Core\\FormBuilder.Core.csproj": {
+              "projectPath": "D:\\trioapps\\FormBuilderApiProject\\FormBuilder.Core\\FormBuilder.Core.csproj"
             },
-            "d:\\trioapps\\FormBuilderApiProject\\FormBuilder.Services\\FormBuilder.Services.csproj": {
-              "projectPath": "d:\\trioapps\\FormBuilderApiProject\\FormBuilder.Services\\FormBuilder.Services.csproj"
+            "D:\\trioapps\\FormBuilderApiProject\\FormBuilder.Services\\FormBuilder.Services.csproj": {
+              "projectPath": "D:\\trioapps\\FormBuilderApiProject\\FormBuilder.Services\\FormBuilder.Services.csproj"
             }
           }
         }

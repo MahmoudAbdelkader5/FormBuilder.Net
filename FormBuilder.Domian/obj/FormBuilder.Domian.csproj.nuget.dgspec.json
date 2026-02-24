@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\trioapps\\FormBuilderApiProject\\formBuilder.Domian\\FormBuilder.Domian.csproj": {}
+    "D:\\trioapps\\FormBuilderApiProject\\formBuilder.Domian\\FormBuilder.Domian.csproj": {}
   },
   "projects": {
-    "d:\\trioapps\\FormBuilderApiProject\\formBuilder.Domian\\FormBuilder.Domian.csproj": {
+    "D:\\trioapps\\FormBuilderApiProject\\formBuilder.Domian\\FormBuilder.Domian.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\trioapps\\FormBuilderApiProject\\formBuilder.Domian\\FormBuilder.Domian.csproj",
+        "projectUniqueName": "D:\\trioapps\\FormBuilderApiProject\\formBuilder.Domian\\FormBuilder.Domian.csproj",
         "projectName": "FormBuilder.Domian",
-        "projectPath": "d:\\trioapps\\FormBuilderApiProject\\formBuilder.Domian\\FormBuilder.Domian.csproj",
+        "projectPath": "D:\\trioapps\\FormBuilderApiProject\\formBuilder.Domian\\FormBuilder.Domian.csproj",
         "packagesPath": "C:\\Users\\master\\.nuget\\packages\\",
-        "outputPath": "d:\\trioapps\\FormBuilderApiProject\\formBuilder.Domian\\obj\\",
+        "outputPath": "D:\\trioapps\\FormBuilderApiProject\\formBuilder.Domian\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -34,7 +35,7 @@ namespace FormBuilder.Services.Services
         private readonly IFieldDataSourcesRepository _fieldDataSourcesRepository;
         private readonly AkhmanageItContext _akhmanageItContext;
         private readonly FormBuilderDbContext _formBuilderDbContext;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IHttpClientFactory? _httpClientFactory;
         private readonly ILogger<FieldDataSourcesService> _logger;
         private readonly ISapHanaService? _sapHanaService;
         private readonly ISapHanaConfigsService _sapHanaConfigsService;
@@ -44,20 +45,36 @@ namespace FormBuilder.Services.Services
             IFieldDataSourcesRepository fieldDataSourcesRepository, 
             AkhmanageItContext akhmanageItContext,
             FormBuilderDbContext formBuilderDbContext,
-            IHttpClientFactory httpClientFactory,
             ILogger<FieldDataSourcesService> logger,
             IMapper mapper,
             ISapHanaConfigsService sapHanaConfigsService,
+            IHttpClientFactory? httpClientFactory = null,
             ISapHanaService? sapHanaService = null) : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _fieldDataSourcesRepository = fieldDataSourcesRepository ?? throw new ArgumentNullException(nameof(fieldDataSourcesRepository));
             _akhmanageItContext = akhmanageItContext ?? throw new ArgumentNullException(nameof(akhmanageItContext));
             _formBuilderDbContext = formBuilderDbContext ?? throw new ArgumentNullException(nameof(formBuilderDbContext));
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
+            _httpClientFactory = httpClientFactory;
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _sapHanaConfigsService = sapHanaConfigsService ?? throw new ArgumentNullException(nameof(sapHanaConfigsService));
             _sapHanaService = sapHanaService;
+        }
+
+        private HttpClient CreateExternalApiClient()
+        {
+            if (_httpClientFactory is not null)
+            {
+                return _httpClientFactory.CreateClient("ExternalApi");
+            }
+
+            // Fallback to keep API inspection/preview functional if HttpClientFactory
+            // wasn't registered by the host startup path.
+            _logger.LogWarning("IHttpClientFactory is not registered. Falling back to direct HttpClient instance.");
+            return new HttpClient(new HttpClientHandler
+            {
+                AutomaticDecompression = DecompressionMethods.All
+            });
         }
 
         protected override IBaseRepository<FIELD_DATA_SOURCES> Repository => _unitOfWork.FieldDataSourcesRepository;
@@ -1992,7 +2009,7 @@ namespace FormBuilder.Services.Services
                 baseUrl, apiPath ?? "(none)", fullApiUrl);
 
             // Use named HttpClient configured with automatic decompression
-            var httpClient = _httpClientFactory.CreateClient("ExternalApi");
+            var httpClient = CreateExternalApiClient();
             httpClient.Timeout = TimeSpan.FromSeconds(30); // Set timeout
             ConfigureExternalApiClientHeaders(httpClient);
 
@@ -2551,7 +2568,7 @@ namespace FormBuilder.Services.Services
                 try
                 {
                     // Use named HttpClient configured with automatic decompression
-                    var httpClient = _httpClientFactory.CreateClient("ExternalApi");
+                    var httpClient = CreateExternalApiClient();
                     httpClient.Timeout = TimeSpan.FromSeconds(30);
                     ConfigureExternalApiClientHeaders(httpClient);
 
@@ -2759,7 +2776,7 @@ namespace FormBuilder.Services.Services
                 Password = password
             });
 
-            using var httpClient = _httpClientFactory.CreateClient("ExternalApi");
+            using var httpClient = CreateExternalApiClient();
             httpClient.Timeout = TimeSpan.FromSeconds(30);
             ConfigureExternalApiClientHeaders(httpClient);
 
