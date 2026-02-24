@@ -7,6 +7,7 @@ using FormBuilder.Domain.Interfaces.Services;
 using formBuilder.Domian.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +21,29 @@ namespace FormBuilder.Services.Services.Email
         private readonly IMapper _mapper;
         private readonly ISecretProtector _protector;
         private readonly ILogger<SmtpConfigsService> _logger;
+        private readonly IMemoryCache _cache;
 
         public SmtpConfigsService(
             IunitOfwork unitOfWork,
             IMapper mapper,
             ISecretProtector protector,
+            IMemoryCache cache,
             ILogger<SmtpConfigsService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _protector = protector;
+            _cache = cache;
             _logger = logger;
+        }
+
+        private void InvalidateSmtpCache(int? smtpConfigId = null)
+        {
+            _cache.Remove("smtp:active");
+            if (smtpConfigId.HasValue)
+            {
+                _cache.Remove($"smtp:{smtpConfigId.Value}");
+            }
         }
 
         public async Task<ServiceResult<IEnumerable<SmtpConfigDto>>> GetAllAsync(bool includeInactive = true)
@@ -109,6 +122,7 @@ namespace FormBuilder.Services.Services.Email
 
                 _unitOfWork.Repositary<SMTP_CONFIGS>().Add(entity);
                 await _unitOfWork.CompleteAsyn();
+                InvalidateSmtpCache(entity.Id);
 
                 return ServiceResult<SmtpConfigDto>.Ok(_mapper.Map<SmtpConfigDto>(entity));
             }
@@ -152,6 +166,7 @@ namespace FormBuilder.Services.Services.Email
 
                 _unitOfWork.Repositary<SMTP_CONFIGS>().Update(entity);
                 await _unitOfWork.CompleteAsyn();
+                InvalidateSmtpCache(id);
 
                 return ServiceResult<SmtpConfigDto>.Ok(_mapper.Map<SmtpConfigDto>(entity));
             }
@@ -183,6 +198,7 @@ namespace FormBuilder.Services.Services.Email
 
                 _unitOfWork.Repositary<SMTP_CONFIGS>().Update(entity);
                 await _unitOfWork.CompleteAsyn();
+                InvalidateSmtpCache(id);
 
                 return ServiceResult<bool>.Ok(true);
             }
@@ -207,6 +223,7 @@ namespace FormBuilder.Services.Services.Email
 
                 _unitOfWork.Repositary<SMTP_CONFIGS>().Update(entity);
                 await _unitOfWork.CompleteAsyn();
+                InvalidateSmtpCache(id);
 
                 return ServiceResult<bool>.Ok(true);
             }
@@ -218,5 +235,4 @@ namespace FormBuilder.Services.Services.Email
         }
     }
 }
-
 

@@ -216,6 +216,9 @@ namespace FormBuilder.Services.Services.FormBuilder
                 entity.UpdatedDate = DateTime.UtcNow;
                 entity.IsDeleted = false;
                 entity.ConditionJson = createDto.ConditionJson ?? "{}";
+                // Database schema keeps these columns as non-nullable in current environments.
+                entity.TargetRoleId = createDto.TargetRoleId ?? string.Empty;
+                entity.TargetUserId = createDto.TargetUserId ?? string.Empty;
 
                 _repository.Add(entity);
                 await _unitOfWork.CompleteAsyn();
@@ -231,7 +234,9 @@ namespace FormBuilder.Services.Services.FormBuilder
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creating alert rule");
-                return new ApiResponse(500, $"Error creating alert rule: {ex.Message}");
+                var inner = ex.InnerException?.Message;
+                var details = string.IsNullOrWhiteSpace(inner) ? ex.Message : $"{ex.Message} | Inner: {inner}";
+                return new ApiResponse(500, $"Error creating alert rule: {details}");
             }
         }
 
@@ -303,9 +308,9 @@ namespace FormBuilder.Services.Services.FormBuilder
                 if (!string.IsNullOrEmpty(updateDto.NotificationType))
                     entity.NotificationType = updateDto.NotificationType;
                 if (updateDto.TargetRoleId != null)
-                    entity.TargetRoleId = updateDto.TargetRoleId;
+                    entity.TargetRoleId = updateDto.TargetRoleId ?? string.Empty;
                 if (updateDto.TargetUserId != null)
-                    entity.TargetUserId = updateDto.TargetUserId;
+                    entity.TargetUserId = updateDto.TargetUserId ?? string.Empty;
                 if (updateDto.IsActive.HasValue)
                     entity.IsActive = updateDto.IsActive.Value;
 
@@ -325,7 +330,9 @@ namespace FormBuilder.Services.Services.FormBuilder
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error updating alert rule {Id}", id);
-                return new ApiResponse(500, $"Error updating alert rule: {ex.Message}");
+                var inner = ex.InnerException?.Message;
+                var details = string.IsNullOrWhiteSpace(inner) ? ex.Message : $"{ex.Message} | Inner: {inner}";
+                return new ApiResponse(500, $"Error updating alert rule: {details}");
             }
         }
 
@@ -457,4 +464,3 @@ namespace FormBuilder.Services.Services.FormBuilder
         }
     }
 }
-

@@ -1213,95 +1213,32 @@ namespace FormBuilder.Services
                 }
             }
 
-            // تحديث Status من Draft إلى Submitted بعد حفظ البيانات بنجاح
+            // Keep Draft editable after save-data.
+            // save-data is for persisting draft content only; final transition to Submitted
+            // must happen explicitly through SubmitAsync.
             if (submission.Status == "Draft")
             {
-                // إعادة تحميل Submission مع tracking للتحديث
                 var submissionToUpdate = await _unitOfWork.FormSubmissionsRepository.SingleOrDefaultAsync(
                     s => s.Id == saveDto.SubmissionId, asNoTracking: false);
-                
+
                 if (submissionToUpdate != null)
                 {
-                    // Update SubmittedByUserId if:
-                    // 1. It's currently empty/null, OR
-                    // 2. A resolvedUserId was provided (from authenticated user or controller logic)
-                    // This ensures authenticated users get their username saved, not "public-user"
                     if (string.IsNullOrWhiteSpace(submissionToUpdate.SubmittedByUserId))
                     {
-                        submissionToUpdate.SubmittedByUserId = !string.IsNullOrWhiteSpace(resolvedUserId) 
-                            ? resolvedUserId 
+                        submissionToUpdate.SubmittedByUserId = !string.IsNullOrWhiteSpace(resolvedUserId)
+                            ? resolvedUserId
                             : "public-user";
                     }
-                    else if (!string.IsNullOrWhiteSpace(resolvedUserId) && 
-                             resolvedUserId != "public-user" && 
+                    else if (!string.IsNullOrWhiteSpace(resolvedUserId) &&
+                             resolvedUserId != "public-user" &&
                              submissionToUpdate.SubmittedByUserId == "public-user")
                     {
-                        // If submission was created as "public-user" but user is now authenticated, update it
                         submissionToUpdate.SubmittedByUserId = resolvedUserId;
                     }
 
-                    // Requirement: Always keep status as "Submitted" when user submits.
-                    // Do NOT auto-approve when no workflow is assigned or workflow is inactive.
-                    // This matches the behavior in SubmitAsync method.
-                    submissionToUpdate.Status = "Submitted";
-                    
-                    submissionToUpdate.SubmittedDate = DateTime.UtcNow;
                     submissionToUpdate.UpdatedDate = DateTime.UtcNow;
-                    
                     _unitOfWork.FormSubmissionsRepository.Update(submissionToUpdate);
                     await _unitOfWork.CompleteAsyn();
-                    
-                    // If Status = Submitted, execute the same trigger flow used by SubmitAsync.
-                    // Previously, this endpoint could change status to Submitted but never executed triggers,
-                    // which caused emails to be skipped even when SMTP/Alert Rules were configured correctly.
-                    if (submissionToUpdate.Status == "Submitted")
-                    {
-                        int? stageId = null;
-                        // Load document type (needed for optional workflow activation)
-                        var documentType = await _unitOfWork.DocumentTypeRepository.GetByIdAsync(submissionToUpdate.DocumentTypeId);
-
-                        // Activate workflow stage if applicable (optional)
-                        if (documentType != null)
-                        {
-                            APPROVAL_WORKFLOWS? workflow = null;
-                            if (documentType.ApprovalWorkflowId.HasValue)
-                            {
-                                workflow = await _unitOfWork.ApprovalWorkflowRepository.GetByIdAsync(documentType.ApprovalWorkflowId.Value);
-                            }
-                            if (workflow == null)
-                            {
-                                workflow = await _unitOfWork.ApprovalWorkflowRepository.GetActiveWorkflowByDocumentTypeIdAsync(submissionToUpdate.DocumentTypeId);
-                            }
-
-                            if (workflow != null && workflow.IsActive)
-                            {
-                                var activationResult = await _approvalWorkflowRuntimeService.ActivateStageForSubmissionAsync(submissionToUpdate.Id);
-                                if (activationResult.StatusCode == 200)
-                                {
-                                    var afterActivation = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(submissionToUpdate.Id);
-                                    stageId = afterActivation?.StageId;
-                                }
-                                else
-                                {
-                                    _logger?.LogWarning("Workflow activation failed in SaveFormSubmissionDataAsync for submission {SubmissionId}. StatusCode: {StatusCode}",
-                                        submissionToUpdate.Id, activationResult.StatusCode);
-                                }
-                            }
-                        }
-
-                        // Always run FormSubmitted trigger (email + history if StageId valid)
-                        var updatedAfterStatus = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(submissionToUpdate.Id);
-                        if (updatedAfterStatus != null)
-                        {
-                            await _triggersService.ExecuteFormSubmittedTriggerAsync(updatedAfterStatus);
-
-                            // If a stage got activated, run ApprovalRequired trigger
-                            if (stageId.HasValue && stageId.Value > 0)
-                            {
-                                await _triggersService.ExecuteApprovalRequiredTriggerAsync(updatedAfterStatus, stageId.Value);
-                            }
-                        }
-                    }
                 }
             }
 
@@ -1309,10 +1246,8 @@ namespace FormBuilder.Services
             var updatedSubmission = await _unitOfWork.FormSubmissionsRepository.GetByIdAsync(saveDto.SubmissionId);
             var submissionDto = _mapper.Map<FormSubmissionDto>(updatedSubmission);
             
-            var statusMessage = updatedSubmission?.Status == "Submitted" 
-                ? "Form submission data saved successfully and submission status changed to Submitted"
-                : updatedSubmission?.Status == "Approved"
-                ? "Form submission data saved successfully and submission was auto-approved"
+            var statusMessage = updatedSubmission?.Status == "Draft"
+                ? "Draft data saved successfully"
                 : "Form submission data saved successfully";
             
             return new ApiResponse(200, statusMessage, submissionDto);

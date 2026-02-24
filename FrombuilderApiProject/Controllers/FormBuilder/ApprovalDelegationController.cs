@@ -1,4 +1,3 @@
-using FormBuilder.API.Attributes;
 using FormBuilder.Application.DTOs.ApprovalWorkflow;
 using FormBuilder.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -60,7 +59,6 @@ namespace FormBuilder.API.Controllers
 
         // POST: api/ApprovalDelegation
         [HttpPost]
-        [RequirePermission("ApprovalDelegation_Allow_Create")]
         public async Task<IActionResult> Create([FromBody] ApprovalDelegationCreateDto dto)
         {
             var response = await _service.CreateAsync(dto);
@@ -69,7 +67,6 @@ namespace FormBuilder.API.Controllers
 
         // PUT: api/ApprovalDelegation/5
         [HttpPut("{id}")]
-        [RequirePermission("ApprovalDelegation_Allow_Edit")]
         public async Task<IActionResult> Update(int id, [FromBody] ApprovalDelegationUpdateDto dto)
         {
             var response = await _service.UpdateAsync(id, dto);
@@ -78,7 +75,6 @@ namespace FormBuilder.API.Controllers
 
         // DELETE: api/ApprovalDelegation/5
         [HttpDelete("{id}")]
-        [RequirePermission("ApprovalDelegation_Allow_Delete")]
         public async Task<IActionResult> Delete(int id)
         {
             var response = await _service.DeleteAsync(id);

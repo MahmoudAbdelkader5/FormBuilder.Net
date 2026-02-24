@@ -46,21 +46,26 @@ namespace FormBuilder.Services.Services.FormBuilder
         }
 
         /// <summary>
-        /// Gets the workflow runtime service lazily to avoid circular dependency
+        /// Executes workflow runtime work inside an async scope to avoid scoped-lifetime leaks.
         /// </summary>
-        private IApprovalWorkflowRuntimeService? GetWorkflowRuntimeService()
+        private async Task<T?> ExecuteWithWorkflowRuntimeServiceAsync<T>(
+            Func<IApprovalWorkflowRuntimeService, Task<T>> action) where T : class
         {
             if (_scopeFactory == null)
                 return null;
 
             try
             {
-                using var scope = _scopeFactory.CreateScope();
-                return scope.ServiceProvider.GetService<IApprovalWorkflowRuntimeService>();
+                await using var scope = _scopeFactory.CreateAsyncScope();
+                var workflowRuntimeService = scope.ServiceProvider.GetService<IApprovalWorkflowRuntimeService>();
+                if (workflowRuntimeService == null)
+                    return null;
+
+                return await action(workflowRuntimeService);
             }
             catch (Exception ex)
             {
-                _logger?.LogWarning(ex, "Failed to resolve IApprovalWorkflowRuntimeService");
+                _logger?.LogWarning(ex, "Failed to resolve or execute IApprovalWorkflowRuntimeService");
                 return null;
             }
         }
@@ -140,7 +145,7 @@ namespace FormBuilder.Services.Services.FormBuilder
                     {
                         try
                         {
-                            using var scope = _scopeFactory.CreateScope();
+                            await using var scope = _scopeFactory.CreateAsyncScope();
                             var emailService = scope.ServiceProvider.GetRequiredService<EmailNotificationService>();
                             await emailService.SendSubmissionConfirmationToRecipientsAsync(submissionIdCopy, recipientsCopy);
                         }
@@ -203,14 +208,14 @@ namespace FormBuilder.Services.Services.FormBuilder
                 // we should still allow notifications/emails to be sent based on ALERT_RULES.TargetUserId/TargetRoleId.
                 var approverUserIds = new List<string>();
 
-                var workflowRuntimeService = GetWorkflowRuntimeService();
-                if (workflowRuntimeService == null)
+                var approversResult = await ExecuteWithWorkflowRuntimeServiceAsync(
+                    runtime => runtime.ResolveApproversForStageAsync(stageId));
+                if (approversResult == null)
                 {
                     _logger?.LogWarning("Failed to resolve IApprovalWorkflowRuntimeService for stage {StageId}. Will rely on ALERT_RULES recipients only.", stageId);
                 }
                 else
                 {
-                    var approversResult = await workflowRuntimeService.ResolveApproversForStageAsync(stageId);
                     if (approversResult.StatusCode != 200)
                     {
                         _logger?.LogWarning("Failed to resolve approvers for stage {StageId}: {Message}. Will rely on ALERT_RULES recipients only.",
@@ -265,7 +270,7 @@ namespace FormBuilder.Services.Services.FormBuilder
                     {
                         try
                         {
-                            using var scope = _scopeFactory.CreateScope();
+                            await using var scope = _scopeFactory.CreateAsyncScope();
                             var emailService = scope.ServiceProvider.GetRequiredService<EmailNotificationService>();
                             await emailService.SendApprovalRequiredAsync(
                                 submissionIdCopy, 
@@ -386,7 +391,7 @@ namespace FormBuilder.Services.Services.FormBuilder
                     {
                         try
                         {
-                            using var scope = _scopeFactory.CreateScope();
+                            await using var scope = _scopeFactory.CreateAsyncScope();
                             var emailService = scope.ServiceProvider.GetRequiredService<EmailNotificationService>();
                             await emailService.SendApprovalResultToRecipientsAsync(
                                 submissionIdCopy, 
@@ -517,7 +522,7 @@ namespace FormBuilder.Services.Services.FormBuilder
                     {
                         try
                         {
-                            using var scope = _scopeFactory.CreateScope();
+                            await using var scope = _scopeFactory.CreateAsyncScope();
                             var emailService = scope.ServiceProvider.GetRequiredService<EmailNotificationService>();
                             await emailService.SendApprovalResultToRecipientsAsync(
                                 submissionIdCopy, 
@@ -617,7 +622,7 @@ namespace FormBuilder.Services.Services.FormBuilder
                     {
                         try
                         {
-                            using var scope = _scopeFactory.CreateScope();
+                            await using var scope = _scopeFactory.CreateAsyncScope();
                             var emailService = scope.ServiceProvider.GetRequiredService<EmailNotificationService>();
                             await emailService.SendApprovalResultToRecipientsAsync(
                                 submissionIdCopy, 
@@ -735,26 +740,19 @@ namespace FormBuilder.Services.Services.FormBuilder
 
                         if (roleIds.Any())
                         {
-                            // Resolve users from roles using the workflow runtime service
-                            var workflowRuntimeService = GetWorkflowRuntimeService();
-                            if (workflowRuntimeService != null)
+                            var usersFromRoles = await ExecuteWithWorkflowRuntimeServiceAsync(
+                                    runtime => runtime.ResolveUsersFromRolesAsync(roleIds))
+                                ?? new List<string>();
+                            foreach (var userId in usersFromRoles)
                             {
-                                var usersFromRoles = await workflowRuntimeService.ResolveUsersFromRolesAsync(roleIds);
-                                foreach (var userId in usersFromRoles)
+                                if (!string.IsNullOrWhiteSpace(userId))
                                 {
-                                    if (!string.IsNullOrWhiteSpace(userId))
-                                    {
-                                        recipients.Add(userId);
-                                    }
+                                    recipients.Add(userId);
                                 }
-                                
-                                _logger?.LogInformation("Added {Count} users from TargetRoleId in rule {RuleId}: {RoleIds}", 
-                                    usersFromRoles.Count, rule.Id, string.Join(", ", roleIds));
                             }
-                            else
-                            {
-                                _logger?.LogWarning("Failed to resolve IApprovalWorkflowRuntimeService for role resolution in rule {RuleId}", rule.Id);
-                            }
+                            
+                            _logger?.LogInformation("Added {Count} users from TargetRoleId in rule {RuleId}: {RoleIds}", 
+                                usersFromRoles.Count, rule.Id, string.Join(", ", roleIds));
                         }
                     }
 
@@ -932,13 +930,11 @@ namespace FormBuilder.Services.Services.FormBuilder
 
                         if (roleIds.Any())
                         {
-                            var workflowRuntimeService = GetWorkflowRuntimeService();
-                            if (workflowRuntimeService != null)
-                            {
-                                var usersFromRoles = await workflowRuntimeService.ResolveUsersFromRolesAsync(roleIds);
-                                foreach (var u in usersFromRoles.Where(x => !string.IsNullOrWhiteSpace(x)))
-                                    recipients.Add(u);
-                            }
+                            var usersFromRoles = await ExecuteWithWorkflowRuntimeServiceAsync(
+                                    runtime => runtime.ResolveUsersFromRolesAsync(roleIds))
+                                ?? new List<string>();
+                            foreach (var u in usersFromRoles.Where(x => !string.IsNullOrWhiteSpace(x)))
+                                recipients.Add(u);
                         }
                     }
                 }
@@ -1090,13 +1086,11 @@ namespace FormBuilder.Services.Services.FormBuilder
 
                         if (roleIds.Any())
                         {
-                            var workflowRuntimeService = GetWorkflowRuntimeService();
-                            if (workflowRuntimeService != null)
-                            {
-                                var usersFromRoles = await workflowRuntimeService.ResolveUsersFromRolesAsync(roleIds);
-                                foreach (var u in usersFromRoles.Where(x => !string.IsNullOrWhiteSpace(x)))
-                                    recipients.Add(u);
-                            }
+                            var usersFromRoles = await ExecuteWithWorkflowRuntimeServiceAsync(
+                                    runtime => runtime.ResolveUsersFromRolesAsync(roleIds))
+                                ?? new List<string>();
+                            foreach (var u in usersFromRoles.Where(x => !string.IsNullOrWhiteSpace(x)))
+                                recipients.Add(u);
                         }
                     }
                 }
@@ -1173,7 +1167,7 @@ namespace FormBuilder.Services.Services.FormBuilder
         {
             try
             {
-                using var scope = _scopeFactory.CreateScope();
+                await using var scope = _scopeFactory.CreateAsyncScope();
                 var executorService = scope.ServiceProvider.GetService<CopyToDocumentActionExecutorService>();
                 if (executorService != null)
                 {

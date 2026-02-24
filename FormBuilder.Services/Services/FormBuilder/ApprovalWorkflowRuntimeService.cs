@@ -71,7 +71,7 @@ namespace FormBuilder.Services
 
             try
             {
-                using var scope = _scopeFactory.CreateScope();
+                await using var scope = _scopeFactory.CreateAsyncScope();
                 var triggersService = scope.ServiceProvider.GetService<IFormSubmissionTriggersService>();
                 if (triggersService != null)
                 {
@@ -96,7 +96,7 @@ namespace FormBuilder.Services
             {
                 try
                 {
-                    using var scope = _scopeFactory.CreateScope();
+                    await using var scope = _scopeFactory.CreateAsyncScope();
                     var emailService = scope.ServiceProvider.GetRequiredService<FormBuilder.Services.Services.Email.EmailNotificationService>();
                     await sendAsync(emailService);
                 }
@@ -2442,7 +2442,7 @@ namespace FormBuilder.Services
                     return false;
                 }
 
-                using var scope = _scopeFactory.CreateScope();
+                await using var scope = _scopeFactory.CreateAsyncScope();
                 var docuSignService = scope.ServiceProvider.GetService<IDocuSignService>();
                 if (docuSignService == null)
                 {
